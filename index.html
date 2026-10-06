@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var t=localStorage.getItem("am_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <meta name="theme-color" content="#4A1640">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -63,8 +64,7 @@ button,input,select{font:inherit;color:inherit}
 .qb[aria-pressed="true"]{border-color:var(--plum-2);background:var(--rose);color:var(--plum)}
 .qb svg{flex:none}
 .dent{position:relative}
-.dent h2{padding-right:40px}
-.fav{position:absolute;top:8px;right:8px;width:40px;height:40px;border:0;background:none;color:var(--mute);border-radius:10px;cursor:pointer;display:grid;place-items:center}
+.fav{position:absolute;top:5px;right:4px;width:40px;height:40px;border:0;background:none;color:var(--mute);border-radius:10px;cursor:pointer;display:grid;place-items:center}
 .fav[aria-pressed="true"]{color:#D99A00}
 .fav[aria-pressed="true"] svg{fill:#F2B600}
 .dist{display:inline-block;margin-left:6px;font-size:.75rem;font-weight:700;color:var(--call);background:color-mix(in srgb,var(--call) 12%,transparent);border-radius:6px;padding:1px 7px}
@@ -151,11 +151,16 @@ details.past summary{cursor:pointer;color:var(--mute);font-size:.9rem;margin:6px
 .ofl b{display:block;font-size:.93rem}
 .ofl small{display:block;font-size:.78rem;color:var(--mute)}
 .ofl span:last-child{margin-left:auto;color:var(--plum-2);font-weight:700}
-.grp{display:flex;align-items:center;gap:8px;margin:18px 2px 8px;font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.15rem}
-.grp:first-child{margin-top:4px}
+.grp{display:flex;align-items:center;gap:8px;width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;margin:0 0 8px;font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1rem;font-weight:700;cursor:pointer;text-align:left}
+.grp .chev{margin-left:auto}
+.grp[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.grpbody{margin:0 0 12px}
 .grp i{width:10px;height:10px;border-radius:3px;display:inline-block}
 .grp small{font-family:Figtree,sans-serif;font-size:.82rem;color:var(--mute);font-weight:500}
-@media (prefers-reduced-motion:reduce){.top{transition:none}}
+@media (prefers-reduced-motion:reduce){.top,.chev{transition:none}}
+.temas{display:flex;gap:6px}
+.temas button{flex:1;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 4px;font-weight:600;font-size:.82rem;cursor:pointer}
+.temas button[aria-pressed="true"]{border-color:var(--plum-2);background:var(--rose);color:var(--plum)}
 .cv{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:1px}
 .cv-uniodonto{background:#F3DDE8;color:#6E2460}
 .cv-unimed{background:#DDF1E4;color:#1D6B54}
@@ -187,8 +192,18 @@ main{max-width:680px;margin:0 auto;padding:12px 14px 110px}
 .toggle input{width:18px;height:18px;accent-color:#6E2460}
 .count{font-size:.88rem;color:var(--mute);margin:4px 2px 10px}
 
-.dent{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;margin-bottom:10px}
-.dent h2{font-size:1.05rem;margin:0;font-weight:700;line-height:1.25}
+.dent{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;margin-bottom:6px}
+.dh{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;color:inherit;text-align:left;padding:10px 46px 10px 12px;cursor:pointer;font:inherit}
+.dh .tx{flex:1;min-width:0}
+.dent h2{font-size:.95rem;margin:0;font-weight:700;line-height:1.25}
+.dh .sum{font-size:.76rem;color:var(--mute);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dh .sum .cv{margin-left:0;margin-right:5px}
+.chev{flex:none;color:var(--mute);transition:transform .2s}
+.dent.open .chev{transform:rotate(180deg)}
+.db{display:none;padding:0 12px 10px}
+.dent.open .db{display:block}
+.dent.open{border-color:var(--plum-2)}
+.db .meta{margin-top:0}
 .meta{font-size:.82rem;color:var(--mute);margin-top:2px}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
 .tag{font-size:.8rem;background:var(--rose);color:var(--plum);border-radius:8px;padding:3px 8px;font-weight:600}
@@ -265,6 +280,7 @@ nav.tabs svg{width:22px;height:22px}
   <div class="brand">
     <div><h1>Acha Médico</h1><small>Médicos e dentistas dos convênios</small></div>
     <div class="hbtns">
+      <button id="btnTheme" aria-label="Mudar tema" title="Mudar tema"><svg id="themeIco" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></svg></button>
       <button id="btnShare" aria-label="Compartilhar app" title="Compartilhar app"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>
       <button id="btnUpdate" aria-label="Atualizar app" title="Atualizar app"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
     </div>
@@ -385,6 +401,9 @@ nav.tabs svg{width:22px;height:22px}
     <p><strong>Fesp:</strong> prestadores de Tatuí que apareceram nos prints do Guia Médico Fesp (só parte da letra A).</p>
     <div class="note">Médicos e dentistas entram e saem das redes. Antes de marcar, confirme no app ou site oficial do seu convênio. Na Uniodonto, os planos Odontoflex e Ortoplus têm rede própria e não estão nesta lista.</div>
     <p>Este app não é oficial de nenhum convênio. Serve só para facilitar a busca.</p>
+    <h3>Tema</h3>
+    <div class="temas" id="temas"><button data-t="auto">Automático</button><button data-t="light">Claro</button><button data-t="dark">Escuro</button></div>
+    <p style="font-size:.8rem;color:var(--mute)">Automático segue o tema do celular.</p>
     <h3>App</h3>
     <div class="bigbtns"><button id="btnInstall2">Instalar na tela inicial</button><button id="btnShare2">Compartilhar app</button><button id="btnUpdate2">Atualizar app</button></div>
     <p style="font-size:.86rem;color:var(--mute)">Favoritos, consultas e carteirinhas ficam guardados só neste celular. As carteirinhas ficam trancadas com a sua senha e se trancam sozinhas quando você sai do app.</p>
@@ -392,7 +411,7 @@ nav.tabs svg{width:22px;height:22px}
     <p style="font-size:.86rem">Com a nuvem ligada, cada pessoa entra com o próprio e-mail e senha. Carteirinhas, favoritos e consultas ficam só na conta dela; as senhas das carteirinhas vão embaralhadas e nem o desenvolvedor consegue ler. A lista de médicos e postos é mantida pelo desenvolvedor e pelos administradores, e os usuários podem mandar sugestões de correção.</p>
     <h3>Sobre o mapa</h3>
     <p>Os alfinetes são posicionados pelo endereço escrito nos guias, então podem ficar um pouco fora do lugar exato. Endereços que atendem mais de um dentista aparecem num alfinete só, com o número de profissionais.</p>
-    <p style="color:var(--mute);font-size:.88rem">Versão 3.4</p>
+    <p style="color:var(--mute);font-size:.88rem">Versão 3.5</p>
   </section>
 
   <footer>
@@ -1048,11 +1067,17 @@ function card(p){
     l.addr ? `<a class="addr" target="_blank" rel="noopener" href="${mapUrl(l.addr,p.city)}">${pinSvg}<span><u>${esc(l.addr)}</u><br><small style="color:var(--mute)">${esc(p.city)}</small></span></a>`
            : `<div class="noaddr">Endereço não informado no guia · ${esc(p.city)}</div>`
   }<div class="phones">${phonesHtml(l.tels)}</div></div>`).join("");
-  const i = PEOPLE.indexOf(p), fv = isFav(p);
-  return `<article class="dent">
-    <button class="fav" data-f="${i}" aria-pressed="${fv}" aria-label="${fv ? "Tirar dos favoritos" : "Salvar nos favoritos"}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></button>
-    <h2>${title(p)}${esc(p.name)}</h2>
-    <div class="meta">${esc(reg(p))}<span class="cv cv-${p.conv}">${esc(CONVS[p.conv].nome)}</span>${p._d != null ? `<span class="dist">a ${fmtKm(p._d)}</span>` : ""}</div>
+  const i = PEOPLE.indexOf(p), fv = isFav(p), op = OPEN.has(pid(p)) || FORCE_OPEN;
+  const resumo = p.specs.slice(0,2).map(s => lab(s.k)).join(", ") + (p.specs.length > 2 ? "…" : "");
+  return `<article class="dent${op ? " open" : ""}">
+    <button class="fav" data-f="${i}" aria-pressed="${fv}" aria-label="${fv ? "Tirar dos favoritos" : "Salvar nos favoritos"}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></button>
+    <button class="dh" data-o="${i}" aria-expanded="${op}">
+      <span class="tx"><h2>${title(p)}${esc(p.name)}</h2>
+      <div class="sum"><span class="cv cv-${p.conv}">${esc(CONVS[p.conv].curto || CONVS[p.conv].nome)}</span>${p._d != null ? `<span class="dist" style="margin:0 5px 0 0">a ${fmtKm(p._d)}</span>` : ""}${esc(resumo || "")}${resumo ? " · " : ""}${esc(p.city)}</div></span>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="db">
+    <div class="meta">${esc(reg(p))}</div>
     <div class="tags">${tags}</div>
     ${locs}
     <div class="actions">
@@ -1062,9 +1087,11 @@ function card(p){
       ${p.locs.some(l=>l.addr) ? `<button class="pinbtn" data-m="${PEOPLE.indexOf(p)}">${pinSvg.replace('width="18" height="18"','width="15" height="15"')}Ver no mapa</button>` : ""}
     </div>
     ${isAdmin() ? `<div class="cardadm"><button data-ed="${i}">Editar</button><button data-del-p="${i}">Remover</button></div>` : ""}
+    </div>
   </article>`;
 }
 
+const OPEN = new Set(); const GRP = {}; let FORCE_OPEN = false;
 function filtered(){
   const words = norm(state.q).split(/\s+/).filter(Boolean);
   return PEOPLE.filter(p =>
@@ -1086,9 +1113,13 @@ function render(){
   }
   renderExtras();
   $("count").textContent = res.length === 1 ? "1 resultado" : res.length + " resultados";
+  FORCE_OPEN = res.length === 1;
+  const busca = !!(state.q || state.spec || state.onlyFav || state.onlyE || state.city !== "Todas");
   const grouped = () => Object.entries(CONVS).map(([k,c]) => {
     const g = res.filter(p=>p.conv===k); if (!g.length) return "";
-    return `<div class="grp"><i style="background:${c.cor}"></i>${esc(c.nome)} <small>${esc(c.sub)} · ${g.length}</small></div>` + g.map(card).join("");
+    const ab = k in GRP ? GRP[k] : busca;
+    return `<button class="grp" data-g="${k}" aria-expanded="${ab}"><i style="background:${c.cor}"></i>${esc(c.nome)} <small>${esc(c.sub)} · ${g.length}</small><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>` +
+      (ab ? `<div class="grpbody">${g.map(card).join("")}</div>` : "");
   }).join("");
   $("list").innerHTML = (res.length ? (state.conv==="todos" && !state.near ? grouped() : res.map(card).join("")) :
     `<div class="empty">${state.onlyFav && !FAVS.size ? "Você ainda não tem favoritos. Toque na estrela de um cartão para salvar." : "Nenhum profissional cadastrado no app com esses filtros."}<br><button id="reset">Limpar filtros</button></div>`) + oficiaisHtml(false);
@@ -1306,6 +1337,27 @@ document.addEventListener("click", e => {
   if (a && a.dataset.city && navigator.clipboard) navigator.clipboard.writeText(a.dataset.city).then(()=>toast("Cidade copiada: cole no guia")).catch(()=>{});
 });
 $("oficiais").innerHTML = oficiaisHtml(true);
+
+/* ===== Tema claro / escuro ===== */
+const THEME_ICO = {
+  auto:'<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/>',
+  light:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  dark:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'
+};
+function applyTheme(t){
+  if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  else document.documentElement.removeAttribute("data-theme");
+  $("themeIco").innerHTML = THEME_ICO[t] || THEME_ICO.auto;
+  document.querySelectorAll("#temas button").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === t));
+}
+let THEME = "auto"; try { THEME = localStorage.getItem("am_theme") || "auto"; } catch(_) {}
+function setTheme(t){ THEME = t; try { localStorage.setItem("am_theme", t); } catch(_) {} applyTheme(t); }
+applyTheme(THEME);
+$("btnTheme").addEventListener("click", () => {
+  const prox = ({auto:"light", light:"dark", dark:"auto"})[THEME] || "auto";
+  setTheme(prox); toast(({auto:"Tema automático (igual ao celular)", light:"Tema claro", dark:"Tema escuro"})[prox]);
+});
+$("temas").addEventListener("click", e => { const b = e.target.closest("button[data-t]"); if (b) setTheme(b.dataset.t); });
 
 /* ===== Guardado no aparelho ===== */
 function lsGet(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(_) { return d; } }
@@ -1938,9 +1990,19 @@ $("cityQ").addEventListener("input", e => {
 $("cityQ").addEventListener("change", e => { if (state.city !== "Todas") e.target.value = state.city; });
 $("spec").addEventListener("change", e => { state.spec = e.target.value; render(); });
 $("onlyE").addEventListener("change", e => { state.onlyE = e.target.checked; render(); });
-let tmr; $("q").addEventListener("input", e => { clearTimeout(tmr); tmr = setTimeout(()=>{ state.q = e.target.value; render(); }, 120); });
+let tmr; $("q").addEventListener("input", e => { clearTimeout(tmr); tmr = setTimeout(()=>{ state.q = e.target.value; Object.keys(GRP).forEach(k => delete GRP[k]); render(); }, 120); });
 $("clear").addEventListener("click", () => { $("q").value=""; state.q=""; render(); $("q").focus(); });
 async function cardClick(e){
+  const gb = e.target.closest(".grp[data-g]");
+  if (gb) { GRP[gb.dataset.g] = gb.getAttribute("aria-expanded") !== "true"; render(); return; }
+  const oh = e.target.closest(".dh[data-o]");
+  if (oh) {
+    const art = oh.closest(".dent"), p = PEOPLE[+oh.dataset.o], k = pid(p);
+    const now = !art.classList.contains("open");
+    art.classList.toggle("open", now); oh.setAttribute("aria-expanded", now);
+    if (now) OPEN.add(k); else OPEN.delete(k);
+    return;
+  }
   const sg = e.target.closest("[data-sug]"); if (sg) { openSug(PEOPLE[+sg.dataset.sug]); return; }
   const ed = e.target.closest("[data-ed]"); if (ed) { openEdit(PEOPLE[+ed.dataset.ed]); return; }
   const dp = e.target.closest("[data-del-p]"); if (dp) { removePerson(PEOPLE[+dp.dataset.delP]); return; }
