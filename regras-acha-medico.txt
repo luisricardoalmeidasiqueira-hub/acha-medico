@@ -1,0 +1,51 @@
+// ===================== ACHA MÉDICO =====================
+// COLE ESTE BLOCO DENTRO de:  match /databases/{database}/documents { ... }
+// (junto dos blocos do Cofre, Férias, Remanejamento e Apontamento),
+// antes das duas últimas chaves  }  }  do arquivo. Não apague os outros blocos.
+
+function achaDev() {
+  return request.auth != null && request.auth.token.email == "luissiqueir@hotmail.com";
+}
+function achaAdmin() {
+  return achaDev() || (request.auth != null
+    && exists(/databases/$(database)/documents/acha_usuarios/$(request.auth.uid))
+    && get(/databases/$(database)/documents/acha_usuarios/$(request.auth.uid)).data.papel == "admin");
+}
+
+// Só o desenvolvedor consegue ler este documento: é assim que o app sabe quem é o desenvolvedor
+match /acha_config/{id} {
+  allow read: if achaDev();
+  allow write: if false;
+}
+
+// Cadastro de cada pessoa. Só o desenvolvedor muda o papel (usuario/admin).
+match /acha_usuarios/{uid} {
+  allow read: if request.auth != null && (request.auth.uid == uid || achaAdmin());
+  allow create: if request.auth != null && request.auth.uid == uid
+    && request.resource.data.papel == "usuario";
+  allow update: if achaDev()
+    || (request.auth != null && request.auth.uid == uid
+        && request.resource.data.papel == resource.data.papel);
+  allow delete: if achaDev();
+}
+
+// Carteirinhas, favoritos e consultas: cada um só vê e mexe nos seus
+match /acha_privado/{uid} {
+  allow read, write: if request.auth != null && request.auth.uid == uid;
+}
+
+// Lista de médicos, dentistas e postos: todos leem, só admin e desenvolvedor alteram
+match /acha_profissionais/{id} {
+  allow read: if true;
+  allow write: if achaAdmin();
+}
+
+// Sugestões: quem tem conta manda; admin e desenvolvedor veem e respondem
+match /acha_sugestoes/{id} {
+  allow create: if request.auth != null
+    && request.resource.data.uid == request.auth.uid
+    && request.resource.data.status == "pendente";
+  allow read: if achaAdmin() || (request.auth != null && resource.data.uid == request.auth.uid);
+  allow update, delete: if achaAdmin();
+}
+// =================== FIM ACHA MÉDICO ===================

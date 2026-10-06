@@ -41,7 +41,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--plum-2);outline-offset:2px;border-radius:8px}
@@ -58,7 +58,8 @@ button,input,select{font:inherit;color:inherit}
 .cvbtn small{display:block;font-size:.64rem;opacity:.8;margin-top:2px}
 .cvbtn[aria-pressed="true"]{background:#fff;color:var(--cvc,#4A1640);border-color:#fff}
 .quick{display:flex;gap:8px;margin-bottom:10px}
-.qb{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 8px;font-weight:600;font-size:.9rem;cursor:pointer}
+.qb{flex:1;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:5px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:9px 4px;font-weight:600;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.quick{gap:6px}
 .qb[aria-pressed="true"]{border-color:var(--plum-2);background:var(--rose);color:var(--plum)}
 .qb svg{flex:none}
 .dent{position:relative}
@@ -77,40 +78,66 @@ button,input,select{font:inherit;color:inherit}
 .instb div{flex:1;font-size:.88rem;line-height:1.3}
 .instb .go{border:0;background:#4A1640;color:#fff;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
 .instb .x{border:0;background:none;color:var(--mute);font-size:1.3rem;cursor:pointer;padding:4px 6px}
-.form{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:10px}
-.form label{display:grid;gap:4px;font-size:.85rem;font-weight:600;color:var(--mute)}
-.form input,.form textarea{font-family:inherit;border:1.5px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 11px;font-size:1rem;color:var(--ink);font-weight:400;width:100%}
-.form textarea{min-height:60px;resize:vertical}
-.form .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.form .save{border:0;background:#4A1640;color:#fff;border-radius:12px;padding:12px;font-weight:700;font-size:1rem;cursor:pointer}
-.form .hint{font-size:.8rem;color:var(--mute);margin:-4px 0 0}
+.form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:9px}
+.form label{display:grid;gap:3px;font-size:.78rem;font-weight:600;color:var(--mute);min-width:0}
+.form input,.form textarea,.form select{font-family:inherit;border:1.5px solid var(--line);background:var(--bg);border-radius:10px;padding:0 10px;height:42px;font-size:16px;color:var(--ink);font-weight:400;width:100%;min-width:0;max-width:100%;display:block;-webkit-appearance:none;appearance:none;line-height:40px}
+.form textarea{height:auto;min-height:56px;padding:9px 10px;line-height:1.35;resize:vertical}
+.form input[type="date"],.form input[type="time"]{text-align:left}
+.form input::-webkit-date-and-time-value{text-align:left;margin:0}
+.form input::-webkit-datetime-edit{padding:0}
+.form .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}
+.form .save{border:0;background:#4A1640;color:#fff;border-radius:12px;padding:11px;font-weight:700;font-size:.95rem;cursor:pointer}
+.form .hint{font-size:.74rem;color:var(--mute);margin:-3px 0 0}
 .cons{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;border-left:5px solid var(--plum-2)}
 .cons.past{opacity:.6;border-left-color:var(--line)}
-.cons .when{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.1rem;font-weight:800;color:var(--plum)}
+.cons .when{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1rem;font-weight:800;color:var(--plum)}
 .cons .who{font-weight:700;margin-top:2px}
 .cons .obs{font-size:.86rem;color:var(--mute);margin-top:4px}
 .cons .btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .cons .btns a,.cons .btns button{font-size:.83rem;font-weight:600;text-decoration:none;border:1.5px solid var(--plum-2);color:var(--plum-2);background:none;border-radius:9px;padding:6px 10px;cursor:pointer}
 .cons .btns .del{border-color:var(--line);color:var(--mute)}
-.vazio{color:var(--mute);font-size:.92rem;background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:16px;text-align:center}
+.vazio{color:var(--mute);font-size:.82rem;background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:16px;text-align:center}
 details.past summary{cursor:pointer;color:var(--mute);font-size:.9rem;margin:6px 2px 10px}
-.pinbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
-.pinbox p{margin:0 0 10px;font-size:.9rem;color:var(--mute)}
-.pinbox input{width:170px;text-align:center;font-size:1.5rem;letter-spacing:.4em;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:10px}
-.pinbox .save{display:block;margin:12px auto 0;border:0;background:#4A1640;color:#fff;border-radius:12px;padding:11px 22px;font-weight:700;cursor:pointer}
-.pinbox .lnk{border:0;background:none;color:var(--mute);font-size:.82rem;text-decoration:underline;margin-top:10px;cursor:pointer}
+.pinbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.pinbox p{margin:0 0 10px;font-size:.8rem;color:var(--mute);line-height:1.4}
+.pinbox input{display:block;margin:0 auto;width:150px;height:42px;text-align:center;font-size:18px;letter-spacing:.3em;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:0 8px;-webkit-appearance:none;appearance:none}
+.pinbox input::placeholder{letter-spacing:normal;font-size:.85rem}
+.pinbox .save{display:block;margin:10px auto 0;border:0;background:#4A1640;color:#fff;border-radius:10px;padding:9px 20px;font-weight:700;font-size:.9rem;cursor:pointer}
+.pinbox .lnk{border:0;background:none;color:var(--mute);font-size:.76rem;text-decoration:underline;margin-top:8px;cursor:pointer}
 .cartao{border-radius:16px;padding:16px;color:#fff;margin-bottom:10px;position:relative;box-shadow:0 6px 16px rgba(0,0,0,.15)}
 .cartao .tp{font-size:.8rem;opacity:.85;font-weight:600}
 .cartao .nm{font-weight:700;margin-top:2px}
-.cartao .num{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:.04em;margin:10px 0 4px;word-break:break-all}
+.cartao .num{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:.04em;margin:10px 0 4px;word-break:break-all}
 .cartao .ln{display:flex;align-items:center;gap:8px;font-size:.88rem;margin-top:6px;flex-wrap:wrap}
 .cartao .ln span{opacity:.85}
 .cartao .ln code{font-family:inherit;font-weight:700;background:rgba(255,255,255,.15);border-radius:6px;padding:2px 8px}
 .cartao button{border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:5px 9px;font-size:.8rem;font-weight:600;cursor:pointer}
 .cartao .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .cartbar{display:flex;gap:8px;margin-bottom:10px}
-.cartbar button{flex:1;border:1.5px solid var(--plum-2);background:var(--card);color:var(--plum-2);border-radius:12px;padding:10px;font-weight:700;cursor:pointer}
+.cartbar button{flex:1;border:1.5px solid var(--plum-2);background:var(--card);color:var(--plum-2);border-radius:10px;padding:8px;font-weight:700;font-size:.82rem;cursor:pointer}
 .form select{border:1.5px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 11px;font-size:1rem;color:var(--ink);width:100%}
+.cloud{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 12px;margin:4px 0 10px}
+.cloud .st{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1;cursor:pointer;border:0;background:none;color:var(--ink);padding:2px 4px}
+.cloud .st b{font-size:.74rem;font-weight:700}
+.cloud .st i{font-style:normal;font-size:.9rem}
+.cloud .who{flex:1;min-width:0;font-size:.78rem;color:var(--mute);line-height:1.3;overflow:hidden;text-overflow:ellipsis}
+.cloud .who strong{display:block;color:var(--ink);font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cloud .go{border:1.5px solid var(--plum-2);background:none;color:var(--plum-2);border-radius:9px;padding:6px 10px;font-weight:700;font-size:.78rem;cursor:pointer;white-space:nowrap}
+.role{display:inline-block;font-size:.66rem;font-weight:700;border-radius:5px;padding:0 6px;margin-left:4px;background:var(--rose);color:var(--plum);vertical-align:1px}
+.adm{background:var(--card);border:1.5px solid var(--plum-2);border-radius:14px;padding:12px;margin-bottom:10px}
+.adm h4{margin:0 0 8px;font-size:.92rem}
+.adm .sg{border-top:1px dashed var(--line);padding:8px 0;font-size:.82rem}
+.adm .sg small{color:var(--mute);display:block}
+.adm .sg .b{display:flex;gap:6px;margin-top:6px}
+.adm button,.admbtn{border:1.5px solid var(--plum-2);background:none;color:var(--plum-2);border-radius:9px;padding:6px 10px;font-weight:700;font-size:.78rem;cursor:pointer}
+.adm .row2{display:flex;gap:6px;margin-top:6px}
+.adm .row2 input{flex:1;min-width:0;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:0 9px;height:36px;font-size:16px}
+.cardadm{display:flex;gap:12px}
+.cardadm button{border:0;background:none;color:var(--plum-2);font-size:.78rem;font-weight:700;padding:8px 0 0;cursor:pointer}
+.sheet .box{max-height:88vh;overflow:auto}
+.sheet .form{border:0;padding:0}
+.legenda{display:grid;gap:8px;font-size:.88rem;margin-bottom:14px}
+.copy{font-size:.7rem;color:var(--mute);text-align:center;margin-top:12px;line-height:1.5}
 .sheet{position:fixed;inset:0;z-index:30;background:rgba(20,8,16,.5);display:none;align-items:flex-end;justify-content:center}
 .sheet.on{display:flex}
 .sheet .box{background:var(--card);color:var(--ink);width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px))}
@@ -187,7 +214,7 @@ main{max-width:680px;margin:0 auto;padding:12px 14px 110px}
 .urg .ph{border-color:#fff;color:#fff;margin-top:8px;font-size:1rem;padding:9px 14px}
 .urg .addr{color:#fff}
 .urg .addr svg{color:#F3DDE8}
-h3{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.2rem;margin:22px 2px 10px}
+h3{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.05rem;margin:18px 2px 8px}
 .office{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px}
 .office strong{display:block;margin-bottom:4px}
 .note{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:11px 13px;font-size:.88rem;margin:10px 0}
@@ -260,6 +287,7 @@ nav.tabs svg{width:22px;height:22px}
     </div>
     <div class="quick">
       <button class="qb" id="btnNear" aria-pressed="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7.5"/></svg>Perto de mim</button>
+      <button class="qb" id="btnCart" data-goto="p-meus"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6.5 15h4"/></svg>Carteirinhas</button>
       <button class="qb" id="btnFavs" aria-pressed="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>Favoritos</button>
     </div>
     <div class="filters">
@@ -277,7 +305,16 @@ nav.tabs svg{width:22px;height:22px}
   </section>
 
   <section class="panel" id="p-meus">
-    <h3 style="margin-top:4px">Minhas consultas</h3>
+    <div class="cloud" id="cloudBar" style="display:none">
+      <button class="st" id="stBtn" aria-label="O que significa a bolinha"><b>☁️ Firebase 🔄</b><i id="stDot">🟠</i></button>
+      <div class="who" id="cloudWho"></div>
+      <button class="go" id="acctBtn">Entrar</button>
+    </div>
+    <div id="admBox"></div>
+    <h3 style="margin-top:4px">Minhas carteirinhas</h3>
+    <div id="cartBox"></div>
+
+    <h3>Minhas consultas</h3>
     <form class="form" id="fCons" autocomplete="off">
       <label>Médico, dentista ou clínica
         <input id="cNome" list="allNames" placeholder="Comece a digitar o nome" required>
@@ -292,9 +329,6 @@ nav.tabs svg{width:22px;height:22px}
       <button class="save" type="submit">Salvar consulta</button>
     </form>
     <div id="consList" style="margin-top:14px"></div>
-
-    <h3>Minhas carteirinhas</h3>
-    <div id="cartBox"></div>
 
     <h3>Favoritos</h3>
     <div id="favList"></div>
@@ -354,9 +388,11 @@ nav.tabs svg{width:22px;height:22px}
     <h3>App</h3>
     <div class="bigbtns"><button id="btnInstall2">Instalar na tela inicial</button><button id="btnShare2">Compartilhar app</button><button id="btnUpdate2">Atualizar app</button></div>
     <p style="font-size:.86rem;color:var(--mute)">Favoritos, consultas e carteirinhas ficam guardados só neste celular. As carteirinhas ficam trancadas com a sua senha e se trancam sozinhas quando você sai do app.</p>
+    <h3>Nuvem</h3>
+    <p style="font-size:.86rem">Com a nuvem ligada, cada pessoa entra com o próprio e-mail e senha. Carteirinhas, favoritos e consultas ficam só na conta dela; as senhas das carteirinhas vão embaralhadas e nem o desenvolvedor consegue ler. A lista de médicos e postos é mantida pelo desenvolvedor e pelos administradores, e os usuários podem mandar sugestões de correção.</p>
     <h3>Sobre o mapa</h3>
     <p>Os alfinetes são posicionados pelo endereço escrito nos guias, então podem ficar um pouco fora do lugar exato. Endereços que atendem mais de um dentista aparecem num alfinete só, com o número de profissionais.</p>
-    <p style="color:var(--mute);font-size:.88rem">Versão 3.2</p>
+    <p style="color:var(--mute);font-size:.88rem">Versão 3.4</p>
   </section>
 
   <footer>
@@ -384,6 +420,24 @@ nav.tabs svg{width:22px;height:22px}
     <div id="map"></div>
     <div class="mapmsg" id="mapMsg"></div>
   </div>
+</div>
+<div class="sheet" id="acctSheet" role="dialog" aria-label="Conta">
+  <div class="box" id="acctBox"></div>
+</div>
+<div class="sheet" id="legSheet" role="dialog" aria-label="Legenda da nuvem">
+  <div class="box">
+    <h3>O que significa a bolinha</h3>
+    <div class="legenda">
+      <div>🟢 Tudo certo: conectado e sincronizado com a nuvem.</div>
+      <div>🟡 Verificando: conectando ou enviando para a nuvem.</div>
+      <div>🟠 Salvo só no aparelho: sem login ou sem internet. Envia quando voltar.</div>
+      <div>🔴 Não conectou: erro na nuvem. Os dados continuam salvos no aparelho.</div>
+    </div>
+    <button class="ok" id="legOk">Entendi</button>
+  </div>
+</div>
+<div class="sheet" id="editSheet" role="dialog" aria-label="Editar">
+  <div class="box" id="editBox"></div>
 </div>
 <div class="sheet" id="instSheet" role="dialog" aria-label="Instalar app">
   <div class="box">
@@ -959,6 +1013,7 @@ PEOPLE.forEach(p => {
   p.hay = norm([p.name, p.city, p.cro, CONVS[p.conv].nome, ...p.locs.map(l=>l.addr), ...p.specs.map(s=>lab(s.k))].join(" "));
 });
 PEOPLE.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));
+const BASE_PEOPLE = PEOPLE.slice();
 
 /* ===== Estado e UI ===== */
 const state = {conv:"todos", city:"Todas", cityQ:"", spec:"", q:"", onlyE:false, onlyFav:false, near:null};
@@ -1003,8 +1058,10 @@ function card(p){
     <div class="actions">
       <button class="share" data-i="${PEOPLE.indexOf(p)}">Enviar contato</button>
       <button class="share" data-c="${i}">Anotar consulta</button>
+      ${FB_ON ? `<button class="share" data-sug="${i}">Sugerir correção</button>` : ""}
       ${p.locs.some(l=>l.addr) ? `<button class="pinbtn" data-m="${PEOPLE.indexOf(p)}">${pinSvg.replace('width="18" height="18"','width="15" height="15"')}Ver no mapa</button>` : ""}
     </div>
+    ${isAdmin() ? `<div class="cardadm"><button data-ed="${i}">Editar</button><button data-del-p="${i}">Remover</button></div>` : ""}
   </article>`;
 }
 
@@ -1112,7 +1169,7 @@ let tokenBad = false;
 async function geocode(addr, city){
   const k = city + "|" + addr;
   if (k in GEO) return GEO[k];
-  const c = CENTERS[city];
+  const c = CENTERS[city] || CENTERS["Tatuí"];
   const q = encodeURIComponent(cleanAddr(addr) + ", " + city + ", SP");
   const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${q}.json?access_token=${MAPBOX_TOKEN}&country=br&language=pt&limit=1&proximity=${c[0]},${c[1]}`;
   try {
@@ -1262,7 +1319,7 @@ function isFav(p){ return FAVS.has(pid(p)); }
 function toggleFav(p){
   const k = pid(p);
   if (FAVS.has(k)) { FAVS.delete(k); toast("Tirado dos favoritos"); } else { FAVS.add(k); toast("Salvo nos favoritos"); }
-  lsSet("am_favs", [...FAVS]);
+  lsSet("am_favs", [...FAVS]); cloudMark("favs");
   render(); renderMeus();
 }
 
@@ -1294,7 +1351,7 @@ function nearMe(){
     $("btnNear").setAttribute("aria-pressed","true");
     const cities = [...new Set(PEOPLE.filter(inConv).map(p => p.city))];
     let best = cities[0], bd = Infinity;
-    cities.forEach(c => { const d = km(state.near, CENTERS[c]); if (d < bd) { bd = d; best = c; } });
+    cities.forEach(c => { if (!CENTERS[c]) return; const d = km(state.near, CENTERS[c]); if (d < bd) { bd = d; best = c; } });
     state.nearCity = best; state.nearFar = bd > 30;
     state.city = best; state.cityQ = best; $("cityQ").value = best;
     buildChips(); buildSpecs(); render();
@@ -1397,14 +1454,14 @@ $("fCons").addEventListener("submit", e => {
   const loc = p ? (p.locs.find(l => l.addr) || p.locs[0]) : null;
   CONS.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), nome, data, hora, obs: $("cObs").value.trim(),
     tel: loc && loc.tels[0] ? fmt(loc.tels[0]) : "", addr: loc && loc.addr ? loc.addr + " - " + p.city + " - SP" : "" });
-  lsSet("am_consultas", CONS);
+  lsSet("am_consultas", CONS); cloudMark("consultas");
   e.target.reset(); renderMeus(); renderExtras();
   toast("Consulta salva. Toque em “Lembrete no celular”");
 });
 $("consList").addEventListener("click", e => {
   const d = e.target.closest("[data-del]"); if (!d) return;
   if (!confirm("Excluir esta consulta?")) return;
-  CONS = CONS.filter(c => c.id !== d.dataset.del); lsSet("am_consultas", CONS); renderMeus(); renderExtras();
+  CONS = CONS.filter(c => c.id !== d.dataset.del); lsSet("am_consultas", CONS); cloudMark("consultas"); renderMeus(); renderExtras();
 });
 
 /* ===== Minhas carteirinhas (guardadas com senha de 4 a 6 números) ===== */
@@ -1419,7 +1476,7 @@ async function deriveKey(pin, salt){
 async function cartSave(){
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const ct = await crypto.subtle.encrypt({name:"AES-GCM", iv}, CKEY, new TextEncoder().encode(JSON.stringify(CART)));
-  lsSet("am_cart", {salt:b64(CSALT), iv:b64(iv), ct:b64(ct)});
+  lsSet("am_cart", {salt:b64(CSALT), iv:b64(iv), ct:b64(ct)}); cloudMark("cart");
 }
 function cartLock(){ CART = null; CKEY = null; CART_EDIT = null; renderCart(); }
 function fmtNum(t, n){ const d = String(n||"").replace(/\s/g,""); return t === "sus" && /^\d{15}$/.test(d) ? d.replace(/(\d{3})(\d{4})(\d{4})(\d{4})/, "$1 $2 $3 $4") : (n||""); }
@@ -1433,8 +1490,8 @@ function renderCart(){
         <button class="save" type="submit">Abrir</button>
         <button class="lnk" type="button" id="pinForgot">Esqueci a senha</button></form>`
       : `<form class="pinbox" id="pinForm"><p>Crie uma senha de 4 a 6 números. Ela protege os números e as senhas das suas carteirinhas neste celular.</p>
-        <input id="pinIn" type="password" inputmode="numeric" pattern="[0-9]*" minlength="4" maxlength="6" autocomplete="new-password" aria-label="Nova senha" required>
-        <input id="pinIn2" type="password" inputmode="numeric" pattern="[0-9]*" minlength="4" maxlength="6" autocomplete="new-password" aria-label="Repita a senha" placeholder="repita" style="margin-top:8px" required>
+        <input id="pinIn" type="password" inputmode="numeric" pattern="[0-9]*" minlength="4" maxlength="6" autocomplete="new-password" aria-label="Nova senha" placeholder="nova senha" required>
+        <input id="pinIn2" type="password" inputmode="numeric" pattern="[0-9]*" minlength="4" maxlength="6" autocomplete="new-password" aria-label="Repita a senha" placeholder="repita a senha" style="margin-top:8px" required>
         <button class="save" type="submit">Criar senha</button>
         <p style="margin-top:10px;font-size:.8rem">Anote essa senha. Se esquecer, as carteirinhas precisam ser cadastradas de novo.</p></form>`;
     $("pinForm").onsubmit = async e => {
@@ -1453,7 +1510,7 @@ function renderCart(){
       } catch(_) { toast("Senha errada"); $("pinIn").value = ""; }
     };
     const fg = $("pinForgot");
-    if (fg) fg.onclick = () => { if (confirm("Sem a senha não dá para abrir. Apagar todas as carteirinhas e criar uma senha nova?")) { try { localStorage.removeItem("am_cart"); } catch(_){} renderCart(); } };
+    if (fg) fg.onclick = () => { if (confirm("Sem a senha não dá para abrir. Apagar todas as carteirinhas e criar uma senha nova?")) { try { localStorage.removeItem("am_cart"); } catch(_){} cloudMark("cart"); renderCart(); } };
     return;
   }
   const form = CART_EDIT ? (() => { const c = CART_EDIT;
@@ -1504,6 +1561,298 @@ $("cartBox").addEventListener("click", async e => {
   if (rm && confirm("Excluir esta carteirinha?")) { CART = CART.filter(x => x.id !== rm.dataset.rm); await cartSave(); renderCart(); }
 });
 document.addEventListener("visibilitychange", () => { if (document.hidden && CART) cartLock(); });
+
+/* =====================================================================
+   NUVEM (Firebase) — projeto Cofre-Seguro
+   Para ligar: cole aqui o firebaseConfig do projeto (Console do Firebase →
+   Configurações do projeto → Seus apps → Web). É o mesmo do app de Férias.
+   Enquanto apiKey estiver vazio, o app funciona só no aparelho.
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+// O desenvolvedor é definido nas REGRAS do Firebase (o e-mail não fica aqui no código público).
+const FB_ON = !!FIREBASE_CONFIG.apiKey && !/claude|anthropic/.test(location.hostname);
+
+let FB = null, DB = null, USER = null, ROLE = "anon", CLOUD_PROF = [], SUGS = [], ADMINS = [];
+let CLOUD_STATE = "orange", PUSH_T = null, CLOUD_UNSUB = [];
+const SYNC_T = lsGet("am_sync_t", {});
+function isDev(){ return ROLE === "dev"; }
+function isAdmin(){ return ROLE === "dev" || ROLE === "admin"; }
+function setDot(st){
+  CLOUD_STATE = st;
+  const d = $("stDot"); if (d) d.textContent = ({green:"🟢", yellow:"🟡", orange:"🟠", red:"🔴"})[st];
+}
+function cloudMark(field){
+  SYNC_T[field] = Date.now(); lsSet("am_sync_t", SYNC_T);
+  if (!USER) return;
+  setDot(navigator.onLine ? "yellow" : "orange");
+  clearTimeout(PUSH_T); PUSH_T = setTimeout(cloudPush, 700);
+}
+function localField(f){ return f === "favs" ? [...FAVS] : f === "consultas" ? CONS : lsGet("am_cart", null); }
+async function cloudPush(){
+  if (!USER || !DB) return;
+  if (!navigator.onLine) { setDot("orange"); return; }
+  setDot("yellow");
+  const data = {};
+  ["favs","consultas","cart"].forEach(f => { data[f] = localField(f); data[f + "_t"] = SYNC_T[f] || 0; });
+  try { await DB.collection("acha_privado").doc(USER.uid).set(data, {merge:true}); setDot("green"); }
+  catch(e) { console.warn(e); setDot("red"); }
+}
+async function cloudPull(){
+  setDot("yellow");
+  try {
+    const snap = await DB.collection("acha_privado").doc(USER.uid).get();
+    const c = snap.exists ? snap.data() : {};
+    let changed = false, needPush = false;
+    ["favs","consultas","cart"].forEach(f => {
+      const ct = c[f + "_t"] || 0, lt = SYNC_T[f] || 0;
+      if (ct > lt && f in c) {
+        if (f === "favs") { FAVS.clear(); (c.favs || []).forEach(x => FAVS.add(x)); lsSet("am_favs", [...FAVS]); }
+        if (f === "consultas") { CONS = c.consultas || []; lsSet("am_consultas", CONS); }
+        if (f === "cart") { if (c.cart) lsSet("am_cart", c.cart); else { try { localStorage.removeItem("am_cart"); } catch(_){} } if (CART) cartLock(); }
+        SYNC_T[f] = ct; changed = true;
+      } else if (lt > ct) needPush = true;
+    });
+    lsSet("am_sync_t", SYNC_T);
+    if (changed) { render(); renderMeus(); renderCart(); renderExtras(); }
+    if (needPush) await cloudPush(); else setDot("green");
+  } catch(e) { console.warn(e); setDot("red"); }
+}
+
+/* --- lista editada pelos administradores (vale para todos) --- */
+const SPEC_BY_LABEL = Object.fromEntries(Object.entries(SPECS).map(([k,v]) => [norm(v), k]));
+function makePerson(d, id){
+  const p = {conv:d.conv, city:d.city, pre:d.pre || "n", name:d.name, cro:d.cro || "",
+    locs:(d.locs && d.locs.length ? d.locs : [{addr:"", tels:[]}]).map(l => ({addr:l.addr || "", tels:(l.tels || []).filter(Boolean)})),
+    specs:(d.specs || []).map(s => ({k:s.k, t:s.t || ""})), _doc:id, _base:d.base || null};
+  p.specs.sort((a,b)=>ordIdx(a.k)-ordIdx(b.k) || a.k.localeCompare(b.k,"pt-BR"));
+  p.hay = norm([p.name, p.city, p.cro, (CONVS[p.conv]||{}).nome, ...p.locs.map(l=>l.addr), ...p.specs.map(s=>lab(s.k))].join(" "));
+  return p;
+}
+function applyCloudList(){
+  const over = {}, extra = [];
+  CLOUD_PROF.forEach(d => { if (d.base) over[d.base] = d; else if (!d.removed && CONVS[d.conv]) extra.push(makePerson(d, d._id)); });
+  const list = [];
+  BASE_PEOPLE.forEach(p => {
+    const o = over[pid(p)];
+    if (!o) list.push(p);
+    else if (!o.removed) list.push(makePerson(o, o._id));
+  });
+  PEOPLE.length = 0; PEOPLE.push(...list, ...extra);
+  PEOPLE.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));
+  Object.keys(BYID).forEach(k => delete BYID[k]); PEOPLE.forEach(p => BYID[pid(p)] = p);
+  buildConvs(); buildChips(); buildSpecs(); render(); renderMeus();
+}
+
+/* --- conta --- */
+function renderCloudBar(){
+  if (!FB_ON) return;
+  $("cloudBar").style.display = "";
+  $("cloudWho").innerHTML = USER ? `<strong>${esc(USER.displayName || USER.email)}</strong>${esc(USER.email)}${isDev() ? '<span class="role">Desenvolvedor</span>' : isAdmin() ? '<span class="role">Administrador</span>' : ""}`
+    : `<strong>Entre para guardar na nuvem</strong>Carteirinhas, favoritos e consultas em qualquer celular`;
+  $("acctBtn").textContent = USER ? "Conta" : "Entrar";
+}
+function openAcct(mode){
+  const box = $("acctBox");
+  const copy = `<div class="copy">Desenvolvido por Luís Ricardo de Almeida Siqueira<br>© 2026 Luís Ricardo de Almeida Siqueira — Todos os direitos reservados.</div>`;
+  if (USER) {
+    box.innerHTML = `<h3>Minha conta</h3><p style="font-size:.88rem;margin:0 0 6px"><b>${esc(USER.displayName || "")}</b><br>${esc(USER.email)}</p>
+      <p style="font-size:.8rem;color:var(--mute)">Perfil: ${isDev() ? "Desenvolvedor" : isAdmin() ? "Administrador" : "Usuário"}. Suas carteirinhas, favoritos e consultas só aparecem para você.</p>
+      <button class="ok" id="acOut">Sair da conta</button><button class="ok" id="acClose" style="background:none;color:var(--mute);margin-top:6px">Fechar</button>${copy}`;
+    $("acOut").onclick = async () => { await FB.auth().signOut(); $("acctSheet").classList.remove("on"); toast("Você saiu da conta"); };
+    $("acClose").onclick = () => $("acctSheet").classList.remove("on");
+  } else {
+    const cad = mode === "cad";
+    box.innerHTML = `<h3>${cad ? "Criar conta" : "Entrar"}</h3>
+      <form class="form" id="acForm" autocomplete="on">
+        ${cad ? `<label>Seu nome<input id="acNome" autocomplete="name" required></label>` : ""}
+        <label>E-mail<input id="acEmail" type="email" autocomplete="email" required></label>
+        <label>Senha${cad ? " (mínimo 6 letras ou números)" : ""}<input id="acSenha" type="password" autocomplete="${cad ? "new-password" : "current-password"}" minlength="6" required></label>
+        <button class="save" type="submit">${cad ? "Criar conta" : "Entrar"}</button>
+      </form>
+      <div style="display:flex;justify-content:space-between;margin-top:10px">
+        <button class="lnk" id="acTroca" style="border:0;background:none;color:var(--plum-2);font-weight:700;cursor:pointer">${cad ? "Já tenho conta" : "Criar conta"}</button>
+        ${cad ? "" : `<button class="lnk" id="acEsq" style="border:0;background:none;color:var(--mute);text-decoration:underline;cursor:pointer">Esqueci a senha</button>`}
+      </div>
+      <button class="ok" id="acClose" style="background:none;color:var(--mute);margin-top:6px">Fechar</button>${copy}`;
+    $("acTroca").onclick = () => openAcct(cad ? "" : "cad");
+    $("acClose").onclick = () => $("acctSheet").classList.remove("on");
+    const esq = $("acEsq");
+    if (esq) esq.onclick = async () => {
+      const em = $("acEmail").value.trim(); if (!em) { toast("Digite o e-mail primeiro"); return; }
+      try { await FB.auth().sendPasswordResetEmail(em); toast("Enviamos um e-mail para trocar a senha"); } catch(e) { toast(authMsg(e)); }
+    };
+    $("acForm").onsubmit = async e => {
+      e.preventDefault();
+      const em = $("acEmail").value.trim(), pw = $("acSenha").value;
+      try {
+        if (cad) {
+          const cr = await FB.auth().createUserWithEmailAndPassword(em, pw);
+          const nome = $("acNome").value.trim();
+          await cr.user.updateProfile({displayName: nome});
+          await DB.collection("acha_usuarios").doc(cr.user.uid).set({email: em.toLowerCase(), nome, papel: "usuario", criado: Date.now()});
+        } else await FB.auth().signInWithEmailAndPassword(em, pw);
+        $("acctSheet").classList.remove("on"); toast("Conectado");
+      } catch(err) { toast(authMsg(err)); }
+    };
+  }
+  $("acctSheet").classList.add("on");
+}
+function authMsg(e){
+  const c = (e && e.code) || "";
+  if (c.includes("invalid-credential") || c.includes("wrong-password") || c.includes("user-not-found")) return "E-mail ou senha errados";
+  if (c.includes("email-already-in-use")) return "Esse e-mail já tem conta. Toque em Entrar";
+  if (c.includes("weak-password")) return "Senha fraca: use pelo menos 6 caracteres";
+  if (c.includes("invalid-email")) return "E-mail inválido";
+  if (c.includes("network")) return "Sem internet";
+  if (c.includes("too-many")) return "Muitas tentativas. Espere um pouco";
+  return "Não foi possível: " + (e.message || c);
+}
+
+/* --- administração --- */
+function renderAdm(){
+  const box = $("admBox"); if (!box) return;
+  if (!FB_ON || !isAdmin()) { box.innerHTML = ""; return; }
+  const pend = SUGS.filter(s => s.status === "pendente");
+  box.innerHTML = `<div class="adm"><h4>Administração</h4>
+    <button id="admAdd">+ Adicionar médico, dentista ou posto</button>
+    <div style="margin-top:10px;font-size:.8rem;font-weight:700">Sugestões dos usuários (${pend.length})</div>
+    ${pend.length ? pend.map(s => `<div class="sg">${esc(s.texto)}<small>${esc(s.sobre || "Sugestão geral")} · ${esc(s.email || "")} · ${new Date(s.criado).toLocaleDateString("pt-BR")}</small>
+      <div class="b">${s.pid && BYID[s.pid] ? `<button data-sg-ed="${esc(s.pid)}">Editar cadastro</button>` : ""}<button data-sg-ok="${esc(s._id)}">Feito</button><button data-sg-no="${esc(s._id)}">Recusar</button></div></div>`).join("") : `<div class="sg"><small>Nenhuma sugestão nova.</small></div>`}
+    ${isDev() ? `<div style="margin-top:10px;font-size:.8rem;font-weight:700">Administradores</div>
+      ${ADMINS.length ? ADMINS.map(a => `<div class="sg">${esc(a.nome || "")} <small>${esc(a.email)}</small><div class="b"><button data-unadm="${esc(a._id)}">Tirar administrador</button></div></div>`).join("") : `<div class="sg"><small>Nenhum administrador ainda.</small></div>`}
+      <div class="row2"><input id="admEmail" type="email" placeholder="E-mail de quem já tem conta"><button id="admMake">Tornar admin</button></div>` : ""}
+  </div>`;
+  $("admAdd").onclick = () => openEdit(null);
+  const mk = $("admMake");
+  if (mk) mk.onclick = async () => {
+    const em = $("admEmail").value.trim().toLowerCase(); if (!em) return;
+    try {
+      const q = await DB.collection("acha_usuarios").where("email", "==", em).get();
+      if (q.empty) { toast("Essa pessoa precisa criar a conta no app primeiro"); return; }
+      await Promise.all(q.docs.map(d => d.ref.update({papel: "admin"})));
+      toast("Agora é administrador"); loadAdmins();
+    } catch(e) { toast("Não foi possível: " + e.message); }
+  };
+}
+$("admBox").addEventListener("click", async e => {
+  const t = e.target;
+  try {
+    if (t.dataset.sgOk) { await DB.collection("acha_sugestoes").doc(t.dataset.sgOk).update({status:"feita"}); toast("Marcada como feita"); }
+    else if (t.dataset.sgNo) { await DB.collection("acha_sugestoes").doc(t.dataset.sgNo).update({status:"recusada"}); toast("Sugestão recusada"); }
+    else if (t.dataset.sgEd) openEdit(BYID[t.dataset.sgEd]);
+    else if (t.dataset.unadm) { await DB.collection("acha_usuarios").doc(t.dataset.unadm).update({papel:"usuario"}); toast("Deixou de ser administrador"); loadAdmins(); }
+  } catch(err) { toast("Não foi possível: " + err.message); }
+});
+async function loadAdmins(){
+  if (!isDev()) return;
+  try { const q = await DB.collection("acha_usuarios").where("papel", "==", "admin").get(); ADMINS = q.docs.map(d => ({...d.data(), _id:d.id})); } catch(_) { ADMINS = []; }
+  renderAdm();
+}
+function openEdit(p){
+  const isNew = !p;
+  const loc = p ? p.locs : [{addr:"", tels:[]}];
+  const specTxt = p ? p.specs.map(s => lab(s.k) + (s.t ? "#" + s.t : "")).join(", ") : "";
+  $("editBox").innerHTML = `<h3>${isNew ? "Adicionar" : "Editar cadastro"}</h3>
+    <form class="form" id="edForm" autocomplete="off">
+      <div class="row"><label>Convênio<select id="edConv">${Object.entries(CONVS).map(([k,c])=>`<option value="${k}" ${p && p.conv===k ? "selected" : ""}>${esc(c.nome)}</option>`).join("")}</select></label>
+      <label>Cidade<input id="edCity" value="${esc(p ? p.city : (state.city !== "Todas" ? state.city : "Tatuí"))}" required></label></div>
+      <div class="row"><label>Tipo<select id="edPre"><option value="o" ${p && p.pre==="o"?"selected":""}>Dr.</option><option value="a" ${p && p.pre==="a"?"selected":""}>Drª</option><option value="n" ${!p || (p.pre!=="o" && p.pre!=="a") ? "selected":""}>Clínica/posto</option></select></label>
+      <label>Registro (CRM/CRO)<input id="edCro" value="${esc(p ? p.cro : "")}"></label></div>
+      <label>Nome<input id="edName" value="${esc(p ? p.name : "")}" required></label>
+      <label>Especialidades (separe por vírgula; título com #E)<input id="edSpecs" value="${esc(specTxt)}" placeholder="Clínica geral, Ortodontia / ortopedia#E"></label>
+      <label>Endereço<input id="edAddr" value="${esc(loc[0].addr)}" placeholder="R. Exemplo, 123 - Centro"></label>
+      <label>Telefones (separe por vírgula)<input id="edTels" value="${esc(loc[0].tels.join(", "))}" placeholder="15 3251-0000, 15 99999-0000" inputmode="tel"></label>
+      ${loc.length > 1 ? `<p class="hint">Este cadastro tem ${loc.length} endereços; aqui você edita o primeiro.</p>` : ""}
+      <button class="save" type="submit">Salvar para todos</button>
+    </form>
+    <button class="ok" id="edClose" style="background:none;color:var(--mute);margin-top:6px">Cancelar</button>`;
+  $("edClose").onclick = () => $("editSheet").classList.remove("on");
+  $("edForm").onsubmit = async e => {
+    e.preventDefault();
+    const specs = $("edSpecs").value.split(",").map(x => x.trim()).filter(Boolean).map(x => { const [n, t=""] = x.split("#"); return {k: SPEC_BY_LABEL[norm(n.trim())] || n.trim(), t: t.trim().toUpperCase()}; });
+    const locs = [{addr: $("edAddr").value.trim(), tels: $("edTels").value.split(",").map(x => x.trim()).filter(Boolean)}, ...(p ? p.locs.slice(1) : [])];
+    const data = {conv:$("edConv").value, city:$("edCity").value.trim(), pre:$("edPre").value, cro:$("edCro").value.trim(), name:$("edName").value.trim(),
+      specs, locs, removed:false, editado:Date.now(), por:USER.email, base: p ? (p._base || (p._doc ? null : pid(p))) : null};
+    try {
+      if (p && p._doc) await DB.collection("acha_profissionais").doc(p._doc).set(data);
+      else await DB.collection("acha_profissionais").add(data);
+      $("editSheet").classList.remove("on"); toast("Salvo para todos");
+    } catch(err) { toast("Não foi possível: " + err.message); }
+  };
+  $("editSheet").classList.add("on");
+}
+async function removePerson(p){
+  if (!confirm(`Remover ${title(p)}${p.name} da lista para todos?`)) return;
+  try {
+    if (p._doc && !p._base) await DB.collection("acha_profissionais").doc(p._doc).update({removed:true, editado:Date.now(), por:USER.email});
+    else if (p._doc) await DB.collection("acha_profissionais").doc(p._doc).update({removed:true, editado:Date.now(), por:USER.email});
+    else await DB.collection("acha_profissionais").add({base:pid(p), removed:true, conv:p.conv, city:p.city, name:p.name, editado:Date.now(), por:USER.email});
+    toast("Removido da lista");
+  } catch(err) { toast("Não foi possível: " + err.message); }
+}
+function openSug(p){
+  if (!FB_ON) return;
+  if (!USER) { toast("Entre na sua conta para mandar sugestões"); goTab("p-meus"); openAcct(); return; }
+  $("editBox").innerHTML = `<h3>Sugerir correção</h3>
+    <p style="font-size:.85rem;margin:0 0 8px">${p ? `<b>${esc(title(p) + p.name)}</b> · ${esc(p.city)}` : "Sugestão geral"}</p>
+    <form class="form" id="sgForm"><label>O que está errado ou faltando?<textarea id="sgTxt" placeholder="Ex.: o telefone mudou para (15) 3251-0000" required></textarea></label>
+    <button class="save" type="submit">Enviar sugestão</button></form>
+    <button class="ok" id="sgClose" style="background:none;color:var(--mute);margin-top:6px">Cancelar</button>`;
+  $("sgClose").onclick = () => $("editSheet").classList.remove("on");
+  $("sgForm").onsubmit = async e => {
+    e.preventDefault();
+    try {
+      await DB.collection("acha_sugestoes").add({texto:$("sgTxt").value.trim(), pid: p ? pid(p) : null, sobre: p ? title(p) + p.name + " · " + p.city : null,
+        uid:USER.uid, email:USER.email, status:"pendente", criado:Date.now()});
+      $("editSheet").classList.remove("on"); toast("Sugestão enviada. Obrigado!");
+    } catch(err) { toast("Não foi possível: " + err.message); }
+  };
+  $("editSheet").classList.add("on");
+}
+
+/* --- ligar --- */
+function loadScript(src){ return new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+async function fbInit(){
+  if (!FB_ON) return;
+  renderCloudBar(); setDot("yellow");
+  try {
+    const v = "10.12.2", base = `https://www.gstatic.com/firebasejs/${v}/`;
+    await loadScript(base + "firebase-app-compat.js");
+    await Promise.all([loadScript(base + "firebase-auth-compat.js"), loadScript(base + "firebase-firestore-compat.js")]);
+    FB = window.firebase; FB.initializeApp(FIREBASE_CONFIG); DB = FB.firestore();
+  } catch(e) { console.warn(e); setDot("red"); return; }
+  DB.collection("acha_profissionais").onSnapshot(q => { CLOUD_PROF = q.docs.map(d => ({...d.data(), _id:d.id})); applyCloudList(); if (!USER) setDot("orange"); },
+    e => { console.warn(e); setDot("red"); });
+  FB.auth().onAuthStateChanged(async u => {
+    CLOUD_UNSUB.forEach(f => f()); CLOUD_UNSUB = []; SUGS = []; ADMINS = [];
+    USER = u;
+    if (!u) { ROLE = "anon"; setDot("orange"); renderCloudBar(); renderAdm(); render(); return; }
+    ROLE = "usuario";
+    try { await DB.collection("acha_config").doc("dev").get(); ROLE = "dev"; } catch(_) {}
+    try {
+      const ref = DB.collection("acha_usuarios").doc(u.uid), d = await ref.get();
+      if (!d.exists) await ref.set({email:(u.email||"").toLowerCase(), nome:u.displayName || "", papel:"usuario", criado:Date.now()});
+      else if (ROLE !== "dev" && d.data().papel === "admin") ROLE = "admin";
+    } catch(e) { console.warn(e); }
+    renderCloudBar(); render();
+    if (isAdmin()) CLOUD_UNSUB.push(DB.collection("acha_sugestoes").where("status", "==", "pendente").onSnapshot(q => { SUGS = q.docs.map(d => ({...d.data(), _id:d.id})).sort((a,b)=>b.criado-a.criado); renderAdm(); }, e => console.warn(e)));
+    loadAdmins(); renderAdm();
+    await cloudPull();
+  });
+  window.addEventListener("online", () => { if (USER) cloudPush(); });
+  window.addEventListener("offline", () => setDot("orange"));
+}
+$("acctBtn").addEventListener("click", () => openAcct());
+$("stBtn").addEventListener("click", () => $("legSheet").classList.add("on"));
+$("legOk").addEventListener("click", () => $("legSheet").classList.remove("on"));
+["acctSheet","legSheet","editSheet"].forEach(id => $(id).addEventListener("click", e => { if (e.target.id === id) $(id).classList.remove("on"); }));
 
 /* ===== Instalar na tela inicial ===== */
 let DEFER = null;
@@ -1592,6 +1941,9 @@ $("onlyE").addEventListener("change", e => { state.onlyE = e.target.checked; ren
 let tmr; $("q").addEventListener("input", e => { clearTimeout(tmr); tmr = setTimeout(()=>{ state.q = e.target.value; render(); }, 120); });
 $("clear").addEventListener("click", () => { $("q").value=""; state.q=""; render(); $("q").focus(); });
 async function cardClick(e){
+  const sg = e.target.closest("[data-sug]"); if (sg) { openSug(PEOPLE[+sg.dataset.sug]); return; }
+  const ed = e.target.closest("[data-ed]"); if (ed) { openEdit(PEOPLE[+ed.dataset.ed]); return; }
+  const dp = e.target.closest("[data-del-p]"); if (dp) { removePerson(PEOPLE[+dp.dataset.delP]); return; }
   const m = e.target.closest(".pinbtn");
   if (m) { const p = PEOPLE[+m.dataset.m]; const l = filtered().filter(x => x.city === p.city); if (!l.includes(p)) l.push(p); openMap(l, p); return; }
   const b = e.target.closest(".share[data-i]"); if (!b) return;
@@ -1611,6 +1963,7 @@ $("offices").innerHTML = OFFICES.map(o => `<div class="office"><strong>${esc(o[0
   <div class="phones">${phonesHtml(o[2].split(",").map(t=>t.trim()))}</div></div>`).join("");
 
 buildConvs(); buildChips(); buildSpecs(); render();
+fbInit();
 </script>
 </body>
 </html>
