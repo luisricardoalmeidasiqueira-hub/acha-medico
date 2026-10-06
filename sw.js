@@ -1,5 +1,5 @@
 // Acha Médico — funciona sem internet com a última versão aberta
-const CACHE = "acha-medico-v3.6";
+const CACHE = "acha-medico-v3.7";
 const FILES = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", e => {

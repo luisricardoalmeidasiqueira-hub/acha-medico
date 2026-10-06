@@ -197,6 +197,7 @@ details.past summary{cursor:pointer;color:var(--mute);font-size:.9rem;margin:6px
 .search{margin-top:12px;position:relative}
 .search input{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px 40px 12px 44px;background:var(--bg);color:var(--ink);font-size:16px}
 .search input:focus{outline:none;border-color:var(--ac)}
+input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;display:none}
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mute)}
 .search .clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--mute);font-size:1.3rem;padding:6px 10px;cursor:pointer;display:none}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 2px;margin:0 -16px;scrollbar-width:none}
@@ -434,16 +435,18 @@ nav.tabs svg{width:22px;height:22px}
     <h3>App</h3>
     <div class="bigbtns"><button id="btnInstall2">Instalar na tela inicial</button><button id="btnShare2">Compartilhar app</button><button id="btnUpdate2">Atualizar app</button></div>
     <p style="font-size:.86rem;color:var(--mute)">Favoritos, consultas e carteirinhas ficam guardados só neste celular. As carteirinhas ficam trancadas com a sua senha e se trancam sozinhas quando você sai do app.</p>
+    <div id="localEd"></div>
     <h3>Nuvem</h3>
     <p style="font-size:.86rem">Com a nuvem ligada, cada pessoa entra com o próprio e-mail e senha. Carteirinhas, favoritos e consultas ficam só na conta dela; as senhas das carteirinhas vão embaralhadas e nem o desenvolvedor consegue ler. A lista de médicos e postos é mantida pelo desenvolvedor e pelos administradores, e os usuários podem mandar sugestões de correção.</p>
     <h3>Sobre o mapa</h3>
     <p>Os alfinetes são posicionados pelo endereço escrito nos guias, então podem ficar um pouco fora do lugar exato. Endereços que atendem mais de um dentista aparecem num alfinete só, com o número de profissionais.</p>
-    <p style="color:var(--mute);font-size:.88rem">Versão 3.6</p>
+    <p style="color:var(--mute);font-size:.88rem">Versão <span class="appver"></span></p>
   </section>
 
   <footer>
     Desenvolvido por Luís Ricardo de Almeida Siqueira<br>
-    © 2026 Luís Ricardo de Almeida Siqueira — Todos os direitos reservados.
+    © 2026 Luís Ricardo de Almeida Siqueira — Todos os direitos reservados.<br>
+    <b>Versão <span class="appver"></span></b>
   </footer>
 </main>
 
@@ -1113,7 +1116,7 @@ function card(p){
       ${FB_ON ? `<button class="share" data-sug="${i}">Sugerir correção</button>` : ""}
       ${p.locs.some(l=>l.addr) ? `<button class="pinbtn" data-m="${PEOPLE.indexOf(p)}">${pinSvg.replace('width="18" height="18"','width="15" height="15"')}Ver no mapa</button>` : ""}
     </div>
-    ${isAdmin() ? `<div class="cardadm"><button data-ed="${i}">Editar</button><button data-del-p="${i}">Remover</button></div>` : ""}
+    ${canEdit() ? `<div class="cardadm"><button data-ed="${i}">Editar</button><button data-del-p="${i}">Remover</button></div>` : ""}
     </div>
   </article>`;
 }
@@ -1362,6 +1365,10 @@ document.addEventListener("click", e => {
   if (a && a.dataset.city && navigator.clipboard) navigator.clipboard.writeText(a.dataset.city).then(()=>toast("Cidade copiada: cole no guia")).catch(()=>{});
 });
 $("oficiais").innerHTML = oficiaisHtml(true);
+
+/* ===== Versão do app (mude aqui a cada atualização) ===== */
+const APP_VERSION = "3.7";
+document.querySelectorAll(".appver").forEach(e => e.textContent = APP_VERSION);
 
 /* ===== Tema claro / escuro ===== */
 const THEME_ICO = {
@@ -1717,9 +1724,23 @@ function makePerson(d, id){
   p.hay = norm([p.name, p.city, p.cro, (CONVS[p.conv]||{}).nome, ...p.locs.map(l=>l.addr), ...p.specs.map(s=>lab(s.k))].join(" "));
   return p;
 }
+let LOCAL_PROF = lsGet("am_local_prof", []);
+function profSrc(){ return FB_ON ? CLOUD_PROF : LOCAL_PROF; }
+function canEdit(){ return FB_ON ? isAdmin() : true; }
+async function profSave(id, data){
+  if (FB_ON) { if (id) await DB.collection("acha_profissionais").doc(id).set(data); else await DB.collection("acha_profissionais").add(data); return; }
+  if (id) { const i = LOCAL_PROF.findIndex(x => x._id === id); if (i >= 0) LOCAL_PROF[i] = {...data, _id:id}; else LOCAL_PROF.push({...data, _id:id}); }
+  else LOCAL_PROF.push({...data, _id:"l" + Date.now().toString(36)});
+  lsSet("am_local_prof", LOCAL_PROF); applyCloudList(); renderLocalEd();
+}
+async function profUpdate(id, patch){
+  if (FB_ON) { await DB.collection("acha_profissionais").doc(id).update(patch); return; }
+  const d = LOCAL_PROF.find(x => x._id === id); if (d) Object.assign(d, patch);
+  lsSet("am_local_prof", LOCAL_PROF); applyCloudList();
+}
 function applyCloudList(){
   const over = {}, extra = [];
-  CLOUD_PROF.forEach(d => { if (d.base) over[d.base] = d; else if (!d.removed && CONVS[d.conv]) extra.push(makePerson(d, d._id)); });
+  profSrc().forEach(d => { if (d.base) over[d.base] = d; else if (!d.removed && CONVS[d.conv]) extra.push(makePerson(d, d._id)); });
   const list = [];
   BASE_PEOPLE.forEach(p => {
     const o = over[pid(p)];
@@ -1852,7 +1873,8 @@ function openEdit(p){
       <label>Endereço<input id="edAddr" value="${esc(loc[0].addr)}" placeholder="R. Exemplo, 123 - Centro"></label>
       <label>Telefones (separe por vírgula)<input id="edTels" value="${esc(loc[0].tels.join(", "))}" placeholder="15 3251-0000, 15 99999-0000" inputmode="tel"></label>
       ${loc.length > 1 ? `<p class="hint">Este cadastro tem ${loc.length} endereços; aqui você edita o primeiro.</p>` : ""}
-      <button class="save" type="submit">Salvar para todos</button>
+      ${FB_ON ? "" : `<p class="hint">A nuvem ainda não está ligada: a mudança fica só neste celular.</p>`}
+      <button class="save" type="submit">${FB_ON ? "Salvar para todos" : "Salvar"}</button>
     </form>
     <button class="ok" id="edClose" style="background:none;color:var(--mute);margin-top:6px">Cancelar</button>`;
   $("edClose").onclick = () => $("editSheet").classList.remove("on");
@@ -1861,21 +1883,20 @@ function openEdit(p){
     const specs = $("edSpecs").value.split(",").map(x => x.trim()).filter(Boolean).map(x => { const [n, t=""] = x.split("#"); return {k: SPEC_BY_LABEL[norm(n.trim())] || n.trim(), t: t.trim().toUpperCase()}; });
     const locs = [{addr: $("edAddr").value.trim(), tels: $("edTels").value.split(",").map(x => x.trim()).filter(Boolean)}, ...(p ? p.locs.slice(1) : [])];
     const data = {conv:$("edConv").value, city:$("edCity").value.trim(), pre:$("edPre").value, cro:$("edCro").value.trim(), name:$("edName").value.trim(),
-      specs, locs, removed:false, editado:Date.now(), por:USER.email, base: p ? (p._base || (p._doc ? null : pid(p))) : null};
+      specs, locs, removed:false, editado:Date.now(), por:USER ? USER.email : "este celular", base: p ? (p._base || (p._doc ? null : pid(p))) : null};
     try {
-      if (p && p._doc) await DB.collection("acha_profissionais").doc(p._doc).set(data);
-      else await DB.collection("acha_profissionais").add(data);
-      $("editSheet").classList.remove("on"); toast("Salvo para todos");
+      await profSave(p && p._doc ? p._doc : null, data);
+      $("editSheet").classList.remove("on"); toast(FB_ON ? "Salvo para todos" : "Salvo neste celular");
     } catch(err) { toast("Não foi possível: " + err.message); }
   };
   $("editSheet").classList.add("on");
 }
 async function removePerson(p){
-  if (!confirm(`Remover ${title(p)}${p.name} da lista para todos?`)) return;
+  if (!confirm(`Remover ${title(p)}${p.name} da lista${FB_ON ? " para todos" : " neste celular"}?`)) return;
+  const por = USER ? USER.email : "este celular";
   try {
-    if (p._doc && !p._base) await DB.collection("acha_profissionais").doc(p._doc).update({removed:true, editado:Date.now(), por:USER.email});
-    else if (p._doc) await DB.collection("acha_profissionais").doc(p._doc).update({removed:true, editado:Date.now(), por:USER.email});
-    else await DB.collection("acha_profissionais").add({base:pid(p), removed:true, conv:p.conv, city:p.city, name:p.name, editado:Date.now(), por:USER.email});
+    if (p._doc) await profUpdate(p._doc, {removed:true, editado:Date.now(), por});
+    else await profSave(null, {base:pid(p), removed:true, conv:p.conv, city:p.city, name:p.name, editado:Date.now(), por});
     toast("Removido da lista");
   } catch(err) { toast("Não foi possível: " + err.message); }
 }
@@ -2054,7 +2075,19 @@ $("offices").innerHTML = OFFICES.map(o => `<div class="office"><strong>${esc(o[0
   <a class="addr" target="_blank" rel="noopener" href="${mapUrl(o[1], o[0].replace("Sede administrativa - ",""))}">${pinSvg}<span><u>${esc(o[1])}</u></span></a>
   <div class="phones">${phonesHtml(o[2].split(",").map(t=>t.trim()))}</div></div>`).join("");
 
-buildConvs(); buildChips(); buildSpecs(); render();
+function renderLocalEd(){
+  const box = $("localEd"); if (!box) return;
+  if (FB_ON) { box.innerHTML = ""; return; }
+  const n = LOCAL_PROF.length;
+  box.innerHTML = `<h3>Editar a lista</h3>
+    <p style="font-size:.84rem">Abra um cartão e toque em <b>Editar</b> para mudar especialidade, telefone ou endereço. Enquanto a nuvem não estiver ligada, as mudanças ficam só neste celular.</p>
+    <div class="bigbtns"><button id="locAdd">+ Adicionar médico ou posto</button>${n ? `<button id="locUndo">Desfazer minhas mudanças (${n})</button>` : ""}</div>`;
+  $("locAdd").onclick = () => openEdit(null);
+  const u = $("locUndo");
+  if (u) u.onclick = () => { if (confirm("Voltar a lista ao original e apagar as mudanças feitas neste celular?")) { LOCAL_PROF = []; lsSet("am_local_prof", LOCAL_PROF); applyCloudList(); renderLocalEd(); toast("Lista voltou ao original"); } };
+}
+if (!FB_ON && LOCAL_PROF.length) applyCloudList(); else { buildConvs(); buildChips(); buildSpecs(); render(); }
+renderLocalEd();
 fbInit();
 </script>
 </body>
