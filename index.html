@@ -3,8 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>try{var t=localStorage.getItem("am_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
-<meta name="theme-color" content="#4A1640">
+<script>
+/* Cores do app: tema (auto/claro/escuro) + cor escolhida (azul/verde/vinho/grafite) */
+window.AM_PAL = {
+  base:{ light:{ink:"#1E2329",mute:"#5E6670",line:"#E2E6EA",card:"#FFFFFF",bg:"#F4F6F8",call:"#1D6B54",wa:"#1E8E4E",warn:"#8A5A00","warn-bg":"#FFF4D6"},
+         dark:{ink:"#EDF0F3",mute:"#A2AAB4",line:"#2F343B",card:"#1B1E23",bg:"#121417",call:"#7FD4B5",wa:"#7FDA9F",warn:"#FFD27A","warn-bg":"#3A2E12"} },
+  cores:{
+    azul:   {nome:"Azul",    light:{ac:"#1F63B0",tx:"#1F63B0",soft:"#E3EDF9",soft2:"#F2F7FD"}, dark:{ac:"#2F74C4",tx:"#8DB9EE",soft:"#1E2B3B",soft2:"#182230"}},
+    verde:  {nome:"Verde",   light:{ac:"#0F7A5E",tx:"#0F7A5E",soft:"#DDF2EA",soft2:"#F0F9F5"}, dark:{ac:"#178A6B",tx:"#7FD4B5",soft:"#1B3029",soft2:"#152520"}},
+    vinho:  {nome:"Vinho",   light:{ac:"#6E2460",tx:"#6E2460",soft:"#F3DDE8",soft2:"#FBF4F7"}, dark:{ac:"#8E3A7C",tx:"#E7B6D6",soft:"#3A2433",soft2:"#2A1A25"}},
+    grafite:{nome:"Grafite", light:{ac:"#3B424C",tx:"#3B424C",soft:"#E7EAEE",soft2:"#F4F5F7"}, dark:{ac:"#4B535E",tx:"#C9D0D9",soft:"#2A2E34",soft2:"#202328"}}
+  }
+};
+window.amApplyLook = function(theme, cor){
+  var dark = theme === "dark" || (theme !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+  var m = dark ? "dark" : "light", P = AM_PAL, c = (P.cores[cor] || P.cores.azul)[m], b = P.base[m], st = document.documentElement.style, k;
+  for (k in b) st.setProperty("--" + k, b[k]);
+  st.setProperty("--ac", c.ac); st.setProperty("--plum", c.tx); st.setProperty("--plum-2", c.tx);
+  st.setProperty("--rose", c.soft); st.setProperty("--rose-2", c.soft2);
+  if (theme === "light" || theme === "dark") document.documentElement.setAttribute("data-theme", theme); else document.documentElement.removeAttribute("data-theme");
+  document.documentElement.style.colorScheme = m;
+  var meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.setAttribute("content", b.card);
+};
+(function(){ var t = "auto", c = "azul"; try { t = localStorage.getItem("am_theme") || "auto"; c = localStorage.getItem("am_cor") || "azul"; } catch(e){} amApplyLook(t, c); })();
+</script>
+<meta name="theme-color" content="#FFFFFF">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -47,17 +70,17 @@ a{color:inherit}
 button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--plum-2);outline-offset:2px;border-radius:8px}
 
-.top{background:#4A1640;color:#fff;padding:18px 16px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.top{background:var(--card);color:var(--ink);border-bottom:1px solid var(--line);padding:18px 16px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .brand small{display:block;margin-top:4px}
 .hbtns{display:flex;gap:8px}
-.hbtns button{border:0;background:rgba(255,255,255,.15);color:#fff;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer}
+.hbtns button{border:0;background:var(--rose);color:var(--plum-2);width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer}
 .top{transition:background .25s}
 .convs{display:grid;grid-template-columns:.85fr 1.3fr 1fr .8fr .85fr;gap:5px;margin-top:12px}
-.cvbtn{border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 2px;cursor:pointer;text-align:center;line-height:1.15;min-width:0}
+.cvbtn{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:8px 2px;cursor:pointer;text-align:center;line-height:1.15;min-width:0}
 .cvbtn strong{display:block;font-size:.76rem;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cvbtn small{display:block;font-size:.64rem;opacity:.8;margin-top:2px}
-.cvbtn[aria-pressed="true"]{background:#fff;color:var(--cvc,#4A1640);border-color:#fff}
+.cvbtn small{display:block;font-size:.64rem;opacity:.75;margin-top:2px}
+.cvbtn[aria-pressed="true"]{background:var(--cvc,var(--ac));color:#fff;border-color:var(--cvc,var(--ac))}
 .quick{display:flex;gap:8px;margin-bottom:10px}
 .qb{flex:1;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:5px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:9px 4px;font-weight:600;font-size:.8rem;cursor:pointer;white-space:nowrap}
 .quick{gap:6px}
@@ -76,7 +99,7 @@ button,input,select{font:inherit;color:inherit}
 .instb{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px}
 .instb img{width:40px;height:40px;border-radius:10px}
 .instb div{flex:1;font-size:.88rem;line-height:1.3}
-.instb .go{border:0;background:#4A1640;color:#fff;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+.instb .go{border:0;background:var(--ac);color:#fff;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
 .instb .x{border:0;background:none;color:var(--mute);font-size:1.3rem;cursor:pointer;padding:4px 6px}
 .form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:9px}
 .form label{display:grid;gap:3px;font-size:.78rem;font-weight:600;color:var(--mute);min-width:0}
@@ -86,7 +109,7 @@ button,input,select{font:inherit;color:inherit}
 .form input::-webkit-date-and-time-value{text-align:left;margin:0}
 .form input::-webkit-datetime-edit{padding:0}
 .form .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}
-.form .save{border:0;background:#4A1640;color:#fff;border-radius:12px;padding:11px;font-weight:700;font-size:.95rem;cursor:pointer}
+.form .save{border:0;background:var(--ac);color:#fff;border-radius:12px;padding:11px;font-weight:700;font-size:.95rem;cursor:pointer}
 .form .hint{font-size:.74rem;color:var(--mute);margin:-3px 0 0}
 .cons{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;border-left:5px solid var(--plum-2)}
 .cons.past{opacity:.6;border-left-color:var(--line)}
@@ -102,7 +125,7 @@ details.past summary{cursor:pointer;color:var(--mute);font-size:.9rem;margin:6px
 .pinbox p{margin:0 0 10px;font-size:.8rem;color:var(--mute);line-height:1.4}
 .pinbox input{display:block;margin:0 auto;width:150px;height:42px;text-align:center;font-size:18px;letter-spacing:.3em;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:0 8px;-webkit-appearance:none;appearance:none}
 .pinbox input::placeholder{letter-spacing:normal;font-size:.85rem}
-.pinbox .save{display:block;margin:10px auto 0;border:0;background:#4A1640;color:#fff;border-radius:10px;padding:9px 20px;font-weight:700;font-size:.9rem;cursor:pointer}
+.pinbox .save{display:block;margin:10px auto 0;border:0;background:var(--ac);color:#fff;border-radius:10px;padding:9px 20px;font-weight:700;font-size:.9rem;cursor:pointer}
 .pinbox .lnk{border:0;background:none;color:var(--mute);font-size:.76rem;text-decoration:underline;margin-top:8px;cursor:pointer}
 .cartao{border-radius:16px;padding:16px;color:#fff;margin-bottom:10px;position:relative;box-shadow:0 6px 16px rgba(0,0,0,.15)}
 .cartao .tp{font-size:.8rem;opacity:.85;font-weight:600}
@@ -143,7 +166,7 @@ details.past summary{cursor:pointer;color:var(--mute);font-size:.9rem;margin:6px
 .sheet .box{background:var(--card);color:var(--ink);width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px))}
 .sheet h3{margin:0 0 10px}
 .sheet ol{margin:0 0 14px;padding-left:20px;line-height:1.6}
-.sheet .ok{width:100%;border:0;background:#4A1640;color:#fff;border-radius:12px;padding:12px;font-weight:700;font-size:1rem;cursor:pointer}
+.sheet .ok{width:100%;border:0;background:var(--ac);color:#fff;border-radius:12px;padding:12px;font-weight:700;font-size:1rem;cursor:pointer}
 .ofc{background:var(--card);border:1.5px dashed var(--line);border-radius:16px;padding:14px;margin:14px 0 6px}
 .ofc h4{margin:0 0 2px;font-size:1rem}
 .ofc p{margin:0 0 10px;font-size:.86rem;color:var(--mute)}
@@ -160,7 +183,8 @@ details.past summary{cursor:pointer;color:var(--mute);font-size:.9rem;margin:6px
 @media (prefers-reduced-motion:reduce){.top,.chev{transition:none}}
 .temas{display:flex;gap:6px}
 .temas button{flex:1;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 4px;font-weight:600;font-size:.82rem;cursor:pointer}
-.temas button[aria-pressed="true"]{border-color:var(--plum-2);background:var(--rose);color:var(--plum)}
+.temas button[aria-pressed="true"]{border-color:var(--ac);background:var(--rose);color:var(--plum)}
+.temas button i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
 .cv{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:1px}
 .cv-uniodonto{background:#F3DDE8;color:#6E2460}
 .cv-unimed{background:#DDF1E4;color:#1D6B54}
@@ -169,16 +193,17 @@ details.past summary{cursor:pointer;color:var(--mute);font-size:.9rem;margin:6px
 .bigbtns{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
 .bigbtns button{flex:1 1 140px;border:1.5px solid var(--plum-2);background:var(--card);color:var(--plum-2);border-radius:12px;padding:11px;font-weight:700;cursor:pointer}
 .brand h1{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:-.02em;margin:0;line-height:1}
-.brand small{font-size:.78rem;opacity:.75}
+.brand small{font-size:.78rem;color:var(--mute)}
 .search{margin-top:12px;position:relative}
-.search input{width:100%;border:0;border-radius:14px;padding:13px 40px 13px 44px;background:#fff;color:#24161F;font-size:1rem}
-.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.55}
-.search .clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:#6E5F68;font-size:1.3rem;padding:6px 10px;cursor:pointer;display:none}
+.search input{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px 40px 12px 44px;background:var(--bg);color:var(--ink);font-size:16px}
+.search input:focus{outline:none;border-color:var(--ac)}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mute)}
+.search .clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--mute);font-size:1.3rem;padding:6px 10px;cursor:pointer;display:none}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 2px;margin:0 -16px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:none;border:1.5px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:999px;padding:7px 13px;font-weight:600;font-size:.9rem;cursor:pointer;white-space:nowrap}
+.chip{flex:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 13px;font-weight:600;font-size:.9rem;cursor:pointer;white-space:nowrap}
 .chip span{opacity:.6;font-weight:500;margin-left:4px}
-.chip[aria-pressed="true"]{background:#fff;color:#4A1640;border-color:#fff}
+.chip[aria-pressed="true"]{background:var(--ac);color:#fff;border-color:var(--ac)}
 .chip[aria-pressed="true"] span{opacity:.7}
 
 main{max-width:680px;margin:0 auto;padding:12px 14px 110px}
@@ -189,7 +214,7 @@ main{max-width:680px;margin:0 auto;padding:12px 14px 110px}
 .filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .filters select{flex:1 1 220px;min-width:0;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px}
 .toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--mute);padding:6px 2px;cursor:pointer}
-.toggle input{width:18px;height:18px;accent-color:#6E2460}
+.toggle input{width:18px;height:18px;accent-color:var(--ac)}
 .count{font-size:.88rem;color:var(--mute);margin:4px 2px 10px}
 
 .dent{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;margin-bottom:6px}
@@ -223,7 +248,7 @@ main{max-width:680px;margin:0 auto;padding:12px 14px 110px}
 
 .panel{display:none}
 .panel.on{display:block}
-.urg{background:#4A1640;color:#fff;border-radius:18px;padding:18px}
+.urg{background:var(--ac);color:#fff;border-radius:18px;padding:18px}
 .urg h2{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.6rem;margin:0 0 4px;line-height:1.1}
 .urg p{margin:6px 0;opacity:.9}
 .urg .ph{border-color:#fff;color:#fff;margin-top:8px;font-size:1rem;padding:9px 14px}
@@ -246,10 +271,10 @@ nav.tabs button[aria-selected="true"]{color:var(--plum-2)}
 nav.tabs svg{width:22px;height:22px}
 .actions{display:flex;gap:16px;align-items:center}
 .pinbtn{border:0;background:none;color:var(--plum-2);font-size:.82rem;font-weight:600;padding:8px 0 0;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
-.fab{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:7;background:#4A1640;color:#fff;border:0;border-radius:999px;padding:13px 18px;font-weight:700;font-size:.95rem;display:flex;gap:8px;align-items:center;box-shadow:0 6px 18px rgba(74,22,64,.35);cursor:pointer}
+.fab{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:7;background:var(--ac);color:#fff;border:0;border-radius:999px;padding:13px 18px;font-weight:700;font-size:.95rem;display:flex;gap:8px;align-items:center;box-shadow:0 6px 18px rgba(0,0,0,.22);cursor:pointer}
 .mapov{position:fixed;inset:0;z-index:20;background:var(--bg);display:none;flex-direction:column}
 .mapov.on{display:flex}
-.mapbar{background:#4A1640;color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;display:flex;align-items:center;gap:10px}
+.mapbar{background:var(--ac);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;display:flex;align-items:center;gap:10px}
 .mapbar button{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:10px;padding:9px 13px;font-weight:600;cursor:pointer}
 .mapbar .t{flex:1;min-width:0}
 .mapbar .t strong{display:block;font-size:1.02rem;line-height:1.2}
@@ -268,7 +293,7 @@ nav.tabs svg{width:22px;height:22px}
 .pop .s{font-size:.78rem;color:#6E5F68;margin:2px 0 6px}
 .pop a{display:inline-block;margin:0 6px 4px 0;text-decoration:none;border:1.5px solid #1D6B54;color:#1D6B54;border-radius:8px;padding:4px 8px;font-size:.82rem;font-weight:600}
 .popaddr{font-size:.82rem;margin-bottom:8px}
-.pop a.rota{border-color:#6E2460;color:#6E2460}
+.pop a.rota{border-color:var(--ac);color:var(--ac)}
 .toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#24161F;color:#fff;padding:9px 16px;border-radius:10px;font-size:.88rem;opacity:0;pointer-events:none;transition:opacity .2s}
 .toast.on{opacity:1}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
@@ -286,7 +311,7 @@ nav.tabs svg{width:22px;height:22px}
     </div>
   </div>
   <div class="search">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#24161F" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="q" type="search" placeholder="Nome, especialidade, rua ou bairro" autocomplete="off" aria-label="Buscar médico ou dentista">
     <button class="clear" id="clear" aria-label="Limpar busca">×</button>
   </div>
@@ -404,6 +429,8 @@ nav.tabs svg{width:22px;height:22px}
     <h3>Tema</h3>
     <div class="temas" id="temas"><button data-t="auto">Automático</button><button data-t="light">Claro</button><button data-t="dark">Escuro</button></div>
     <p style="font-size:.8rem;color:var(--mute)">Automático segue o tema do celular.</p>
+    <h3>Cor do app</h3>
+    <div class="temas" id="cores"></div>
     <h3>App</h3>
     <div class="bigbtns"><button id="btnInstall2">Instalar na tela inicial</button><button id="btnShare2">Compartilhar app</button><button id="btnUpdate2">Atualizar app</button></div>
     <p style="font-size:.86rem;color:var(--mute)">Favoritos, consultas e carteirinhas ficam guardados só neste celular. As carteirinhas ficam trancadas com a sua senha e se trancam sozinhas quando você sai do app.</p>
@@ -411,7 +438,7 @@ nav.tabs svg{width:22px;height:22px}
     <p style="font-size:.86rem">Com a nuvem ligada, cada pessoa entra com o próprio e-mail e senha. Carteirinhas, favoritos e consultas ficam só na conta dela; as senhas das carteirinhas vão embaralhadas e nem o desenvolvedor consegue ler. A lista de médicos e postos é mantida pelo desenvolvedor e pelos administradores, e os usuários podem mandar sugestões de correção.</p>
     <h3>Sobre o mapa</h3>
     <p>Os alfinetes são posicionados pelo endereço escrito nos guias, então podem ficar um pouco fora do lugar exato. Endereços que atendem mais de um dentista aparecem num alfinete só, com o número de profissionais.</p>
-    <p style="color:var(--mute);font-size:.88rem">Versão 3.5</p>
+    <p style="color:var(--mute);font-size:.88rem">Versão 3.6</p>
   </section>
 
   <footer>
@@ -1137,11 +1164,9 @@ function resetAll(){
 }
 
 function buildConvs(){
-  const opts = [["todos",{nome:"Todos",sub:"Juntos",cor:"#4A1640"}], ...Object.entries(CONVS)];
+  const opts = [["todos",{nome:"Todos",sub:"Juntos",cor:"var(--ac)"}], ...Object.entries(CONVS)];
   $("convs").innerHTML = opts.map(([k,c]) => `<button class="cvbtn" style="--cvc:${c.cor}" aria-pressed="${k===state.conv}" data-v="${k}"><strong>${esc(c.curto||c.nome)}</strong><small>${esc(c.sub)} · ${PEOPLE.filter(p=>k==="todos"||p.conv===k).length}</small></button>`).join("");
-  const cor = state.conv==="todos" ? "#4A1640" : CONVS[state.conv].cor;
-  $("top").style.background = cor; $("fab").style.background = cor;
-  document.querySelector('meta[name="theme-color"]').setAttribute("content", cor);
+  $("fab").style.background = state.conv==="todos" ? "" : CONVS[state.conv].cor;
 }
 function buildChips(){
   const pool = PEOPLE.filter(inConv);
@@ -1233,7 +1258,7 @@ function mapMsg(html){ const m=$("mapMsg"); m.innerHTML = html || ""; m.classLis
 function pinEl(n, focus){
   const d = document.createElement("div");
   d.className = "pin" + (focus ? " focus" : "");
-  d.innerHTML = `<svg viewBox="0 0 30 40" width="30" height="40"><path d="M15 0C6.7 0 0 6.6 0 14.8 0 25.9 15 40 15 40s15-14.1 15-25.2C30 6.6 23.3 0 15 0z" fill="#6E2460" stroke="#fff" stroke-width="2"/></svg>` + (n > 1 ? `<b>${n}</b>` : `<b>●</b>`);
+  d.innerHTML = `<svg viewBox="0 0 30 40" width="30" height="40"><path d="M15 0C6.7 0 0 6.6 0 14.8 0 25.9 15 40 15 40s15-14.1 15-25.2C30 6.6 23.3 0 15 0z" style="fill:var(--ac)" stroke="#fff" stroke-width="2"/></svg>` + (n > 1 ? `<b>${n}</b>` : `<b>●</b>`);
   return d;
 }
 function popupHtml(g){
@@ -1344,13 +1369,15 @@ const THEME_ICO = {
   light:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   dark:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'
 };
+let THEME = "auto", COR = "azul"; try { THEME = localStorage.getItem("am_theme") || "auto"; COR = localStorage.getItem("am_cor") || "azul"; } catch(_) {}
 function applyTheme(t){
-  if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
-  else document.documentElement.removeAttribute("data-theme");
+  window.amApplyLook(t, COR);
   $("themeIco").innerHTML = THEME_ICO[t] || THEME_ICO.auto;
   document.querySelectorAll("#temas button").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === t));
+  document.querySelectorAll("#cores button").forEach(b => b.setAttribute("aria-pressed", b.dataset.c === COR));
 }
-let THEME = "auto"; try { THEME = localStorage.getItem("am_theme") || "auto"; } catch(_) {}
+function setCor(c){ COR = c; try { localStorage.setItem("am_cor", c); } catch(_) {} applyTheme(THEME); }
+if (window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (THEME === "auto") applyTheme("auto"); });
 function setTheme(t){ THEME = t; try { localStorage.setItem("am_theme", t); } catch(_) {} applyTheme(t); }
 applyTheme(THEME);
 $("btnTheme").addEventListener("click", () => {
@@ -1358,6 +1385,9 @@ $("btnTheme").addEventListener("click", () => {
   setTheme(prox); toast(({auto:"Tema automático (igual ao celular)", light:"Tema claro", dark:"Tema escuro"})[prox]);
 });
 $("temas").addEventListener("click", e => { const b = e.target.closest("button[data-t]"); if (b) setTheme(b.dataset.t); });
+$("cores").innerHTML = Object.entries(window.AM_PAL.cores).map(([k,v]) => `<button data-c="${k}" aria-pressed="${k===COR}"><i style="background:${v.light.ac}"></i>${v.nome}</button>`).join("");
+$("cores").addEventListener("click", e => { const b = e.target.closest("button[data-c]"); if (b) setCor(b.dataset.c); });
+applyTheme(THEME);
 
 /* ===== Guardado no aparelho ===== */
 function lsGet(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(_) { return d; } }
