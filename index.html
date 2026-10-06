@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4A1640">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Acha Médico">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Acha Médico — médicos e dentistas dos convênios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plum:#4A1640; --plum-2:#6E2460; --rose:#F3DDE8; --rose-2:#FBF4F7;
+  --ink:#24161F; --mute:#6E5F68; --line:#E8D6DF; --card:#FFFFFF;
+  --call:#1D6B54; --wa:#1E8E4E; --warn:#8A5A00; --warn-bg:#FFF4D6;
+  --bg:#FBF7F9;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --plum:#E7B6D6; --plum-2:#F2CBE3; --rose:#3A2433; --rose-2:#2A1A25;
+    --ink:#F5EAF0; --mute:#BFA9B5; --line:#4A3241; --card:#25171F;
+    --call:#7FD4B5; --wa:#7FDA9F; --warn:#FFD27A; --warn-bg:#3A2E12;
+    --bg:#1B1117;
+  }
+}
+:root[data-theme="dark"]{
+  --plum:#E7B6D6; --plum-2:#F2CBE3; --rose:#3A2433; --rose-2:#2A1A25;
+  --ink:#F5EAF0; --mute:#BFA9B5; --line:#4A3241; --card:#25171F;
+  --call:#7FD4B5; --wa:#7FDA9F; --warn:#FFD27A; --warn-bg:#3A2E12;
+  --bg:#1B1117;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--plum-2);outline-offset:2px;border-radius:8px}
+
+.top{background:#4A1640;color:#fff;padding:18px 16px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand small{display:block;margin-top:4px}
+.hbtns{display:flex;gap:8px}
+.hbtns button{border:0;background:rgba(255,255,255,.15);color:#fff;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer}
+.top{transition:background .25s}
+.convs{display:grid;grid-template-columns:.85fr 1.3fr 1fr .8fr .85fr;gap:5px;margin-top:12px}
+.cvbtn{border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 2px;cursor:pointer;text-align:center;line-height:1.15;min-width:0}
+.cvbtn strong{display:block;font-size:.76rem;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cvbtn small{display:block;font-size:.64rem;opacity:.8;margin-top:2px}
+.cvbtn[aria-pressed="true"]{background:#fff;color:var(--cvc,#4A1640);border-color:#fff}
+.quick{display:flex;gap:8px;margin-bottom:10px}
+.qb{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 8px;font-weight:600;font-size:.9rem;cursor:pointer}
+.qb[aria-pressed="true"]{border-color:var(--plum-2);background:var(--rose);color:var(--plum)}
+.qb svg{flex:none}
+.dent{position:relative}
+.dent h2{padding-right:40px}
+.fav{position:absolute;top:8px;right:8px;width:40px;height:40px;border:0;background:none;color:var(--mute);border-radius:10px;cursor:pointer;display:grid;place-items:center}
+.fav[aria-pressed="true"]{color:#D99A00}
+.fav[aria-pressed="true"] svg{fill:#F2B600}
+.dist{display:inline-block;margin-left:6px;font-size:.75rem;font-weight:700;color:var(--call);background:color-mix(in srgb,var(--call) 12%,transparent);border-radius:6px;padding:1px 7px}
+.near{display:flex;align-items:center;gap:10px;background:var(--rose-2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:.9rem}
+.near span{flex:1}
+.near button{border:0;background:none;color:var(--plum-2);font-weight:700;cursor:pointer;padding:4px}
+.lembra{display:flex;gap:10px;align-items:center;background:#FFF4D6;color:#5C3D00;border-radius:12px;padding:11px 13px;margin-bottom:10px;font-size:.9rem;border:0;width:100%;text-align:left;cursor:pointer}
+.lembra b{display:block}
+.instb{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px}
+.instb img{width:40px;height:40px;border-radius:10px}
+.instb div{flex:1;font-size:.88rem;line-height:1.3}
+.instb .go{border:0;background:#4A1640;color:#fff;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+.instb .x{border:0;background:none;color:var(--mute);font-size:1.3rem;cursor:pointer;padding:4px 6px}
+.form{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:10px}
+.form label{display:grid;gap:4px;font-size:.85rem;font-weight:600;color:var(--mute)}
+.form input,.form textarea{font-family:inherit;border:1.5px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 11px;font-size:1rem;color:var(--ink);font-weight:400;width:100%}
+.form textarea{min-height:60px;resize:vertical}
+.form .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form .save{border:0;background:#4A1640;color:#fff;border-radius:12px;padding:12px;font-weight:700;font-size:1rem;cursor:pointer}
+.form .hint{font-size:.8rem;color:var(--mute);margin:-4px 0 0}
+.cons{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;border-left:5px solid var(--plum-2)}
+.cons.past{opacity:.6;border-left-color:var(--line)}
+.cons .when{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.1rem;font-weight:800;color:var(--plum)}
+.cons .who{font-weight:700;margin-top:2px}
+.cons .obs{font-size:.86rem;color:var(--mute);margin-top:4px}
+.cons .btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.cons .btns a,.cons .btns button{font-size:.83rem;font-weight:600;text-decoration:none;border:1.5px solid var(--plum-2);color:var(--plum-2);background:none;border-radius:9px;padding:6px 10px;cursor:pointer}
+.cons .btns .del{border-color:var(--line);color:var(--mute)}
+.vazio{color:var(--mute);font-size:.92rem;background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:16px;text-align:center}
+details.past summary{cursor:pointer;color:var(--mute);font-size:.9rem;margin:6px 2px 10px}
+.pinbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+.pinbox p{margin:0 0 10px;font-size:.9rem;color:var(--mute)}
+.pinbox input{width:170px;text-align:center;font-size:1.5rem;letter-spacing:.4em;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:10px}
+.pinbox .save{display:block;margin:12px auto 0;border:0;background:#4A1640;color:#fff;border-radius:12px;padding:11px 22px;font-weight:700;cursor:pointer}
+.pinbox .lnk{border:0;background:none;color:var(--mute);font-size:.82rem;text-decoration:underline;margin-top:10px;cursor:pointer}
+.cartao{border-radius:16px;padding:16px;color:#fff;margin-bottom:10px;position:relative;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.cartao .tp{font-size:.8rem;opacity:.85;font-weight:600}
+.cartao .nm{font-weight:700;margin-top:2px}
+.cartao .num{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:.04em;margin:10px 0 4px;word-break:break-all}
+.cartao .ln{display:flex;align-items:center;gap:8px;font-size:.88rem;margin-top:6px;flex-wrap:wrap}
+.cartao .ln span{opacity:.85}
+.cartao .ln code{font-family:inherit;font-weight:700;background:rgba(255,255,255,.15);border-radius:6px;padding:2px 8px}
+.cartao button{border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:5px 9px;font-size:.8rem;font-weight:600;cursor:pointer}
+.cartao .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.cartbar{display:flex;gap:8px;margin-bottom:10px}
+.cartbar button{flex:1;border:1.5px solid var(--plum-2);background:var(--card);color:var(--plum-2);border-radius:12px;padding:10px;font-weight:700;cursor:pointer}
+.form select{border:1.5px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 11px;font-size:1rem;color:var(--ink);width:100%}
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(20,8,16,.5);display:none;align-items:flex-end;justify-content:center}
+.sheet.on{display:flex}
+.sheet .box{background:var(--card);color:var(--ink);width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px))}
+.sheet h3{margin:0 0 10px}
+.sheet ol{margin:0 0 14px;padding-left:20px;line-height:1.6}
+.sheet .ok{width:100%;border:0;background:#4A1640;color:#fff;border-radius:12px;padding:12px;font-weight:700;font-size:1rem;cursor:pointer}
+.ofc{background:var(--card);border:1.5px dashed var(--line);border-radius:16px;padding:14px;margin:14px 0 6px}
+.ofc h4{margin:0 0 2px;font-size:1rem}
+.ofc p{margin:0 0 10px;font-size:.86rem;color:var(--mute)}
+.ofl{display:flex;align-items:center;gap:10px;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px;background:var(--rose-2)}
+.ofl b{display:block;font-size:.93rem}
+.ofl small{display:block;font-size:.78rem;color:var(--mute)}
+.ofl span:last-child{margin-left:auto;color:var(--plum-2);font-weight:700}
+.grp{display:flex;align-items:center;gap:8px;margin:18px 2px 8px;font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.15rem}
+.grp:first-child{margin-top:4px}
+.grp i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.grp small{font-family:Figtree,sans-serif;font-size:.82rem;color:var(--mute);font-weight:500}
+@media (prefers-reduced-motion:reduce){.top{transition:none}}
+.cv{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:1px}
+.cv-uniodonto{background:#F3DDE8;color:#6E2460}
+.cv-unimed{background:#DDF1E4;color:#1D6B54}
+.cv-fesp{background:#E2E8F7;color:#2B4A8B}
+.cv-sus{background:#DCEBFA;color:#0B5CAD}
+.bigbtns{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.bigbtns button{flex:1 1 140px;border:1.5px solid var(--plum-2);background:var(--card);color:var(--plum-2);border-radius:12px;padding:11px;font-weight:700;cursor:pointer}
+.brand h1{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:-.02em;margin:0;line-height:1}
+.brand small{font-size:.78rem;opacity:.75}
+.search{margin-top:12px;position:relative}
+.search input{width:100%;border:0;border-radius:14px;padding:13px 40px 13px 44px;background:#fff;color:#24161F;font-size:1rem}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.55}
+.search .clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:#6E5F68;font-size:1.3rem;padding:6px 10px;cursor:pointer;display:none}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 2px;margin:0 -16px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1.5px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:999px;padding:7px 13px;font-weight:600;font-size:.9rem;cursor:pointer;white-space:nowrap}
+.chip span{opacity:.6;font-weight:500;margin-left:4px}
+.chip[aria-pressed="true"]{background:#fff;color:#4A1640;border-color:#fff}
+.chip[aria-pressed="true"] span{opacity:.7}
+
+main{max-width:680px;margin:0 auto;padding:12px 14px 110px}
+.cityf{position:relative;margin-bottom:8px}
+.cityf svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--plum-2);pointer-events:none}
+.cityf input{width:100%;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:11px 12px 11px 38px;font-size:1rem}
+.cityf input:focus{border-color:var(--plum-2);outline:none}
+.filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.filters select{flex:1 1 220px;min-width:0;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--mute);padding:6px 2px;cursor:pointer}
+.toggle input{width:18px;height:18px;accent-color:#6E2460}
+.count{font-size:.88rem;color:var(--mute);margin:4px 2px 10px}
+
+.dent{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;margin-bottom:10px}
+.dent h2{font-size:1.05rem;margin:0;font-weight:700;line-height:1.25}
+.meta{font-size:.82rem;color:var(--mute);margin-top:2px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.tag{font-size:.8rem;background:var(--rose);color:var(--plum);border-radius:8px;padding:3px 8px;font-weight:600}
+.tag b{display:inline-block;margin-left:5px;background:var(--plum);color:var(--card);border-radius:4px;padding:0 4px;font-size:.7rem;line-height:1.5}
+.loc{border-top:1px dashed var(--line);padding-top:9px;margin-top:4px}
+.loc + .loc{margin-top:9px}
+.addr{display:flex;gap:8px;align-items:flex-start;text-decoration:none;font-size:.93rem}
+.addr svg{flex:none;margin-top:2px;color:var(--plum-2)}
+.addr u{text-decoration-color:var(--line);text-underline-offset:3px}
+.noaddr{font-size:.88rem;color:var(--mute);font-style:italic}
+.phones{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ph{display:inline-flex;align-items:center;gap:6px;text-decoration:none;border:1.5px solid var(--call);color:var(--call);border-radius:10px;padding:6px 10px;font-weight:600;font-size:.88rem}
+.ph.wa{border-color:var(--wa);color:var(--wa)}
+.share{border:0;background:none;color:var(--mute);font-size:.82rem;padding:8px 0 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.empty{text-align:center;padding:40px 16px;color:var(--mute)}
+.empty button{margin-top:10px;border:1.5px solid var(--plum-2);background:none;color:var(--plum-2);border-radius:10px;padding:8px 14px;font-weight:600;cursor:pointer}
+
+.panel{display:none}
+.panel.on{display:block}
+.urg{background:#4A1640;color:#fff;border-radius:18px;padding:18px}
+.urg h2{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.6rem;margin:0 0 4px;line-height:1.1}
+.urg p{margin:6px 0;opacity:.9}
+.urg .ph{border-color:#fff;color:#fff;margin-top:8px;font-size:1rem;padding:9px 14px}
+.urg .addr{color:#fff}
+.urg .addr svg{color:#F3DDE8}
+h3{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.2rem;margin:22px 2px 10px}
+.office{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.office strong{display:block;margin-bottom:4px}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:11px 13px;font-size:.88rem;margin:10px 0}
+.legend{display:grid;gap:8px;font-size:.92rem}
+.legend div{display:flex;gap:10px;align-items:center}
+.legend b{background:var(--plum);color:var(--card);border-radius:5px;padding:1px 7px;font-size:.8rem}
+.steps{margin:0;padding-left:20px}
+.steps li{margin-bottom:6px}
+footer{text-align:center;font-size:.78rem;color:var(--mute);margin-top:28px;line-height:1.6}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:6}
+nav.tabs button{flex:1;border:0;background:none;padding:10px 4px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.75rem;font-weight:600;color:var(--mute);cursor:pointer}
+nav.tabs button[aria-selected="true"]{color:var(--plum-2)}
+nav.tabs svg{width:22px;height:22px}
+.actions{display:flex;gap:16px;align-items:center}
+.pinbtn{border:0;background:none;color:var(--plum-2);font-size:.82rem;font-weight:600;padding:8px 0 0;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
+.fab{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:7;background:#4A1640;color:#fff;border:0;border-radius:999px;padding:13px 18px;font-weight:700;font-size:.95rem;display:flex;gap:8px;align-items:center;box-shadow:0 6px 18px rgba(74,22,64,.35);cursor:pointer}
+.mapov{position:fixed;inset:0;z-index:20;background:var(--bg);display:none;flex-direction:column}
+.mapov.on{display:flex}
+.mapbar{background:#4A1640;color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;display:flex;align-items:center;gap:10px}
+.mapbar button{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:10px;padding:9px 13px;font-weight:600;cursor:pointer}
+.mapbar .t{flex:1;min-width:0}
+.mapbar .t strong{display:block;font-size:1.02rem;line-height:1.2}
+.mapbar .t small{opacity:.8;font-size:.8rem}
+.mapwrap{flex:1;position:relative}
+#map{position:absolute;inset:0}
+.mapmsg{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--mute);z-index:3;background:var(--bg);line-height:1.5}
+.mapmsg.on{display:flex}
+.mapmsg code{background:var(--rose);color:var(--plum);padding:1px 6px;border-radius:5px}
+.pin{width:30px;height:40px;cursor:pointer;position:relative}
+.pin b{position:absolute;top:5px;left:0;right:0;text-align:center;color:#fff;font:700 11px Figtree,sans-serif}
+.pin.focus svg path{fill:#C2185B}
+.mapboxgl-popup-content{font-family:Figtree,system-ui,sans-serif;border-radius:12px;padding:12px 14px;max-width:270px;color:#24161F;max-height:52vh;overflow:auto}
+.pop + .pop{border-top:1px dashed #E8D6DF;margin-top:8px;padding-top:8px}
+.pop h4{margin:0;font-size:.95rem;line-height:1.25}
+.pop .s{font-size:.78rem;color:#6E5F68;margin:2px 0 6px}
+.pop a{display:inline-block;margin:0 6px 4px 0;text-decoration:none;border:1.5px solid #1D6B54;color:#1D6B54;border-radius:8px;padding:4px 8px;font-size:.82rem;font-weight:600}
+.popaddr{font-size:.82rem;margin-bottom:8px}
+.pop a.rota{border-color:#6E2460;color:#6E2460}
+.toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#24161F;color:#fff;padding:9px 16px;border-radius:10px;font-size:.88rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="brand">
+    <div><h1>Acha Médico</h1><small>Médicos e dentistas dos convênios</small></div>
+    <div class="hbtns">
+      <button id="btnShare" aria-label="Compartilhar app" title="Compartilhar app"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+      <button id="btnUpdate" aria-label="Atualizar app" title="Atualizar app"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
+    </div>
+  </div>
+  <div class="search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#24161F" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Nome, especialidade, rua ou bairro" autocomplete="off" aria-label="Buscar médico ou dentista">
+    <button class="clear" id="clear" aria-label="Limpar busca">×</button>
+  </div>
+  <div class="convs" id="convs" role="group" aria-label="Convênio"></div>
+  <div class="chips" id="chips" role="group" aria-label="Cidade"></div>
+</header>
+
+<main>
+  <section class="panel on" id="p-busca">
+    <div class="cityf">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      <input id="cityQ" type="search" list="cityList" placeholder="Digite a cidade (ex.: Tatuí)" autocomplete="off" aria-label="Cidade">
+      <datalist id="cityList"></datalist>
+    </div>
+    <div class="quick">
+      <button class="qb" id="btnNear" aria-pressed="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7.5"/></svg>Perto de mim</button>
+      <button class="qb" id="btnFavs" aria-pressed="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>Favoritos</button>
+    </div>
+    <div class="filters">
+      <select id="spec" aria-label="Especialidade"></select>
+      <label class="toggle"><input type="checkbox" id="onlyE"> Só especialistas com título</label>
+    </div>
+    <div id="topExtras"></div>
+    <div class="note" id="convNote" style="display:none"></div>
+    <div class="count" id="count"></div>
+    <div id="list"></div>
+    <button class="fab" id="fab" aria-label="Ver resultados no mapa">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      Ver no mapa
+    </button>
+  </section>
+
+  <section class="panel" id="p-meus">
+    <h3 style="margin-top:4px">Minhas consultas</h3>
+    <form class="form" id="fCons" autocomplete="off">
+      <label>Médico, dentista ou clínica
+        <input id="cNome" list="allNames" placeholder="Comece a digitar o nome" required>
+        <datalist id="allNames"></datalist>
+      </label>
+      <div class="row">
+        <label>Dia<input id="cData" type="date" required></label>
+        <label>Hora<input id="cHora" type="time" required></label>
+      </div>
+      <label>Observação<textarea id="cObs" placeholder="Ex.: levar exames, pedir retorno, jejum"></textarea></label>
+      <p class="hint">Depois de salvar, toque em “Lembrete no celular” para o aviso tocar 1 dia antes e 2 horas antes.</p>
+      <button class="save" type="submit">Salvar consulta</button>
+    </form>
+    <div id="consList" style="margin-top:14px"></div>
+
+    <h3>Minhas carteirinhas</h3>
+    <div id="cartBox"></div>
+
+    <h3>Favoritos</h3>
+    <div id="favList"></div>
+  </section>
+
+  <section class="panel" id="p-urg">
+    <div class="urg">
+      <h2>Urgência 24 horas</h2>
+      <p>Atendimento odontológico de urgência todos os dias, inclusive fins de semana e feriados. Em Piracicaba, funciona só no Hospital Unimed.</p>
+      <a class="addr" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Av.+Antonia+Pazzinato+Sturion,+1221+Morumbi+Piracicaba+SP">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+        <span><u>Av. Antonia Pazzinato Sturion, 1221 – Morumbi, Piracicaba</u></span>
+      </a>
+      <a class="ph" href="tel:+551934368300">Ligar (19) 3436-8300</a>
+    </div>
+
+    <h3>Urgência pelo SUS em Tatuí</h3>
+    <div class="office"><strong>SAMU — ambulância</strong><div class="phones"><a class="ph" href="tel:192">Ligar 192</a></div></div>
+    <div class="office"><strong>Pronto Socorro Municipal (24 horas)</strong>
+      <a class="addr" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=R.+Capit%C3%A3o+Lisboa,+1240,+Tatu%C3%AD+-+SP"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><u>R. Capitão Lisboa, 1240 - Centro</u></span></a>
+      <div class="phones"><a class="ph" href="tel:+551533053996">(15) 3305-3996</a></div></div>
+    <div class="office"><strong>Santa Casa de Misericórdia de Tatuí</strong>
+      <a class="addr" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=R.+Maneco+Pereira,+299,+Tatu%C3%AD+-+SP"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><u>R. Maneco Pereira, 299 - Centro</u></span></a>
+      <div class="phones"><a class="ph" href="tel:+551532514950">(15) 3251-4950</a></div></div>
+
+    <h3>Guias oficiais na internet</h3>
+    <div id="oficiais"></div>
+
+    <h3>Escritórios da Uniodonto</h3>
+    <div id="offices"></div>
+
+    <h3>Como ser atendido</h3>
+    <ol class="steps">
+      <li>Escolha um dentista da rede e marque consulta por telefone.</li>
+      <li>Leve sua identificação de usuário Uniodonto (carteirinha no app oficial).</li>
+      <li>Na avaliação, tire suas dúvidas com o dentista.</li>
+      <li>Com a liberação, marque o retorno e comece o tratamento.</li>
+    </ol>
+    <div class="note">Não vai conseguir ir? Ligue avisando o consultório. A vaga pode ir para outro paciente.</div>
+  </section>
+
+  <section class="panel" id="p-sobre">
+    <h3>O que significam as letras</h3>
+    <div class="legend">
+      <div><b>E</b> Título de especialista naquela área</div>
+      <div><b>M</b> Mestrado</div>
+      <div><b>D</b> Doutorado ou pós-doutorado</div>
+      <div><b>R</b> Residência médica</div>
+    </div>
+    <h3>De onde vêm os dados</h3>
+    <p><strong>Uniodonto:</strong> Manual do Beneficiário Uniodonto Piracicaba 2025/2026, atualizado até 15/08/2025, validade até setembro de 2026.</p>
+    <p><strong>Unimed Tatuí:</strong> primeira página do Guia Médico de 19/10/2021 (Alergologia a Gastroenterologia e Clínica Médica). É um guia antigo e incompleto.</p>
+    <p><strong>SUS Tatuí:</strong> postos, pronto-socorro e Santa Casa de listas da internet (TatuíFácil e HospiVista), conferidas em outubro de 2026. Quatro UBS estão sem endereço porque a lista não trazia.</p>
+    <p><strong>Fesp:</strong> prestadores de Tatuí que apareceram nos prints do Guia Médico Fesp (só parte da letra A).</p>
+    <div class="note">Médicos e dentistas entram e saem das redes. Antes de marcar, confirme no app ou site oficial do seu convênio. Na Uniodonto, os planos Odontoflex e Ortoplus têm rede própria e não estão nesta lista.</div>
+    <p>Este app não é oficial de nenhum convênio. Serve só para facilitar a busca.</p>
+    <h3>App</h3>
+    <div class="bigbtns"><button id="btnInstall2">Instalar na tela inicial</button><button id="btnShare2">Compartilhar app</button><button id="btnUpdate2">Atualizar app</button></div>
+    <p style="font-size:.86rem;color:var(--mute)">Favoritos, consultas e carteirinhas ficam guardados só neste celular. As carteirinhas ficam trancadas com a sua senha e se trancam sozinhas quando você sai do app.</p>
+    <h3>Sobre o mapa</h3>
+    <p>Os alfinetes são posicionados pelo endereço escrito nos guias, então podem ficar um pouco fora do lugar exato. Endereços que atendem mais de um dentista aparecem num alfinete só, com o número de profissionais.</p>
+    <p style="color:var(--mute);font-size:.88rem">Versão 3.2</p>
+  </section>
+
+  <footer>
+    Desenvolvido por Luís Ricardo de Almeida Siqueira<br>
+    © 2026 Luís Ricardo de Almeida Siqueira — Todos os direitos reservados.
+  </footer>
+</main>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-p="p-busca">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Buscar</button>
+  <button role="tab" aria-selected="false" data-p="p-meus">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Meus</button>
+  <button role="tab" aria-selected="false" data-p="p-urg">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M3 12h18"/></svg>Urgência</button>
+  <button role="tab" aria-selected="false" data-p="p-sobre">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Sobre</button>
+</nav>
+<div class="mapov" id="mapov" role="dialog" aria-label="Mapa">
+  <div class="mapbar">
+    <div class="t"><strong id="mapTitle">Mapa</strong><small id="mapSub"></small></div>
+    <button id="mapClose">Fechar</button>
+  </div>
+  <div class="mapwrap">
+    <div id="map"></div>
+    <div class="mapmsg" id="mapMsg"></div>
+  </div>
+</div>
+<div class="sheet" id="instSheet" role="dialog" aria-label="Instalar app">
+  <div class="box">
+    <h3>Colocar na tela inicial</h3>
+    <div id="instSteps"></div>
+    <button class="ok" id="instOk">Entendi</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== Especialidades ===== */
+const SPECS = {
+  cg:"Clínica geral", acu:"Acupuntura", cir:"Cirurgia buco-maxilo-facial", den:"Dentística restauradora",
+  dtm:"DTM e dor orofacial", end:"Endodontia (canal)", est:"Estomatologia", imp:"Implantodontia",
+  pne:"Pacientes com necessidades especiais", hos:"Odontologia hospitalar", ped:"Odontopediatria (crianças)",
+  ort:"Ortodontia / ortopedia", ofm:"Ortopedia funcional dos maxilares", per:"Periodontia (gengiva)",
+  pro:"Prótese dental / sobre implante", rad:"Radiologia"
+};
+
+/* ===== Dados do guia 2025/2026 =====
+   Linha: prefixo|nome|CRO|endereço|telefones|g   (a = Drª, o = Dr., c = clínica; g = atende clínica geral)
+   Vários endereços: separar endereço e telefones com " ~ " na mesma ordem.
+   Especialidades: nomes separados por ";" e títulos após "#" (E, M, D). */
+const DATA = {
+"Piracicaba": { d:`
+a|Raquel Grisotto Sansigolo|34.482|R. Santa Cruz, 710 - Centro|19 3434-4628, 19 98256-0997|
+a|Adriana Brolio Marques Rezende|96.684|R. São João, 1202 - S. 4 - Bairro Alto|19 3422-4270, 19 99122-6454|
+a|Adriana Daniele Lopes|92.144|R. Dr. João Teodoro, 620 - S. 1 - Vila Rezende|19 3375-7200, 19 98207-7111|g
+o|Aladim Gomes Lameira Júnior|93.157|R. Joaquim André, 809 - Paulista|19 3371-6362, 19 99518-8601|
+a|Ana Carolina Toledo de Moraes|144.239|Av. Dona Lídia, 245 - Vila Rezende|19 99449-9840|g
+o|Andrés Humberto Cáceres Barreno|113.139|Trav. Olegário Mariano, 290 - Vila Monteiro|19 3371-3225, 19 98781-8888|
+a|Betzi Carolina Basualto Carrasco|154.965|R. Riachuelo, 2212 - S. 3 - Jd. Elite|19 99938-0651|g
+o|Danilo Siqueira Pino|76.310|Av. Independência, 940 - S. 143 - 14º A - Bairro Alto|19 3374-5725, 19 97403-5252|
+o|Eduardo Luna Soliz Filho|87.708|R. Tiradentes, 565 - Centro|19 98180-9900|g
+o|Gabriel Marchiori Galani|154.575|R. Voluntários de Piracicaba, 277 - Centro|19 99226-4937|g
+o|Guilherme Henrique Bueno|112.084||19 98300-8893|g
+o|Gustavo Furlan da Silva Prezotto|95.818|Av. Dona Jane Conceição, 1432 - Paulista|19 3434-5607, 19 98158-7278|g
+a|Juliana de Oliveira|124.135|Praça José Bonifácio, 799 - S. 17 - Centro|19 98730-3632|
+o|Leonardo Altafin|42.407|R. Visconde do Rio Branco, 151 - Alemães|19 3422-5359, 19 3434-7819, 19 99199-0660|
+o|Leonardo Caldeira|98.047|R. Prudente de Morais, 409 - S. 73 - Centro|19 99862-9030|g
+o|Luiz Roberto Cerezetti|28.367|R. Gomes Carneiro, 967 - Centro|19 3434-9474|
+a|Mariana da Silva|120.367|Av. Carlos Botelho, 166 - S. 2 - São Dimas|19 99628-0304|g
+o|Rafael Oliveira da Silva|86.663|Av. Independência, 724 - S. 83 - 8º A - Cidade Alta ~ R. Tiradentes, 362 - Centro|19 3375-6700, 19 3375-6800, 19 99237-3807, 19 99395-7337 ~ 19 3433-2125, 19 98131-9788|g
+a|Renata Sari Precetti|94.711|Av. Independência, 1840 - S. 505 - 5º A - Cidade Alta|19 99745-9506|
+a|Ada Elizabet Giusti de Souza|17.537|Av. Conceição, 1063 - Vila Rezende|19 3421-0940, 19 99732-2279|g
+a|Alessandra Rocha|49.182|Av. Presidente Vargas, 22 - Jaraguá|19 3434-7900, 19 99203-8524|g
+o|Alexandro Bortoletto|51.427|R. Baronesa Dona Rita, 67 - Nova América|19 3426-9907, 19 99114-3156|g
+a|Ana Cláudia Moraes Martins|91.789|R. Prudente de Moraes, 1835 - Bairro Alto|19 3433-3677|g
+a|Ana Lúcia Travalini Rosolem|46.105|Av. Santo Estevão, 495 - Vila Rezende|19 3421-1828, 19 99902-1828|g
+a|Ana Paula Marcheto Marcelino Ramires|101.324|R. Samuel Neves, 1502 - Jd. Europa|19 2534-0535, 19 99625-5411|g
+o|André Furlan da Silva Prezotto|103.157|Av. Dona Jane Conceição, 1432 - Paulista|19 3434-5607, 19 98158-7278|g
+a|Andrea Costa Oliveira|101.714|Trav. Olegário Mariano, 290 - Vila Monteiro|19 3371-3225, 19 98781-8888|g
+a|Andrea Milanez|95.799|Av. Madre Maria Teodoro, 87 - Jaraguá|19 3432-1215, 19 98315-0621|g
+a|Andréia Bolzan de Paula|77.599|R. Dr. José Vizioli, 288 - Centro|19 99972-3525|g
+a|Angela Maria Bacchin Cangiani|19.890|R. Dr. Otávio Teixeira Mendes, 1845 - Bairro Alto|19 3434-7286|g
+a|Annapaula Aguiar de Oliveira|103.421|R. Saldanha Marinho, 574 - Centro|19 3377-9540, 19 3377-9550|g
+a|Antonia Taiane Lopes de Moraes|146.508|R. Bernardino de Campos, 499 - Bairro Alto|19 3301-2495, 19 99393-4490|g
+a|Arieli Raymundo Vazão|153.660|R. Dom Pedro II, 1936 - Bairro Alto|19 3432-1859, 19 99103-9326|g
+a|Arliane Fontanello|26.166|R. Tiradentes, 362 - Centro|19 3433-2125|g
+a|Bárbara Bortolin Cesar|159.600|Praça Prof. Sérgio Bonganhi, 120 - S. 108 - Terras de Piracicaba|18 99689-3748|g
+a|Beatriz Rossi de Azevedo Paiva|104.930|Av. Independência, 724 - S. 55 - Bairro Alto|19 99777-2466|g
+a|Beatriz Severino Verza|153.206|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 99964-9354, 19 3421-6729, 19 3413-3553|g
+a|Beatriz Thereza Custódio da Silva|141.916||19 3432-5995, 19 99595-4369|g
+o|Ben Hur Zambello|28.892|R. Gomes Carneiro, 967 - Centro|19 3422-3521, 19 99321-3594|g
+a|Bianca Camargo Domingues|152.459|Av. Juscelino Kubitschek de Oliveira, 655 - S. 11 - Vila Rezende|19 3421-6729, 19 99373-2442|g
+a|Bruna Cuéllar Oliveira|151.198|Trav. Olegário Mariano, 290 - Vila Monteiro|19 3371-3225, 19 98781-8888|g
+a|Bruna Natasha Beraldo Marmiroli|93.167|R. Dr. João Sampaio, 1507 - São Judas|19 3422-8160, 19 3434-1048|g
+a|Brunna de Godoy Faganello|103.366|R. Aquilino Pacheco, 1664 - Bairro Alto|19 99720-1855|g
+a|Bruna Rezende Matheus|162.142|R. Bom Jesus, 1762 - Bairro Alto|19 99768-9557|g
+a|Camila Kaori Vatanabi|152.460||19 99826-2505|g
+a|Camila Rodrigues da Costa|124.111|R. Floriano Peixoto, 796 - Centro|19 97143-6575|g
+o|Carlos Willian da Silva Conti|115.806|R. Nilo Peçanha, 430 - Vila Sônia|19 3425-7773|g
+a|Carolina Barbosa Françoso|125.975|R. Regente Feijó, 1696 - Alemães|19 99748-5792|g
+a|Carolina Barrichello Clemente Tonolli|100.544|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 3421-6729|g
+a|Caroline Boni Ibanhes|144.161|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 3421-6729, 19 97402-7804|g
+a|Célia Maria Cuculo Badiale|24.387|R. Joana D'Arc, 756 - Jardim Monumento|19 3421-1285, 19 99154-9602|g
+o|Célio Domingos Mazzonetto|07.224|Av. Ulhôa Cintra, 74 - Centro|19 99327-7000|g
+o|César Roberto Schmidt|38.891|R. Alferes José Caetano, 1533 - Centro|19 3434-7309, 19 98808-6668|g
+a|Cintia Maria Zanin de Moura|108.840|R. Benjamin Constant, 1528 - Centro|19 3434-4141, 19 98119-2889|g
+a|Clara Adamoli Zaninetti Caputo|165.137|Av. Independência, 940 - S. 144 - 14º A - Bairro Alto|19 3434-5443, 19 99150-3188|g
+a|Cleusa Correa Cillo|88.726|Av. Barão de Serra Negra, 1194 - Vila Rezende|19 3421-5248, 19 3413-8396|g
+a|Creusa de Fátima Bortoletto|27.100|R. Baronesa Dona Rita, 67 - Nova América|19 3426-9907, 19 99114-3156|g
+a|Cristiane de Giacomo|54.015|R. Campos Salles, 1352 - Cidade Jardim|19 3433-0257|g
+a|Cristiane Weckwerth|72.538|R. do Rosário, 1141 - Centro|19 97155-1089, 19 99933-9752|g
+a|Daniela de Cillos Chalita|123.162|Av. Independência, 350 - S. 92 - 9º A - Bairro Alto|19 3432-3332, 19 97820-5454|g
+a|Daniela Decico Ferrari Chaim|51.315|R. do Rosário, 2373 - Paulista|19 3422-1493, 19 99325-6778|g
+a|Daniela Galvani Fuzatto|62.011|Av. São João, 395 - São Judas|19 3432-7525, 19 3435-3827|g
+a|Débora Barella Salatti|114.594|Av. Independência, 1840 - S. 812 - 8º A - Alemães|19 98770-1460|g
+a|Débora Emanoella Turquetti|144.201|Av. Dr. Edgard Conceição, 779 - S. 09 - Paulista ~ Trav. Olegário Mariano, 290 - Vila Monteiro|19 98217-9310 ~ 19 98781-8888|g
+a|Débora Maria Mariano Puppin|36.006|R. Regente Feijó, 1042 - Alemães|19 3433-8636|g
+a|Denise C. Galvão do Amaral Prado|23.951|R. do Vergueiro, 417 - Centro|19 3433-9124, 19 99621-0025|g
+a|Denise Helena Fontana Ferraz|42.536|R. Guaporé, 86 - Higienópolis|19 3426-2879, 19 99572-8552|g
+a|Denise Maria Perecin|23.846|R. Regente Feijó, 2090 - Bairro Alto|19 3434-2130, 19 98216-4843|g
+o|Domingos Schicarelli Filho|81.002||19 3447-0360, 19 3435-7002, 19 99940-4740|g
+a|Elaine Cristina Prudente Moda|59.787|R. do Rosário, 134 - Centro|19 3434-9709, 19 99845-8755|g
+a|Elizabeth Zambom|15.123|R. São Francisco de Assis, 812 - Centro|19 3434-4461|g
+a|Elizete Araújo Di Hipólito|130.300|Av. Independência, 940 - S. 144 - 14º A - Bairro Alto|19 3434-5443, 19 99150-3188|g
+a|Eloisa Zenebra Costa|80.231|R. Dr. Paulo Pinto, 821 - São Dimas|19 3433-1951, 19 97414-6225|g
+a|Emanuelle Zang Telles Martins|88.245||19 3377-8834, 19 99319-8834|g
+o|Felipe Orsini Rossi|100.689|R. Treze de Maio, 768 - S. 92 - 9º A - Centro|19 3422-2911, 19 99948-4080|g
+a|Fernanda Barrichello Tosello|85.618||19 98710-9735|g
+a|Fernanda Frasseto|93.956|R. Dr. João Sampaio, 1507 - São Judas|19 98191-9301|g
+a|Fernanda Montanha Marcos|128.733|Av. Independência, 1840 - S. 1203 - Bairro Alto|19 99689-6910|g
+a|Fernanda Sallum Haddad Dib|69.118|R. Gomes Carneiro, 1576 - Bairro Alto|19 3402-9527, 19 99730-9779|g
+o|Fernando Cavalcante Bortoleto|136.848||19 99277-1001|g
+o|Fernando Marcos Prates Sachs|36.040|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 3421-6729, 19 3421-7745|g
+a|Flávia Lazarini Marques|130.741|Av. Independência, 724 - S. 96 - 9º A - Bairro Alto|19 99888-7173|g
+o|Gabriel Salvetti Cardenas Lara|152.470||19 99826-2505|g
+a|Gabriela Aliberti Goldschmidt|149.180|Av. Independência, 546 - S. 22 - 2º A - Centro|19 3422-8410, 19 99931-5051|g
+a|Gabriela Maria Moreira Greco|144.162|R. Ten. Tomaz Nunes, 45 - Nova Piracicaba|19 3421-5165, 19 98118-1330|g
+a|Gabriele Borghesi Brunelli|119.674|R. Treze de Maio, 316 - Centro|19 3433-0121|g
+a|Gabriely Medeiros Gomes Martins|136.383|R. Treze de Maio, 316 - S. 01 - Centro|19 98996-8000|g
+a|Grace de Castro Ferraz|23.958|R. Barão de Piracicamirim, 1783 - Independência|19 99830-0180|g
+o|Guilherme Bottene Guarda|95.817||19 3402-1233, 19 97418-4054|g
+o|Gustavo Setem Nunes Simões|80.399|Av. São João, 600 - São Judas|19 3422-4800, 19 3402-6169, 19 97415-9778|g
+o|Gustavo Tobal Bersaneti|86.407|R. Alfredo Guedes, 610 - Bairro Alto|19 3433-1101, 19 98119-6337|g
+a|Hélia Aparecida R. da Conceição Boccato|32.360|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 3421-6729|g
+o|Hélio José Benatti Júnior|20.481|R. Alfredo Guedes, 1006 - Bairro Alto|19 3434-6898|g
+o|Hélio Sinatura|24.899|Av. Dois Córregos, 675 - Piracicamirim|19 3426-3156, 19 99295-5601|g
+o|Igor Alves da Silva|105.701|R. Prof. Luiz Curiacos, 109 - S. 710 - 7º A - Cidade Jardim|19 99726-8846|g
+a|Isabella Rossete Zotelli|162.106|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 99145-6776|g
+a|Isis Figueiredo Bertolotto|156.762||19 98148-8133|g
+a|Izabele Gemeli Rigo|166.564|Av. Juscelino Kubitschek de Oliveira, 655 - S. 07 - Vila Rezende|19 98141-9238|g
+a|Izabella Amaral Baesteiro|142.270|R. Nilo Peçanha, 430 - Vila Sônia|19 3425-7773|g
+o|Jamil Roberto Pompermayer Lopes|53.726|R. Bernardino de Campos, 1462 - Cidade Alta|19 99665-2497|g
+o|João Carlos Tullio Fonseca|50.558|R. Dr. Otávio Teixeira Mendes, 1845 - Bairro Alto|19 3434-7286|g
+o|João Marcos Renci|49.517|R. Monsenhor Manoel Francisco Rosa, 807 - Centro|19 3422-4888, 19 97131-4888|g
+o|José Arthur Casella Poiani|123.449|R. São João, 620 - Bairro Alto|19 99521-8734|g
+a|Judite Schiavuzzo Bernardi|14.886|Av. do Café, 703 - Paulista|19 3433-8242, 19 99697-8242|g
+a|Julia Cristina Horii|88.254|R. São João, 610 - Centro|19 3434-1919, 19 98117-9465|g
+a|Júlia Pileggi Coletti|150.980|R. Treze de Maio, 768 - 7º A - S. 73 - Centro|19 99923-2610|g
+a|Julia Polisel|141.787|R. Alfredo Guedes, 806 - Cidade Alta|19 97805-8490|g
+a|Jussara Marinho Dias Frasson|31.117|R. São João, 620 - Bairro Alto|19 3434-8059, 19 99521-8734|g
+a|Karime Kelen Buck|80.298||19 3456-4949, 19 98125-6262|g
+a|Karina Schievano Everaldo|124.017|R. D. João Nery, 302 - Vila Rezende|19 3927-1348, 19 99557-5873|g
+a|Karine Keila Cavalcanti|100.600|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 3421-6729, 19 99964-9354|g
+a|Kátia de Sousa Freires|142.372|R. Alfredo Guedes, 806 - Cidade Alta|14 99815-5710|g
+a|Larissa Pandolfo Cirino|130.637|R. Rangel Pestana, 339 - Centro|19 3432-8034, 19 98142-8150|g
+a|Laura Maciel Ballassini|126.282|Av. Dr. João Teodoro, 620 - S. 4 - Vila Rezende|19 3375-7200, 19 98207-7111|g
+o|Lecine Borzino da Silva Junior|165.321|Av. Barão de Serra Negra, 710 - Nova Piracicaba|19 3421-6775, 21 97208-9407|g
+a|Letícia Lazari Tangza Motta|155.255|R. Riachuelo, 2212 - S. 3|19 99733-1120|g
+a|Ligia de Paiva Tangerina|62.450|R. Bom Jesus, 1308 - S. 5 - Bairro Alto|19 3432-7733, 19 99502-9998|g
+a|Ligia Luzia Buarque e Silva|74.600|R. Joaquim André, 809 - Paulista|19 3371-6362, 19 99518-8601|g
+a|Liliana Harder Aliberti Goldschmidt|52.556|Av. Independência, 546 - S. 22 - 2º A - Centro|19 3422-8410, 19 99931-5051|g
+a|Lisandra Reynaldo Pegorari|46.008|R. Bernardino de Campos, 1889 - Bairro Alto|19 3433-8079|g
+a|Lúcia Cristina Palauro Furlan|37.820|Av. Capitão Humberto Aldrovandi, 861 - Vila Rezende|19 3421-1215|g
+a|Luciana M. de Rezende Naccarato|47.797|Av. Carlos Botelho, 166 - S. 8 - São Dimas|19 3302-0143, 19 99161-8124|g
+a|Lucimeire Aparecida Furlan|45.581|Av. Independência, 724 - S. 45 - 4º A - Cidade Alta|19 99152-0538|g
+o|Luis Antonio Laudari|16.743|R. XV de Novembro, 82 - S. 2 - Centro|19 3434-9279|g
+o|Luis Fernando Barata da Silveira|86.646|R. Visconde do Rio Branco, 1888 - Bairro Alto|19 3927-9450, 19 97417-3933|g
+o|Luis Marcos de Castro Nascimento|52.457|R. Dona Eugênia, 1301 - Alemães|19 3422-2549|g
+o|Luis Paulo Caldari Casteleti|138.415|R. Acácio do Canto, 606 - Vila Rezende|19 3421-4701, 19 99305-7694|g
+a|Luísa de Almeida Vieira Marins|158.774|R. Tiradentes, 1200 - 3º A - S. 32 - Centro|19 99939-7479|g
+a|Maíra Kimati Petri|46.014|Av. Independência, 1840 - S. 812 - 8º A - Alemães|19 98770-1460|g
+o|Marcelo Couto Ducatti|59.937|R. Alfredo Guedes, 806 - Cidade Alta|19 3302-9450, 19 97410-4116|g
+a|Marcely Travalini de Lima|115.830|Av. Dona Francisca, 860 - Vila Rezende|19 3421-3678, 19 99733-3435|g
+o|Marcos Antonio Taglieta|42.400|Av. João Teodoro, 369 - Vila Rezende|19 3421-0324|g
+o|Marcos dos Santos Cury|59.592|Av. Independência, 940 - S. 141 - 14º A|19 97415-7178|g
+o|Marcos Moretti Magro|38.340|R. Rangel Pestana, 339 - Centro|19 3432-8034|g
+o|Marcos Tomazello|18.239|R. Alferes José Caetano, 514 - Centro|19 3433-3856|g
+o|Marcos Tomazello Filho|154.207|R. Alferes José Caetano, 514 - Centro|19 3433-3856, 19 99675-7689|g
+a|Maria Aline Daiane de Souza|107.992|R. Dom Pedro II, 507 - Centro|19 98841-9343, 19 99648-3383|g
+a|Maria Carolina Dommarco Yarid|89.603|R. Prudente de Morais, 1521 - Bairro Alto|19 3422-4152, 19 99430-7996|g
+a|Maria Cristina Ramalli de Assis|42.310|R. Dr. Jorge Augusto da Silveira, 489 - Morumbi|19 3426-0398|g
+a|Maria Elisabete Peressin Peroni|36.171|R. Boa Morte, 1238 - Centro|19 3434-2877, 19 98155-1975|g
+a|Maria Graziela S. Caldari Casteleti|40.026|R. Acácio do Canto, 606 - Vila Rezende|19 3421-4701, 19 99305-7694|g
+a|Maria Irene Romano de Albuquerque|18.791|R. Bom Jesus, 811 - Bairro Alto|19 3434-4522, 19 99781-6933|g
+a|Maria Lúcia Lubian|44.686|Av. Independência, 3115 - Independência|19 3433-6556, 19 99958-5523|g
+a|Maria Rita Marrocos Machado|41.826|R. Barão de Piracicamirim, 1783 - Independência|19 3433-8206|g
+a|Mariana de Luca Galdino Scotton|69.118|R. Gomes Carneiro, 1576 - Bairro Alto|19 3402-9527, 19 99730-9779|g
+a|Mariana Giusti Stollai Doricci|110.159|R. Prudente de Moraes, 1239 - Cidade Alta|19 3434-2431, 19 99378-6149|g
+a|Mariane Sebe Marques Batista Antunes|105.722|Av. Independência, 3053 - Alemães|19 99229-0637|g
+a|Mariella Maria Miarelli Miguel Bertolini|111.160|Av. Independência, 1840 - S. 901 - Bairro Alto|19 3301-2464, 19 99999-7786|g
+a|Marina Alves Lara|112.542|R. Riachuelo, 1393 - Jardim Elite|19 3432-6724, 19 98264-4424|g
+a|Marina Heloisa Bassa|144.232|Av. Juscelino Kubitschek de Oliveira, 655 - S. 1 - Vila Rezende|19 3421-6729, 19 98317-2007|g
+a|Marina Paparotto Lopes|164.856|R. Dona Eugênia, 1301 - Alemães|19 3422-2549, 19 99818-3856|g
+a|Marli Aparecida Travalini de Lima|28.531|Av. Dona Francisca, 860 - Vila Rezende|19 3421-3678, 19 99733-3435|g
+a|Meire Cristina Braga Casarin|38.962|R. Bernardino de Campos, 499 - Bairro Alto|19 3301-2495, 19 99736-1011|g
+a|Mônica Scarazzati|141.794|Av. Independência, 940 - S. 113 - 11º A - Bairro Alto|19 99772-0563|g
+a|Mônica Simoni Calile Franck|35.097|Av. França, 195 - Cidade Jardim|19 3058-0404, 19 99738-0679|g
+a|Nanci Aparecida Catandi Perrone|37.137|R. São João, 1419 - Bairro Alto|19 3422-4868, 19 3434-5284, 19 99190-0244, 19 99872-1275|g
+a|Natália Avagliano Alvarenga Silva|165.143|Av. Independência, 940 - S. 144 - 14º A - Bairro Alto|19 3434-5443, 19 99150-3188|g
+a|Natália Fontanello Furlan|98.061|R. Tiradentes, 362 - Centro|19 3433-2125, 19 3434-8796, 19 98131-9788|g
+a|Natália Funari Gomes|108.772||19 3402-1233, 19 97418-4054|g
+a|Nataly Luqueto Lopes|170.857|Av. Independência, 350 - S. 92 - 9º A - Bairro Alto|19 98237-5298, 19 98342-5769|g
+a|Nilmara Alves Lara|59.769|R. Riachuelo, 1393 - Jardim Elite|19 3432-6724, 19 98264-4424|g
+a|Nivia Cristina Duran Gallassi|120.018|Av. Dois Córregos, 675 - Piracicamirim|19 3426-3156|g
+o|Olavo Frias Netto|111.411|Av. Barão de Serra Negra, 710 - Nova Piracicaba|19 3421-6775, 19 99605-0692|g
+a|Patrícia Penati de Francisco|73.651|R. Dom Pedro II, 1936 - Bairro Alto|19 3432-1859, 19 99103-9326|g
+o|Paulo Eduardo Naval Machado|41.132|R. Bom Jesus, 1308 - Bairro Alto|19 3433-8426, 19 98910-9515|g
+a|Prússia Rodrigues|112.460|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 3421-6729, 19 99277-1953|g
+a|Rafaela Mazzini Crozatti|126.425|Av. Juscelino Kubitschek de Oliveira, 655 - S. 12 - Vila Rezende|19 3421-6729, 19 99964-9354|g
+o|Raphael José de Lima Fonseca|164.925|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 99268-3179, 19 99964-9354|g
+o|Raul Rensi|159.458|R. Alfredo Guedes, 806 - Cidade Alta|19 99130-1291|g
+a|Ravenny Leite da Silva Inácio|118.018|R. Virgílio da Silva Fagundes, 513 - S. 4 - Santa Terezinha|19 99585-3295|g
+o|Renan Venturini|106.388|R. 23 de Maio, 1090 - Paulista|19 3433-4662, 19 99635-2323|g
+o|Ricardo Rodrigues da Costa|12.271|Av. Independência, 350 - 2º A - S. 22 - Centro|19 3433-0483|g
+o|Richard Sega Sbravati|59.509|R. Bom Jesus, 1762 - Bairro Alto|19 3422-8245, 19 99768-9557|g
+a|Rosana Duarte Spolidório|42.401|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 3421-6729, 19 99184-1953|g
+a|Sabrina Berto Mandro|134.103|Av. Dr. Edgard Conceição, 779 - Paulista|19 99822-4826|g
+a|Samara Gilbertone Coimbra|123.956|R. Dona Eugênia, 1696 - Jd. Europa|19 99154-3130|g
+a|Sandra Aparecida Barroso Furlan|22.171|R. Dr. João Sampaio, 1467 - São Judas|19 3432-8201|g
+a|Sandra Giacomini Louça|119.677||19 99289-9832|g
+a|Selma Deolinda Tomazela Polastri|38.398|R. Riachuelo, 1643 - Bairro Alto|14 3888-1314, 14 99184-5965|g
+o|Sérgio Antonio Ferrazzo|35.779|R. Riachuelo, 442 - Centro|19 3422-3363, 19 3422-9003|g
+o|Sérgio Augusto Toniolo|37.865||19 99254-0301|g
+a|Sheila Cristina Fraletti|25.303|R. Dom Pedro II, 507 - Centro|19 3433-3433|g
+a|Silvana Maria Avedisian Laudari|18.040|R. XV de Novembro, 82 - S. 2 - Centro|19 3434-9279|g
+a|Silvia Helena Bonfati|138.885|R. Aquilino Pacheco, 1664 - Bairro Alto|19 99285-5700|g
+a|Silvia Maria Paparotto Lopes|56.652|R. Dona Eugênia, 1301 - Alemães|19 3422-2549, 19 99818-3856|g
+a|Soraia Mazzonetto Tozatti|75.998|Av. Ulhôa Cintra, 74 - Centro|19 99140-4734, 19 99327-7000|g
+a|Sueli de Fátima Ribeiro Schmidt|94.044|Av. Independência, 724 - S. 83 - 8º A - Cidade Alta|19 3375-6700, 19 3375-6800, 19 99395-7337|g
+o|Sylvio Greco Júnior|34.320|Av. Raposo Tavares, 1217 - Jardim Glória|19 3434-6648, 19 99271-9668|g
+a|Tania Mara Zenero|26.403|R. Ipiranga, 847 - Centro|19 3434-3188|g
+a|Tayne Ferretti|103.384|Av. Independência, 724 - S. 94 - 9º A - Bairro Alto|19 99621-1014|g
+a|Thaina Nasato Fioravanti|150.864|Av. Juscelino Kubitschek de Oliveira, 655 - S. 2 - Vila Rezende|19 3421-6729, 19 97802-0909|g
+a|Teresinha F. da Silva Palauro|23.863|Av. Capitão Humberto Aldrovandi, 861 - Vila Rezende|19 3421-1215|g
+o|Thales Rocha de Mattos Neto|101.781||19 3432-5995, 19 99286-0139|g
+o|Thiago Brólio de Carvalho|90.746|Av. Luiz Ralf Benatti, 1133 - Mário Dedini|19 3421-2041|g
+a|Valéria Maria Totti|41.495|R. Bom Jesus, 1007 - Bairro Alto|19 3402-6593|g
+o|Victor José Sanches|115.270|R. Tiradentes, 731 - Centro|19 2532-0772|g
+o|Victor Peres Benatti|95.490|R. Alfredo Guedes, 1006 - Bairro Alto|19 3434-6898, 19 99637-8765|g
+o|Vinícius Di Hipólito|76.353|Av. Independência, 940 - S. 144 - 14º A - Bairro Alto|19 3434-5443, 19 99150-3188|g
+a|Virginia Maria Altafin Botelho|35.639|R. Visconde do Rio Branco, 151 - Alemães|19 3422-5359, 19 99199-0660|g
+a|Ana Luiza Bueno Barrichello Tosello|13.116|R. Floriano Peixoto, 653 - Centro|19 3433-9569, 19 98106-6338|
+a|Ana Maria Jacomazzi Fusatto|80.466|R. Dona Eugênia, 1301 - Alemães|19 3422-2549, 19 99818-3856|
+a|Daniela Pincke Costa Arbex|79.916|R. Dom Pedro I, 519 - Centro|19 3433-3843, 19 99962-3843|
+o|Fernando Munhoz Antunes|68.627|R. Nilo Peçanha, 430 - Vila Sônia|19 3425-7773|
+a|Gladi Patrícia Cruz Taglieta|59.504|Av. Dr. João Teodoro, 369 - Vila Rezende|19 3421-0324|
+a|Marília Esteves Vacari|125.734|R. Regente Feijó, 1696 - Alemães|19 99949-6477|
+o|Paulo de Tarso Mosquera de Andrade|25.054|Av. Independência, 350 - S. 92 - 9º A - Bairro Alto|19 3432-3332, 19 97820-5454|
+o|William Ferraz Bello|89.779|R. Bernardino de Campos, 1823 - Bairro Alto|19 3374-4776, 19 99536-6087|
+a|Camila Cristina Cury|72.080||19 3432-1243, 19 99125-5972|
+o|Danilo Mantuanelli Roberto|86.978|Av. Independência, 950 - S. 143 - 14º A - Cidade Alta|19 97406-1674, 19 99635-3370|
+o|Érico Barbosa Lima|43.714|R. Frei Evaristo de Santa Úrsula, 160 - Nova Piracicaba|19 99665-2924|
+o|Marcelo Rossy de Carvalho|95.321|R. Riachuelo, 1643 - Bairro Alto|19 3434-0083, 19 97411-2255|
+a|Samira Buselli Pereira Nuevo|77.046|Av. São João, 395 - São Judas|19 3435-3827, 19 3432-7525|
+a|Isabela Gil Regis do Amaral|69.771|R. Bernardino de Campos, 718 - Bairro Alto|19 3426-5363, 19 3374-5242|
+a|Maria Eduarda Werneck Cavalcante|141.840|R. São João, 620 - Bairro Alto|19 98285-4828|
+a|Alessandra Fabretti Sturion|57.414|Av. São João, 395 - São Judas|19 3432-7525, 19 3435-3827|
+a|Ana Carla Burato Furlanis|53.210|R. Prudente de Moraes, 1835 - Bairro Alto|19 3433-3677, 19 99843-8474|
+o|Djalma Clemente da Silva|19.585|Av. Juscelino Kubitschek de Oliveira, 655 - Vila Rezende|19 3421-6729|
+a|Gláucia Soriano Oliveira|39.576|Av. São João, 65 - Alemães|19 3433-9950|
+a|Milene Geraldi Caniçais|62.048|Av. São João, 600 - São Judas|19 3422-4800, 19 3402-6169, 19 97415-9778|
+a|Sandra Regina Facciolli Hebling|42.212|R. Alferes José Caetano, 1876 - Centro|19 3433-7833, 19 3402-6300|
+o|Tiago de Paula Garcia|78.535|R. Luiz Razera, 21 - Nova América|19 3426-1913|
+a|Waruna Stefaneli Ruy Procópio|98.087|R. Barão de Piracicamirim, 1783 - Independência|19 98355-8183|
+a|Fabíola Mattioli|72.763|R. Ipiranga, 381 - Centro|19 3422-5922|
+a|Marilena Tozzi|41.499|R. Ipiranga, 381 - Centro|19 3422-5922|
+a|Ludmila Oliveira de Andrade|135.819|R. Dr. João Sampaio, 1467 - São Judas|19 3432-8201, 19 99990-1094|
+c|Centro de Imagens Crânio Faciais|6.112 · resp. téc. Drª Cristina Maria Dumit Sewell|R. Coronel Barbosa, 41 - São Judas|19 3432-7752, 19 3422-5248, 19 98187-3397|
+c|Clínica Catandi|6.107 · resp. téc. Dr. Maurício Catandi|R. São João, 1419 - Bairro Alto|19 3422-4868, 19 3434-5284, 19 99190-0244, 19 99872-1275|
+c|DPI Radiologia|5.934 · resp. téc. Drª Cláudia Fátima Silva Haiter|Av. Dona Lídia, 443 - Vila Rezende|19 3413-0004, 19 98318-0770|
+c|Level Radiologia Odontológica|028.811 · resp. téc. Drª Mariana Gimenes Pancini|R. Marechal Deodoro, 1752 - Cidade Alta|19 3432-4599|
+c|Rio Radiologia Odontológica|031.808 · resp. téc. Drª Carla Renata Sanomiya Ikuta|R. Benjamin Constant, 807 - Centro|19 3432-1111, 19 98601-5064|
+`, s:{
+acu:"Raquel Grisotto Sansigolo",
+cir:"Adriana Brolio Marques Rezende#E; Adriana Daniele Lopes#E; Aladim Gomes Lameira Júnior#EM; Ana Carolina Toledo de Moraes; Andrés Humberto Cáceres Barreno#E; Betzi Carolina Basualto Carrasco; Danilo Siqueira Pino#EM; Eduardo Luna Soliz Filho; Gabriel Marchiori Galani; Guilherme Henrique Bueno#E; Gustavo Furlan da Silva Prezotto; Juliana de Oliveira; Leonardo Altafin#E; Leonardo Caldeira; Luiz Roberto Cerezetti#E; Mariana da Silva; Rafael Oliveira da Silva; Renata Sari Precetti#E",
+den:"Carolina Barbosa Françoso; Débora Maria Mariano Puppin#E; Eloisa Zenebra Costa; Gustavo Setem Nunes Simões#E; João Marcos Renci; Karine Keila Cavalcanti; Ligia Luzia Buarque e Silva#E; Lúcia Cristina Palauro Furlan; Maria Carolina Dommarco Yarid; Richard Sega Sbravati#E; Teresinha F. da Silva Palauro; Vinícius Di Hipólito; Virginia Maria Altafin Botelho",
+dtm:"Ana Luiza Bueno Barrichello Tosello; Jamil Roberto Pompermayer Lopes; Ligia Luzia Buarque e Silva#E; Lisandra Reynaldo Pegorari; Richard Sega Sbravati",
+end:"Ana Maria Jacomazzi Fusatto#E; André Furlan da Silva Prezotto#E; Andrea Costa Oliveira; Andrea Milanez#E; Bárbara Bortolin Cesar; Beatriz Rossi de Azevedo Paiva; Bruna Natasha Beraldo Marmiroli#E; Bruna Rezende Matheus; Camila Rodrigues da Costa; Cleusa Correa Cillo; Cristiane de Giacomo#E; Daniela Pincke Costa Arbex#E; Elizete Araújo Di Hipólito#E; Eloisa Zenebra Costa#E; Felipe Orsini Rossi#E; Fernando Munhoz Antunes#E; Flávia Lazarini Marques; Gabriel Salvetti Cardenas Lara; Gabriela Maria Moreira Greco; Gabriely Medeiros Gomes Martins; Gladi Patrícia Cruz Taglieta#E; Hélio José Benatti Júnior#E; Igor Alves da Silva; Karine Keila Cavalcanti; Larissa Pandolfo Cirino; Luis Antonio Laudari#E; Luis Marcos de Castro Nascimento; Luis Paulo Caldari Casteleti#E; Luísa de Almeida Vieira Marins; Marcelo Couto Ducatti#E; Marcely Travalini de Lima; Marcos Tomazello#E; Mariana Giusti Stollai Doricci#E; Mariella Maria Miarelli Miguel Bertolini#E; Marília Esteves Vacari#E; Natália Funari Gomes; Nilmara Alves Lara#E; Patrícia Penati de Francisco; Paulo de Tarso Mosquera de Andrade#E; Prússia Rodrigues#E; Renan Venturini; Samara Gilbertone Coimbra; Selma Deolinda Tomazela Polastri; Silvana Maria Avedisian Laudari#E; Tania Mara Zenero#E; Victor José Sanches; William Ferraz Bello#E",
+est:"Antonia Taiane Lopes de Moraes#M; Silvia Maria Paparotto Lopes#EM",
+imp:"Adriana Daniele Lopes#E; Aladim Gomes Lameira Júnior; Ana Lúcia Travalini Rosolem; Ana Maria Jacomazzi Fusatto; Andréia Bolzan de Paula; Annapaula Aguiar de Oliveira#E; Camila Cristina Cury#E; César Roberto Schmidt#E; Danilo Mantuanelli Roberto#E; Débora Barella Salatti; Débora Emanoella Turquetti#E; Emanuelle Zang Telles Martins#E; Érico Barbosa Lima; Gabriel Marchiori Galani; Gustavo Furlan da Silva Prezotto#E; Jamil Roberto Pompermayer Lopes#E; João Marcos Renci; José Arthur Casella Poiani; Jussara Marinho Dias Frasson; Lecine Borzino da Silva Junior; Leonardo Caldeira; Lucimeire Aparecida Furlan#E; Luis Marcos de Castro Nascimento; Marcelo Rossy de Carvalho#E; Natália Funari Gomes; Paulo Eduardo Naval Machado#E; Rafael Oliveira da Silva#E; Renata Sari Precetti; Renan Venturini; Rosana Duarte Spolidório; Samira Buselli Pereira Nuevo#E; Selma Deolinda Tomazela Polastri#E; Sérgio Antonio Ferrazzo#E; Sheila Cristina Fraletti#E; Silvia Helena Bonfati; Thales Rocha de Mattos Neto#E; Victor Peres Benatti#E; William Ferraz Bello",
+pne:"Luis Antonio Laudari#E",
+hos:"Andrea Costa Oliveira#E; Luis Antonio Laudari#E",
+ped:"Arieli Raymundo Vazão#M; Elaine Cristina Prudente Moda; Fernanda Frasseto#EM; Fernanda Sallum Haddad Dib#E; Hélia Aparecida R. da Conceição Boccato#E; Isabela Gil Regis do Amaral#E; Jussara Marinho Dias Frasson#E; Luciana M. de Rezende Naccarato; Maria Eduarda Werneck Cavalcante#M; Maria Graziela S. Caldari Casteleti#E; Mariana Giusti Stollai Doricci; Rafaela Mazzini Crozatti",
+ort:"Alessandra Fabretti Sturion#E; Ana Carla Burato Furlanis; Ana Luiza Bueno Barrichello Tosello#EM; Ana Paula Marcheto Marcelino Ramires#E; Andrea Milanez#E; Arliane Fontanello; Beatriz Rossi de Azevedo Paiva#E; Brunna de Godoy Faganello#E; Carolina Barrichello Clemente Tonolli; César Roberto Schmidt#E; Daniela Galvani Fuzatto#E; Denise Helena Fontana Ferraz#E; Djalma Clemente da Silva#E; Domingos Schicarelli Filho#E; Eduardo Luna Soliz Filho#EM; Emanuelle Zang Telles Martins#E; Fernanda Montanha Marcos#E; Gláucia Soriano Oliveira#E; Grace de Castro Ferraz; Gustavo Tobal Bersaneti; Jamil Roberto Pompermayer Lopes#E; Julia Cristina Horii; Jussara Marinho Dias Frasson#E; Kátia de Sousa Freires; Ligia de Paiva Tangerina; Lisandra Reynaldo Pegorari; Luciana M. de Rezende Naccarato; Marcos Antonio Taglieta; Maria Carolina Dommarco Yarid#E; Maria Elisabete Peressin Peroni; Maria Graziela S. Caldari Casteleti#E; Marli Aparecida Travalini de Lima; Milene Geraldi Caniçais#EM; Mônica Simoni Calile Franck; Natália Fontanello Furlan#EM; Olavo Frias Netto#E; Rafael Oliveira da Silva; Raquel Grisotto Sansigolo; Sandra Aparecida Barroso Furlan#E; Sandra Regina Facciolli Hebling#E; Selma Deolinda Tomazela Polastri#E; Sérgio Antonio Ferrazzo#E; Soraia Mazzonetto Tozatti#E; Sueli de Fátima Ribeiro Schmidt#E; Sylvio Greco Júnior; Tiago de Paula Garcia#E; Victor José Sanches; Waruna Stefaneli Ruy Procópio#E",
+ofm:"Djalma Clemente da Silva#E; Grace de Castro Ferraz#E; Jamil Roberto Pompermayer Lopes; Lisandra Reynaldo Pegorari; Luciana M. de Rezende Naccarato; Sandra Aparecida Barroso Furlan#E",
+per:"Camila Cristina Cury#E; Creusa de Fátima Bortoletto#E; Cristiane Weckwerth#E; Denise Helena Fontana Ferraz; Fabíola Mattioli#E; Fernanda Barrichello Tosello#E; José Arthur Casella Poiani; Judite Schiavuzzo Bernardi#E; Karime Kelen Buck; Luis Marcos de Castro Nascimento#EMD; Marcelo Rossy de Carvalho; Marilena Tozzi#E; Nanci Aparecida Catandi Perrone; Paulo Eduardo Naval Machado; Selma Deolinda Tomazela Polastri; Sheila Cristina Fraletti#E; Vinícius Di Hipólito",
+pro:"Alexandro Bortoletto#E; Ana Lúcia Travalini Rosolem; Andrea Costa Oliveira; Andréia Bolzan de Paula#E; Brunna de Godoy Faganello; Débora Barella Salatti; Eloisa Zenebra Costa; Emanuelle Zang Telles Martins; Guilherme Bottene Guarda; João Carlos Tullio Fonseca; João Marcos Renci; Leonardo Caldeira#E; Ligia Luzia Buarque e Silva#EMD; Lucimeire Aparecida Furlan#E; Ludmila Oliveira de Andrade; Marcos Antonio Taglieta; Maria Carolina Dommarco Yarid; Maria Elisabete Peressin Peroni#E; Marina Alves Lara#E; Paulo Eduardo Naval Machado#E; Rafael Oliveira da Silva; Richard Sega Sbravati; Sheila Cristina Fraletti; Silvia Maria Paparotto Lopes; Victor José Sanches; Vinícius Di Hipólito",
+rad:"Centro de Imagens Crânio Faciais#EMD; Clínica Catandi#E; DPI Radiologia#E; Level Radiologia Odontológica#E; Rio Radiologia Odontológica"
+}},
+
+"Barra Bonita": { d:`
+a|Silvia Franco da Rocha|23.862|R. Antônio Benedito Di Muzio, 787 - Recanto Regina|14 3641-2767, 14 98124-9361|g
+`, s:{}},
+
+"Cerquilho": { d:`
+a|Jéssica Serafim Grando|118.295|R. Angelo Luvizotto, 446 - S. 05 - Centro|15 99806-9709|g
+a|Lais Bertanha|147.426|R. Presidente Vargas, 31 - S. 02 - Centro|15 99666-9011|g
+a|Larissa Lopes de Souza|116.461|R. Angelo Luvizotto, 407 - Centro|15 99654-7917|g
+o|Renato Saraiva Junior|17.786|R. Achiles Audi, 629 - Centro|15 3284-1791, 15 99280-0808|g
+a|Teresa Mara Albuquerque Carneiro Pires|154.282|Av. Corradi II, 1048 - S. 02 - Portal dos Pilares|15 99128-6402|g
+a|Thaís Ribeiro Reis Malavazi|91.264|Av. Corradi II, 965 - Centro|15 99666-9599|g
+a|Valéria da Silva Ramos|118.418|R. Presidente Vargas, 31 - S. 03 - Centro|15 99725-1727|g
+a|Anna Luiza Bueno Alves|105.090|R. Alfredo Carlos Madeira, 79 - Centro|15 3284-2030, 15 99722-2030|
+a|Anna Sylvia Lollato Andrade|40.424|R. Paulo Setubal, 227 - S. 11 - Centro|15 99185-2376|
+`, s:{
+ped:"Larissa Lopes de Souza",
+ort:"Anna Luiza Bueno Alves; Anna Sylvia Lollato Andrade#E; Larissa Lopes de Souza"
+}},
+
+"Charqueada": { d:`
+a|Ana Caroline Semmler|109.551|Av. Ítalo Lorandi, 188 - Santa Helena|19 3486-7548, 19 98964-8019|g
+a|Vitória Siqueira Burato|143.283|Av. Brasil, 151 - Centro|19 3486-1087, 19 99366-8463|g
+o|Eduardo Ciaramello Racosta|40.537|Av. Ítalo Lorandi, 188 - Centro|19 98606-1040|
+`, s:{ end:"Eduardo Ciaramello Racosta#E" }},
+
+"Laranjal Paulista": { d:`
+o|Leandro Umberto de Paula|88.160|R. Barão do Rio Branco, 519 - Centro|15 3283-3876|g
+o|Luciano Falcão Rodrigues Alves|55.197|R. Pereira Barreto, 127 - Centro|15 3283-3371|g
+a|Renata Aparecida Rovai Bado|84.960|R. Barão do Rio Branco, 73 - Centro|15 3283-1770|g
+a|Tarsila Bado de Almeida|81.028|Praça Dom Pedro II, 68 - Centro|15 3283-6739|g
+a|Tatiane Luvisotto de Oliveira|81.029|R. Barão do Rio Branco, 519 - Centro|15 3283-2275|g
+`, s:{
+ped:"Renata Aparecida Rovai Bado",
+ort:"Tarsila Bado de Almeida; Tatiane Luvisotto de Oliveira",
+per:"Luciano Falcão Rodrigues Alves#E"
+}},
+
+"Pereiras": { d:`
+a|Selma Deolinda Tomazela Polastri|38.398|R. Dr. Luiz Vergueiro, 347 - Centro|14 3888-1314, 14 99184-5965|g
+`, s:{
+end:"Selma Deolinda Tomazela Polastri", imp:"Selma Deolinda Tomazela Polastri",
+ort:"Selma Deolinda Tomazela Polastri#E", per:"Selma Deolinda Tomazela Polastri"
+}},
+
+"Rio das Pedras": { d:`
+o|Fellipe de Cássio Denari|90.728|R. Prudente de Moraes, 444 - Centro|19 3493-6642, 19 99676-2454|g
+o|Carlos Alberto Sartore|35.610|R. Ademar de Barros, 22 - Centro|19 3493-1949|g
+a|Daniele de Oliveira|102.704|R. Contador Rafael Vitor Pôncio, 708 - São Cristóvão II|19 3493-2361, 19 99667-8677|g
+a|Liliana M. de Almeida Rogero|27.576|R. Rotary Club, 36 - São Cristóvão I|19 3493-1582|g
+o|Luiz Fernando Nicolai|48.239|Av. Adhemar de Barros, 234 - Bom Jesus I|19 3493-3067, 19 99777-3937|g
+a|Patrícia Gracieli Bonassa|98.200|R. Prudente de Moraes, 444 - Centro|19 99820-7033|g
+a|Renata Carla Miori Pitta Gomes|28.648|R. Prudente de Moraes, 210 - S. 2 - Centro|19 3493-2308|g
+a|Renata Correia Cardoso Nicolai|48.278|Av. Adhemar de Barros, 234 - Bom Jesus I|19 3493-3067, 19 99777-3937|g
+o|Thiago Paris de Medeiros|103.362|R. Prudente de Moraes, 566 - S. 2 - Centro|19 99862-7404|g
+a|Maria Viviane Nicolai|37.747|Av. Adhemar de Barros, 234 - Bom Jesus I|19 3493-2387, 19 99999-9118|
+`, s:{
+cir:"Fellipe de Cássio Denari",
+den:"Thiago Paris de Medeiros",
+end:"Carlos Alberto Sartore; Daniele de Oliveira; Liliana M. de Almeida Rogero#E; Renata Carla Miori Pitta Gomes#E; Renata Correia Cardoso Nicolai#E",
+ort:"Maria Viviane Nicolai#E; Thiago Paris de Medeiros#E",
+per:"Luiz Fernando Nicolai#E",
+pro:"Carlos Alberto Sartore; Renata Carla Miori Pitta Gomes"
+}},
+
+"Saltinho": { d:`
+o|Osni Florencio|44.258|Av. Sete de Setembro, 1434 - Centro|19 3439-1167, 19 99649-9900|g
+o|Osni Florencio Junior|157.110|Av. Sete de Setembro, 1434 - Centro|19 3439-1167, 19 99649-9900|g
+`, s:{}},
+
+"São Pedro": { d:`
+a|Ana Beatriz Ferraz de Almeida Rochelle|111.603|R. José Estanislau de Oliveira, 344 - Santa Cruz|19 3481-3254, 19 99981-3254|g
+o|André Juliano Berto Pinto|79.929|R. Joaquim Teixeira de Toledo, 250 - Centro|19 3481-2739, 19 97166-1324|g
+o|Henrique Dorigon Tardivo|152.530|R. Campos Salles, 1000 - Santa Cruz|19 3481-4971, 19 98210-1488|g
+a|Isaura Maria Ferraz Rochelle|23.854|R. José Estanislau de Oliveira, 344 - Santa Cruz|19 3481-3254, 19 99981-3254|g
+a|Juliana Pucci de Moraes|105.706|Av. Presidente Getúlio Vargas, 1108 - S. 03 - São Benedito|19 99810-2053|g
+a|Karin Karell Consoni Ceribeli|42.297|R. Antônio Teixeira de Barros, 922 - Santa Cruz|19 3481-1830, 19 98133-8525|g
+a|Lídia Teixeira Prado|162.548|R. Valentim Amaral, 268 - Santa Cruz|19 99101-6866|g
+o|Marcelo Consoni Ceribeli|42.224|R. Antônio Teixeira de Barros, 922 - Santa Cruz|19 3481-1830, 19 98133-8525|g
+o|Raul Ivan Alberto Vega Petkovic|58.197|R. Campos Salles, 1000 - Santa Cruz|19 3481-4971|g
+a|Renata Dante da Silva Petkovic|29.935|R. Campos Salles, 1000 - Santa Cruz|19 3481-4971|g
+a|Rosemary Negreziolo Teixeira|30.419|R. Valentim Amaral, 268 - Santa Cruz|19 99101-6866|g
+`, s:{
+end:"Ana Beatriz Ferraz de Almeida Rochelle; Juliana Pucci de Moraes#E; Marcelo Consoni Ceribeli#E; Renata Dante da Silva Petkovic#E",
+imp:"André Juliano Berto Pinto; Raul Ivan Alberto Vega Petkovic#E; Rosemary Negreziolo Teixeira",
+hos:"Ana Beatriz Ferraz de Almeida Rochelle",
+ort:"Isaura Maria Ferraz Rochelle; Karin Karell Consoni Ceribeli#E; Raul Ivan Alberto Vega Petkovic#E; Renata Dante da Silva Petkovic",
+ped:"Lídia Teixeira Prado; Rosemary Negreziolo Teixeira#E",
+ofm:"Isaura Maria Ferraz Rochelle#E; Raul Ivan Alberto Vega Petkovic#E",
+per:"André Juliano Berto Pinto#E",
+pro:"Marcelo Consoni Ceribeli#E; Rosemary Negreziolo Teixeira",
+rad:"Renata Dante da Silva Petkovic#E"
+}},
+
+"Tatuí": { d:`
+o|Adriano Augusto Hoffmann|76.094|R. Capitão Lisboa, 950 - Centro|15 3305-5077, 15 99635-3230|g
+a|Carla Maria B. Lourenço Miranda|39.859|R. Coronel Aureliano de Camargo, 730 - Centro|15 3251-5228, 15 99708-2202|g
+a|Cláudia Maria Barbosa Lourenço|39.927|R. Coronel Aureliano de Camargo, 730 - Centro|15 3251-5228, 15 99759-5009|g
+o|Fábio Antonio Villa Nova|48.827|R. José Bonifácio, 692 - Centro|15 3251-6865, 15 99672-1969|g
+o|Gabriel França Albuquerque|88.330|R. Maneco Pereira, 365 - Centro|15 3251-9777, 15 99813-2822|g
+o|Henry Barrinovo|136.981|R. Capitão Lisboa, 715 - 8º A - Cj. 83 - Centro|15 99710-8483|g
+a|Luiza Lourenço Sottovia|142.488|R. Coronel Aureliano de Camargo, 730 - Centro|15 3305-5009, 15 99759-5009|g
+a|Patrícia Loretti de Sousa|42.830|R. Governador Pedro de Toledo, 111 - Jardim São Paulo|15 3251-1572, 15 99779-7056|g
+a|Tafnes Mendonça de Souza|123.379|R. Maneco Pereira, 330 - S. 13 - Centro|15 99823-9045|g
+o|César Fernando Magalhães Vaz|96.169|Av. Cônego João Clímaco, 410 - Centro|15 99806-6749|
+o|Gilson Marques de Almeida|76.459||15 3251-9925|
+a|Débora Cristina Gonçalves|101.423|R. Capitão Lisboa, 1307 - Centro|15 99609-3922|
+a|Letícia Maria Ramos Zanchetta|116.468|R. Capitão Lisboa, 715 - 8º A - Cj. 83 - Centro|15 99710-8483|
+a|Marcela F. Machado de Campos Camargo|92.178|Av. Cônego João Clímaco, 410 - Centro|15 3259-4633, 15 99817-0606|
+o|Marco Aurélio Gardenal Meneguel|42.824|Praça da Bandeira, 42 - Centro|15 3251-8096, 15 99632-2664|
+c|ROT - Radiologia Odontológica Tatuí|11.146 · resp. téc. Dr. José Eduardo Cantieri Costa|R. Dorival Carneiro, 81 - Jd. São Paulo|15 3251-8199, 15 99797-8199|
+`, s:{
+cir:"César Fernando Magalhães Vaz; Gabriel França Albuquerque; Henry Barrinovo#E",
+end:"Adriano Augusto Hoffmann#E; Gilson Marques de Almeida; Tafnes Mendonça de Souza#E",
+imp:"Débora Cristina Gonçalves#E; Henry Barrinovo",
+ped:"Letícia Maria Ramos Zanchetta#E",
+ort:"Débora Cristina Gonçalves#E; Letícia Maria Ramos Zanchetta#E; Marcela F. Machado de Campos Camargo; Marco Aurélio Gardenal Meneguel#EM; Patrícia Loretti de Sousa#E",
+per:"Fábio Antonio Villa Nova#E",
+rad:"ROT - Radiologia Odontológica Tatuí#E; Marco Aurélio Gardenal Meneguel#E"
+}},
+
+"Tietê": { d:`
+a|Christina Madeira de Moura Campos|41.597|R. Tereza Marson Sbompato, 174 - Vila São Geraldo|15 98125-3255|g
+a|Jaqueline Beatriz da Costa Barbosa|96.970|R. Tenente Gelás, 1240 - Centro|15 3389-1999, 15 99175-0291|g
+o|Marcelo Pereira Piloto|46.361|R. Dr. Palinuro, 160 - Centro|15 3282-5626|g
+a|Rosana Nicolosi Franzini|25.578|R. Júlio dos Reis, 66 - Centro|15 3282-5484, 15 99714-5177|g
+o|Umberto Mazzer Filho|96.985|R. Bento Antônio de Moraes, 157 - Centro|15 3282-8322, 15 99260-8647|g
+a|Fernanda Cavalcanti Banov|54.278|R. Tenente Gelás, 1240 - Centro|15 3389-1999, 15 99175-0291|
+o|Marco Aurélio Gardenal Meneguel|42.824|Av. Dr. Soares Hungria, 99 - Centro|15 3285-1792|
+o|Rogério Ortiz Prospero|65.145|R. Tenente Gelás, 611 - Centro|15 3285-2763, 15 99652-9594|
+`, s:{
+cir:"Fernanda Cavalcanti Banov#E",
+end:"Umberto Mazzer Filho",
+imp:"Umberto Mazzer Filho",
+ped:"Christina Madeira de Moura Campos#E",
+ort:"Marco Aurélio Gardenal Meneguel#EM; Umberto Mazzer Filho#E",
+rad:"Rogério Ortiz Prospero#E"
+}}
+};
+
+
+/* ===== Unimed Tatuí (Guia Médico 19/10/2021, 1ª página) ===== */
+const UNIMED = { "Tatuí": { d:`
+a|Marília Menezes Poles Fiorenzi||R. Maneco Pereira, 330 - 1º andar - Centro|15 3251-9101|
+a|Talita Machado Boulhosa Aranha Preira||R. Coronel Aureliano de Camargo, 905 - Centro|15 3451-1300|
+o|Henrique Prestes Miramontes||Praça da Bandeira, 65 - 1º andar - Sala 103 - Centro|15 3251-2574|
+o|José Luiz Barusso||Praça da Bandeira, 65 - 1º andar - Sala 103 - Centro|15 3251-2574|
+o|Massafiro Arahata||Praça da Bandeira, 65 - 1º andar - Sala 103 - Centro|15 3251-2574|
+o|Ney José Dias||Praça da Bandeira, 65 - 1º andar - Sala 103 - Centro|15 3251-2574|
+o|Rodrigo Silva Araújo||R. Dr. Ibraim de Almeida Nobre, 100|15 3251-7113|
+o|Domingos Módolo Júnior||R. Dorival Carneiro, 80 - Jardim São Paulo|15 3205-8700|
+o|Fábio José Concílio Fucci||R. Coronel Aureliano de Camargo, 905 - Centro|15 3451-1300|
+a|Raquel Silva Araújo||R. Cônego Demétrio, 719|15 99840-4095|
+n|Centro Médico Unimed - CAMU||R. Stélio Machado Loureiro, 168|15 3205-8500|
+a|Nathalia Ishimaru Galvão||R. Dorival Carneiro, 80 - Jardim São Paulo|15 99818-2727|
+o|José Celso Fiuza||R. Cônego Demétrio, 890|15 3251-4941, 15 99689-3451|
+o|Nilton Tosi Pires||R. Dorival Carneiro, 80 - Jardim São Paulo|15 3205-8700|
+o|Wladimir Faustino Saporito||R. Coronel Aureliano de Camargo, 905 - Centro|15 3451-1300|
+o|Eduardo Jozala||R. Dorival Carneiro, 80 - Jardim São Paulo|15 3205-8700|
+o|Paulo Baida Filho||Av. Cônego João Clímaco, 414 - Centro|15 3322-8605, 15 3322-8609|
+o|Sérgio Costa Brentan||R. Dorival Carneiro, 80 - Jardim São Paulo|15 3205-8700|
+o|Ivan Machado||Av. Coronel Firmo Vieira de Camargo, 856|15 3305-1727, 15 3259-4411|
+a|Poliana Valéria Palmeira Marocolo||R. Maneco Pereira, 330 - 1º andar - Sala 11 - Centro|15 3305-5173, 15 99674-0223|
+o|William de Carvalho Teixeira||R. Dr. Ibraim de Almeida Nobre, 100|15 3022-3856, 15 99823-4727|
+o|Rodrigo Fulini Brasil||R. Pedro Holtz, 472|15 3205-2023, 15 99775-0472|
+a|Célia Aparecida Rodrigues Pires||R. Dorival Carneiro, 80 - Jardim São Paulo|15 3205-8700|
+a|Maria de Fátima Miramontes||R. Dorival Carneiro, 80 - Jardim São Paulo|15 3205-8700|
+o|Wilson Machado Júnior||R. Dorival Carneiro, 80 - Jardim São Paulo|15 3205-8700|
+o|Carlos Eduardo Grazzia||R. Dr. Ibraim de Almeida Nobre, 25|15 3305-3248, 15 99620-5455, 15 3251-0900, 15 3251-1341|
+a|Marília Orsi Rosa da Silva Rios||R. 13 de Maio, 441 - Centro|15 3251-2912|
+o|Gustavo Cavinatto||R. Dr. Ibraim de Almeida Nobre, 25|15 3251-0900|
+a|Maria Nazareth Jenner de Faria Orsi||R. Governador Pedro de Toledo, 111 - Jardim São Paulo|15 3305-7311|
+o|Paulo Sérgio Medeiros Borges||Av. Zilah Aquino, 1159|15 3259-3750, 15 99664-1474|
+o|Paulo Grisotto Sansigolo||R. Dr. Ibraim de Almeida Nobre, 25|15 3251-0900|
+o|Roberto Issamu Kitahara||R. Prof. Joaquim Teixeira, 182 - Junqueira|15 3305-1264|
+o|Tarcízio Antonio de Lucas Lélis||R. Cônego Demétrio, 890|15 3305-2081|
+o|Vidal José de Camargo Barros||R. Dr. Ibraim de Almeida Nobre, 25|15 3251-0900|
+`, s:{
+"Alergologia":"Marília Menezes Poles Fiorenzi; Talita Machado Boulhosa Aranha Preira",
+"Anestesiologia":"Henrique Prestes Miramontes; José Luiz Barusso; Massafiro Arahata; Ney José Dias; Rodrigo Silva Araújo",
+"Angiologia":"Domingos Módolo Júnior; Fábio José Concílio Fucci",
+"Anatomia patológica":"Raquel Silva Araújo",
+"Cardiologia":"Centro Médico Unimed - CAMU; Nathalia Ishimaru Galvão; José Celso Fiuza; Nilton Tosi Pires; Wladimir Faustino Saporito",
+"Cirurgia geral":"Centro Médico Unimed - CAMU; Domingos Módolo Júnior; Eduardo Jozala; Paulo Baida Filho; Sérgio Costa Brentan",
+"Cirurgia pediátrica":"Centro Médico Unimed - CAMU",
+"Cirurgia plástica":"Ivan Machado; Poliana Valéria Palmeira Marocolo; William de Carvalho Teixeira; Rodrigo Fulini Brasil",
+"Cirurgia torácica":"Wladimir Faustino Saporito",
+"Cirurgia vascular":"Domingos Módolo Júnior; Fábio José Concílio Fucci; Centro Médico Unimed - CAMU",
+"Clínica médica":"Gustavo Cavinatto; Maria Nazareth Jenner de Faria Orsi; Paulo Sérgio Medeiros Borges; Paulo Grisotto Sansigolo; Roberto Issamu Kitahara; Centro Médico Unimed - CAMU; Tarcízio Antonio de Lucas Lélis; Vidal José de Camargo Barros",
+"Dermatologia":"Célia Aparecida Rodrigues Pires; Maria de Fátima Miramontes; Wilson Machado Júnior; Centro Médico Unimed - CAMU",
+"Endocrinologia":"Centro Médico Unimed - CAMU; Carlos Eduardo Grazzia",
+"Endocrinologia pediátrica":"Marília Orsi Rosa da Silva Rios",
+"Gastroenterologia":"Centro Médico Unimed - CAMU"
+}}};
+
+/* ===== Fesp (prints do Guia Médico Fesp, Tatuí) ===== */
+const FESP = { "Tatuí": { d:`
+o|Antonio de Padua Prestes Miramontes|CRM-SP 29.580|R. Dorival Carneiro, 80 - Jardim São Paulo|15 3205-8700|
+o|Antonio José de Albuquerque Brasil|CRM-SP 41.042|R. Maneco Pereira, 330 - 1º andar - Sala 12 - Centro|15 3251-9101|
+o|Antonio Sergio Penalva de Oliveira|CRM-SP 60.293|R. General Bertoldo Klinger, 10 - Jardim São Paulo|15 3251-4351, 15 3251-4378|
+n|Aline Dantas Alberge Oliveira|CRP-SP 180.670 · também atende como Aline Dantas Alberge Oliveira ME|R. Duque de Caxias, 145 - Centro|15 98801-5130|
+n|Ana Carolina de Oliveira Pinto Macedo||R. Prof. Joaquim Teixeira, 212 - Chácara Junqueira|15 99758-8589|
+n|Adriana Soares Alves||R. Dorival Carneiro, 80 - Jardim São Paulo|15 99664-1986|
+n|Ana Carolina Sancinetti de Moura ME|Telefone não aparece no print|R. Santa Terezinha, 330 - Centro||
+n|Albertoni Manis Serviços Médicos|Resp. téc. Drª Roberta Albertoni Manis (CRM-SP 169.809)|R. Coronel Lúcio Seabra, 960 - Centro ~ Av. Cônego João Clímaco, 422 - Centro|15 3451-1111 ~ 15 3259-6817, 15 3259-1756|
+n|Adryan Leme Fisioterapia|Resp. téc. Adryan Caroline de Almeida Leme Matias (CREFITO-SP 337.676)|R. Domingos dos Santos Filho, 559 - Vila Doutor Laurindo ~ R. José Ribeiro de Campos, 99 - Nova Tatuí|15 99710-2350 ~ 15 3142-5001|
+`, s:{
+"Clínica médica":"Antonio de Padua Prestes Miramontes",
+"Medicina do trabalho":"Antonio de Padua Prestes Miramontes",
+"Psiquiatria":"Antonio José de Albuquerque Brasil#E",
+"Ortopedia e traumatologia":"Antonio Sergio Penalva de Oliveira#RE",
+"Psicologia":"Aline Dantas Alberge Oliveira",
+"Fisioterapia":"Adryan Leme Fisioterapia",
+"Especialidade não informada":"Ana Carolina de Oliveira Pinto Macedo; Adriana Soares Alves; Ana Carolina Sancinetti de Moura ME; Albertoni Manis Serviços Médicos"
+}}};
+
+/* ===== SUS Tatuí (tatuifacil.com.br e hospivista.com, out/2026) ===== */
+const SUS = { "Tatuí": { d:`
+n|Pronto Socorro Municipal|Atendimento 24 horas|R. Capitão Lisboa, 1240 - Centro|15 3305-3996|
+n|Santa Casa de Misericórdia de Tatuí||R. Maneco Pereira, 299 - Centro|15 3251-4950|
+n|UBS Central||Praça Adelaide Guedes - Centro|15 3305-1854|
+n|UBS Vila Esperança||R. Coronel Lúcio Seabra, s/nº - Vila Esperança|15 3305-1854|
+n|UBS Americana|||15 3205-2998|
+n|UBS CDHU||R. Sérgio Mascarenhas, s/nº|15 3251-5789|
+n|UBS Congonhal|||15 3305-8513|
+n|UBS Dr. Laurindo||R. Prefeita Chiquinha Rodrigues, 895 - Vila Doutor Laurindo|15 3251-4639|
+n|UBS Enxovia|||15 3259-7226|
+n|UBS Jardim Gonzaga||R. Antonio Silverio Fernandes, 75 - Jardim Gonzaga|15 3259-5167|
+n|UBS Mirandas|||15 3259-4078|
+n|UBS Rosa Garcia||Av. Teófilo Andrade Gama, 1850|15 3251-5668|
+n|UBS Santa Cruz||R. Santa Cruz, 1689|15 3259-0997|
+n|UBS São Cristóvão||Praça Deocacir de Oliveira Silva, 114 - São Cristóvão|15 3251-4692|
+n|UBS Valinhos||R. Rui Barbosa, 601 - Valinhos|15 3251-9488|
+n|Posto Municipal Paulo Fernandes Pires||Av. Cônego João Clímaco, s/nº - Centro|15 3305-2585|
+n|CEMEM - Centro Municipal de Especialidades Médicas||Praça Adelaide Guedes - Centro|15 3259-0051|
+n|CEO - Centro de Especialidades Odontológicas||Praça Adelaide Guedes - Centro|15 3305-8517|
+n|CEPCAR - Estimulação Precoce e Reabilitação||Praça Antônio Prado, 112|15 3251-5657|
+`, s:{
+"Pronto-socorro 24h":"Pronto Socorro Municipal",
+"Hospital":"Santa Casa de Misericórdia de Tatuí",
+"Posto de saúde (UBS)":"UBS Central; UBS Vila Esperança; UBS Americana; UBS CDHU; UBS Congonhal; UBS Dr. Laurindo; UBS Enxovia; UBS Jardim Gonzaga; UBS Mirandas; UBS Rosa Garcia; UBS Santa Cruz; UBS São Cristóvão; UBS Valinhos; Posto Municipal Paulo Fernandes Pires",
+"Especialidades médicas":"CEMEM - Centro Municipal de Especialidades Médicas",
+"Dentista (especialidades)":"CEO - Centro de Especialidades Odontológicas",
+"Reabilitação":"CEPCAR - Estimulação Precoce e Reabilitação"
+}}};
+
+const CONVS = {
+  uniodonto:{nome:"Uniodonto", sub:"Dentistas", cor:"#4A1640", reg:"CRO-SP", cities:DATA,
+    aviso:"Dentistas do guia Uniodonto Piracicaba 2025/2026 (validade até set/2026). Confirme no app oficial antes de marcar."},
+  unimed:{nome:"Unimed Tatuí", curto:"Unimed", sub:"Médicos", cor:"#0B6B3A", reg:"", cities:UNIMED,
+    aviso:"Atenção: guia de outubro de 2021 e só a primeira página. Pode ter médico que saiu e falta muita especialidade. Confirme no site ou app da Unimed."},
+  sus:{nome:"SUS Tatuí", curto:"SUS", sub:"Postos e hospital", cor:"#0B5CAD", reg:"", cities:SUS,
+    aviso:"Rede pública de Tatuí. Endereços e telefones de listas da internet (out/2026). A UBS Central e a UBS Vila Esperança aparecem com o mesmo telefone; confirme ligando. Para marcar consulta, leve o Cartão SUS e um documento com foto."},
+  fesp:{nome:"Unimed Fesp", curto:"Fesp", sub:"Médicos e clínicas", cor:"#1F3F7A", reg:"", cities:FESP,
+    aviso:"Só os prestadores de Tatuí que apareceram nos prints (parte da letra A). Confirme no Guia Médico Fesp."}
+};
+
+const OFFICES = [
+  ["Tatuí","Praça da Bandeira, 50 - Centro","15 3205-4050, 15 99607-7939"],
+  ["Sede administrativa - Piracicaba","R. Alferes José Caetano, 1352 - Centro","19 3401-1770, 19 98162-9661"],
+  ["Cerquilho","Av. Francisco da Silva Pontes, 591 - S. 2 - Centro","15 3284-3692"],
+  ["Charqueada","R. Governador Pedro de Toledo, 131 - Centro","19 3486-1037"],
+  ["Laranjal Paulista","R. Ordele, 16 - Centro","15 3283-4587"],
+  ["Rio das Pedras","R. Prudente de Moraes, 636 - Centro","19 3493-1736"],
+  ["São Pedro","R. Floriano Peixoto, 929 - Santa Cruz","19 3483-3261, 19 99890-8370"],
+  ["Tietê","R. Lara Campos, 657 - Centro","15 3282-5735, 15 98152-0032"]
+];
+
+/* ===== Montagem ===== */
+const norm = s => (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const PEOPLE = [];
+const MISSING = [];
+for (const [ck, conv] of Object.entries(CONVS))
+for (const [city, obj] of Object.entries(conv.cities)) {
+  const map = {};
+  obj.d.trim().split("\n").forEach(line => {
+    const [pre,name,cro,addr,tels,g] = line.split("|").map(x => (x||"").trim());
+    const addrs = addr ? addr.split("~").map(x=>x.trim()) : [""];
+    const telsArr = tels.split("~").map(x=>x.trim());
+    const locs = addrs.map((a,i)=>({addr:a, tels:(telsArr[i]||telsArr[0]||"").split(",").map(t=>t.trim()).filter(Boolean)}));
+    const p = {conv:ck, city, pre, name, cro, locs, specs:[]};
+    if (g === "g") p.specs.push({k:"cg", t:""});
+    map[name] = p; PEOPLE.push(p);
+  });
+  for (const [k, list] of Object.entries(obj.s)) {
+    list.split(";").forEach(item => {
+      const [n, t=""] = item.trim().split("#");
+      const p = map[n.trim()];
+      if (p) p.specs.push({k, t}); else MISSING.push(ck+" / "+city+": "+n);
+    });
+  }
+}
+if (MISSING.length) console.warn("Nomes sem cadastro:", MISSING);
+const ORDER = Object.keys(SPECS);
+const lab = k => SPECS[k] || k;
+const ordIdx = k => { const i = ORDER.indexOf(k); return i < 0 ? 100 : i; };
+function reg(p){ const c = CONVS[p.conv]; if (!p.cro) return ""; return (c.reg && /^\d/.test(p.cro)) ? c.reg + " " + p.cro : p.cro; }
+PEOPLE.forEach(p => {
+  p.specs.sort((a,b)=>ordIdx(a.k)-ordIdx(b.k) || a.k.localeCompare(b.k,"pt-BR"));
+  p.hay = norm([p.name, p.city, p.cro, CONVS[p.conv].nome, ...p.locs.map(l=>l.addr), ...p.specs.map(s=>lab(s.k))].join(" "));
+});
+PEOPLE.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));
+
+/* ===== Estado e UI ===== */
+const state = {conv:"todos", city:"Todas", cityQ:"", spec:"", q:"", onlyE:false, onlyFav:false, near:null};
+const cityOk = p => state.city !== "Todas" ? p.city === state.city : (!state.cityQ || norm(p.city).includes(norm(state.cityQ)));
+const inConv = p => state.conv==="todos" || p.conv===state.conv;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const title = p => p.pre==="a" ? "Drª " : p.pre==="o" ? "Dr. " : "";
+
+function digits(t){ return t.replace(/\D/g,""); }
+function isMobile(t){ const d = digits(t); return d.length===11 && d[2]==="9"; }
+function fmt(t){ const d=digits(t); const ddd=d.slice(0,2), n=d.slice(2);
+  return `(${ddd}) ` + (n.length===9 ? n.slice(0,5)+"-"+n.slice(5) : n.slice(0,4)+"-"+n.slice(4)); }
+
+const pinSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>';
+const callSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>';
+const waSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.3z"/></svg>';
+
+function phonesHtml(tels){
+  return tels.map(t => {
+    const d = digits(t);
+    let h = `<a class="ph" href="tel:+55${d}">${callSvg}${fmt(t)}</a>`;
+    if (isMobile(t)) h += `<a class="ph wa" target="_blank" rel="noopener" href="https://wa.me/55${d}" aria-label="WhatsApp ${fmt(t)}">${waSvg}WhatsApp</a>`;
+    return h;
+  }).join("");
+}
+function mapUrl(addr, city){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr + ", " + city + " - SP"); }
+
+function card(p){
+  const tags = p.specs.map(s => `<span class="tag">${esc(lab(s.k))}${s.t ? s.t.split("").map(x=>`<b title="${({E:"Título de especialista",M:"Mestrado",D:"Doutorado",R:"Residência médica"})[x]}">${x}</b>`).join("") : ""}</span>`).join("");
+  const locs = p.locs.map(l => `<div class="loc">${
+    l.addr ? `<a class="addr" target="_blank" rel="noopener" href="${mapUrl(l.addr,p.city)}">${pinSvg}<span><u>${esc(l.addr)}</u><br><small style="color:var(--mute)">${esc(p.city)}</small></span></a>`
+           : `<div class="noaddr">Endereço não informado no guia · ${esc(p.city)}</div>`
+  }<div class="phones">${phonesHtml(l.tels)}</div></div>`).join("");
+  const i = PEOPLE.indexOf(p), fv = isFav(p);
+  return `<article class="dent">
+    <button class="fav" data-f="${i}" aria-pressed="${fv}" aria-label="${fv ? "Tirar dos favoritos" : "Salvar nos favoritos"}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></button>
+    <h2>${title(p)}${esc(p.name)}</h2>
+    <div class="meta">${esc(reg(p))}<span class="cv cv-${p.conv}">${esc(CONVS[p.conv].nome)}</span>${p._d != null ? `<span class="dist">a ${fmtKm(p._d)}</span>` : ""}</div>
+    <div class="tags">${tags}</div>
+    ${locs}
+    <div class="actions">
+      <button class="share" data-i="${PEOPLE.indexOf(p)}">Enviar contato</button>
+      <button class="share" data-c="${i}">Anotar consulta</button>
+      ${p.locs.some(l=>l.addr) ? `<button class="pinbtn" data-m="${PEOPLE.indexOf(p)}">${pinSvg.replace('width="18" height="18"','width="15" height="15"')}Ver no mapa</button>` : ""}
+    </div>
+  </article>`;
+}
+
+function filtered(){
+  const words = norm(state.q).split(/\s+/).filter(Boolean);
+  return PEOPLE.filter(p =>
+    inConv(p) &&
+    cityOk(p) &&
+    (!state.spec || p.specs.some(s=>s.k===state.spec && (!state.onlyE || s.t.includes("E")))) &&
+    (state.spec || !state.onlyE || p.specs.some(s=>s.t.includes("E"))) &&
+    (!state.onlyFav || isFav(p)) &&
+    words.every(w => p.hay.includes(w))
+  );
+}
+
+function render(){
+  let res = filtered();
+  PEOPLE.forEach(p => p._d = null);
+  if (state.near) {
+    res.forEach(p => p._d = distOf(p));
+    res = res.slice().sort((a,b) => (a._d==null) - (b._d==null) || (a._d||0) - (b._d||0));
+  }
+  renderExtras();
+  $("count").textContent = res.length === 1 ? "1 resultado" : res.length + " resultados";
+  const grouped = () => Object.entries(CONVS).map(([k,c]) => {
+    const g = res.filter(p=>p.conv===k); if (!g.length) return "";
+    return `<div class="grp"><i style="background:${c.cor}"></i>${esc(c.nome)} <small>${esc(c.sub)} · ${g.length}</small></div>` + g.map(card).join("");
+  }).join("");
+  $("list").innerHTML = (res.length ? (state.conv==="todos" && !state.near ? grouped() : res.map(card).join("")) :
+    `<div class="empty">${state.onlyFav && !FAVS.size ? "Você ainda não tem favoritos. Toque na estrela de um cartão para salvar." : "Nenhum profissional cadastrado no app com esses filtros."}<br><button id="reset">Limpar filtros</button></div>`) + oficiaisHtml(false);
+  const r = $("reset"); if (r) r.onclick = resetAll;
+  $("clear").style.display = state.q ? "block" : "none";
+  const cn = $("convNote");
+  if (state.conv !== "todos") { cn.textContent = CONVS[state.conv].aviso; cn.style.display = "block"; } else cn.style.display = "none";
+}
+
+function resetAll(){
+  state.onlyFav=false; $("btnFavs").setAttribute("aria-pressed","false"); state.near=null; $("btnNear").setAttribute("aria-pressed","false");
+  state.q=""; state.spec=""; state.onlyE=false; state.city="Todas"; state.cityQ=""; $("cityQ").value=""; state.conv="todos"; buildConvs();
+  $("q").value=""; $("spec").value=""; $("onlyE").checked=false;
+  buildChips(); buildSpecs(); render();
+}
+
+function buildConvs(){
+  const opts = [["todos",{nome:"Todos",sub:"Juntos",cor:"#4A1640"}], ...Object.entries(CONVS)];
+  $("convs").innerHTML = opts.map(([k,c]) => `<button class="cvbtn" style="--cvc:${c.cor}" aria-pressed="${k===state.conv}" data-v="${k}"><strong>${esc(c.curto||c.nome)}</strong><small>${esc(c.sub)} · ${PEOPLE.filter(p=>k==="todos"||p.conv===k).length}</small></button>`).join("");
+  const cor = state.conv==="todos" ? "#4A1640" : CONVS[state.conv].cor;
+  $("top").style.background = cor; $("fab").style.background = cor;
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", cor);
+}
+function buildChips(){
+  const pool = PEOPLE.filter(inConv);
+  const all = [...new Set(pool.map(p=>p.city))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+  $("cityList").innerHTML = all.map(c=>`<option value="${esc(c)}">`).join("");
+  if (state.city !== "Todas" && !all.includes(state.city)) { state.city = "Todas"; }
+  const typed = state.city === "Todas" && state.cityQ ? all.filter(c => norm(c).includes(norm(state.cityQ))) : all;
+  const cities = ["Todas", ...typed];
+  $("chips").innerHTML = cities.map(c => {
+    const n = c==="Todas" ? pool.length : pool.filter(p=>p.city===c).length;
+    return `<button class="chip" aria-pressed="${c===state.city}" data-c="${esc(c)}">${esc(c)}<span>${n}</span></button>`;
+  }).join("");
+}
+function buildSpecs(){
+  const pool = PEOPLE.filter(p => inConv(p) && cityOk(p));
+  const avail = [...new Set(pool.flatMap(p=>p.specs.map(s=>s.k)))].sort((a,b)=>lab(a).localeCompare(lab(b),"pt-BR"));
+  if (state.spec && !avail.includes(state.spec)) state.spec = "";
+  $("spec").innerHTML = `<option value="">Todas as especialidades</option>` +
+    avail.map(k=>`<option value="${k}" ${k===state.spec?"selected":""}>${esc(lab(k))}</option>`).join("");
+}
+
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("on"); setTimeout(()=>t.classList.remove("on"),1800); }
+
+function shareText(p){
+  const lines = [title(p)+p.name, p.specs.map(s=>lab(s.k)).join(", ")];
+  p.locs.forEach(l => { if (l.addr) lines.push(l.addr + " - " + p.city); lines.push(l.tels.map(fmt).join(" / ")); });
+  lines.push([reg(p), "Convênio: " + CONVS[p.conv].nome].filter(Boolean).join(" · "));
+  return lines.join("\n");
+}
+
+/* ===== Mapa (Mapbox) ===== */
+// Cole aqui o seu token público do Mapbox (começa com "pk.")
+const MAPBOX_TOKEN = "pk.eyJ1IjoibHVpc3NpcXVlaXJhIiwiYSI6ImNtdWE3eWlkYzFhaWkyd29rdTE1azczOW0ifQ.obU3pPCEHP856-OvuFE19g";
+
+const CENTERS = {
+  "Piracicaba":[-47.649,-22.725], "Tatuí":[-47.857,-23.355], "Tietê":[-47.716,-23.102],
+  "Cerquilho":[-47.744,-23.165], "Laranjal Paulista":[-47.836,-23.049], "Pereiras":[-47.975,-23.076],
+  "Rio das Pedras":[-47.606,-22.843], "Saltinho":[-47.676,-22.844], "São Pedro":[-47.914,-22.548],
+  "Charqueada":[-47.775,-22.509], "Barra Bonita":[-48.558,-22.494]
+};
+let GEO = {};
+try { GEO = JSON.parse(localStorage.getItem("ad_geo_v1") || "{}"); } catch(_) {}
+function saveGeo(){ try { localStorage.setItem("ad_geo_v1", JSON.stringify(GEO)); } catch(_) {} }
+
+function km(a,b){ const R=6371, r=Math.PI/180, dLa=(b[1]-a[1])*r, dLo=(b[0]-a[0])*r;
+  const h=Math.sin(dLa/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dLo/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
+
+// Tira sala, andar e conjunto, que atrapalham a busca do endereço
+function cleanAddr(a){
+  const parts = a.split(" - ").map(s=>s.trim());
+  const rest = parts.slice(1).filter(x => !/^(s\.|sala|cj|conj|\d+\s*[ºo°])/i.test(x));
+  return [parts[0], rest[rest.length-1]].filter(Boolean).join(", ");
+}
+
+let tokenBad = false;
+async function geocode(addr, city){
+  const k = city + "|" + addr;
+  if (k in GEO) return GEO[k];
+  const c = CENTERS[city];
+  const q = encodeURIComponent(cleanAddr(addr) + ", " + city + ", SP");
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${q}.json?access_token=${MAPBOX_TOKEN}&country=br&language=pt&limit=1&proximity=${c[0]},${c[1]}`;
+  try {
+    const r = await fetch(url);
+    if (r.status === 401) { tokenBad = true; return undefined; }
+    if (!r.ok) return undefined;
+    const j = await r.json();
+    let pt = j.features && j.features[0] ? j.features[0].center : null;
+    if (pt && km(pt, c) > 25) pt = null; // caiu em outra cidade: descarta
+    GEO[k] = pt; saveGeo();
+    return pt;
+  } catch(_) { return undefined; }
+}
+
+function loadMapbox(){
+  if (window.mapboxgl) return Promise.resolve();
+  return new Promise((res, rej) => {
+    const l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = "https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css";
+    document.head.appendChild(l);
+    const s = document.createElement("script");
+    s.src = "https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js";
+    s.onload = res; s.onerror = rej; document.head.appendChild(s);
+  });
+}
+
+let MAP = null, MARKERS = [], RUN = 0;
+function mapMsg(html){ const m=$("mapMsg"); m.innerHTML = html || ""; m.classList.toggle("on", !!html); }
+
+function pinEl(n, focus){
+  const d = document.createElement("div");
+  d.className = "pin" + (focus ? " focus" : "");
+  d.innerHTML = `<svg viewBox="0 0 30 40" width="30" height="40"><path d="M15 0C6.7 0 0 6.6 0 14.8 0 25.9 15 40 15 40s15-14.1 15-25.2C30 6.6 23.3 0 15 0z" fill="#6E2460" stroke="#fff" stroke-width="2"/></svg>` + (n > 1 ? `<b>${n}</b>` : `<b>●</b>`);
+  return d;
+}
+function popupHtml(g){
+  const addr = g.items[0].l.addr;
+  const dest = encodeURIComponent(addr + ", " + g.city + " - SP");
+  return `<div class="popaddr">${esc(addr)} · ${esc(g.city)}<br>
+    <a class="rota" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${dest}">Rota</a></div>` +
+    g.items.map(({p,l}) => `<div class="pop"><h4>${title(p)}${esc(p.name)}</h4>
+      <div class="s">${esc(p.specs.map(s=>lab(s.k)).join(", "))} · ${esc(CONVS[p.conv].nome)}</div>
+      ${l.tels.slice(0,2).map(t=>`<a href="tel:+55${digits(t)}">${fmt(t)}</a>`).join("")}</div>`).join("");
+}
+
+async function openMap(list, focus){
+  const run = ++RUN;
+  $("mapov").classList.add("on");
+  const cityName = focus ? focus.city : (state.city === "Todas" ? "Todas as cidades" : state.city);
+  $("mapTitle").textContent = focus ? title(focus) + focus.name : cityName;
+  $("mapSub").textContent = "";
+  if (/claude|anthropic/.test(location.hostname)) {
+    mapMsg("Nesta prévia de teste o mapa fica bloqueado. Ele funciona quando o app estiver no GitHub Pages com o seu token do Mapbox.");
+    return;
+  }
+  if (!MAPBOX_TOKEN || MAPBOX_TOKEN.startsWith("COLE")) {
+    mapMsg('Para o mapa funcionar, cole o seu token do Mapbox na linha <code>MAPBOX_TOKEN</code> do código.');
+    return;
+  }
+  mapMsg("");
+  try { await loadMapbox(); } catch(_) { mapMsg("Não foi possível carregar o mapa. Verifique a internet e tente de novo."); return; }
+  const center = CENTERS[focus ? focus.city : state.city] || CENTERS["Piracicaba"];
+  if (!MAP) {
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+    MAP = new mapboxgl.Map({container:"map", style:"mapbox://styles/mapbox/streets-v12", center, zoom:13});
+    MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), "top-right");
+    MAP.addControl(new mapboxgl.GeolocateControl({positionOptions:{enableHighAccuracy:true}}), "top-right");
+    await new Promise(r => MAP.once("load", r));
+  } else { MAP.resize(); MAP.jumpTo({center, zoom:13}); }
+  MARKERS.forEach(m => m.remove()); MARKERS = [];
+
+  // Junta quem atende no mesmo endereço num alfinete só
+  const groups = {};
+  list.forEach(p => p.locs.forEach(l => {
+    if (!l.addr) return;
+    const k = p.city + "|" + l.addr;
+    (groups[k] = groups[k] || {city:p.city, items:[]}).items.push({p, l});
+  }));
+  const keys = Object.keys(groups);
+  let done = 0, miss = 0;
+  const bounds = new mapboxgl.LngLatBounds();
+  let focusMarker = null;
+  const upd = () => { $("mapSub").textContent = done < keys.length ? `Localizando ${done} de ${keys.length} endereços…` :
+      `${keys.length - miss} endereços no mapa` + (miss ? ` · ${miss} não localizados` : ""); };
+  upd();
+
+  let idx = 0;
+  async function worker(){
+    while (idx < keys.length) {
+      const k = keys[idx++]; const g = groups[k];
+      const pt = await geocode(g.items[0].l.addr, g.city);
+      if (run !== RUN) return;
+      done++;
+      if (!pt) { miss++; upd(); continue; }
+      const isFocus = focus && g.items.some(it => it.p === focus);
+      const mk = new mapboxgl.Marker({element: pinEl(g.items.length, isFocus), anchor:"bottom"})
+        .setLngLat(pt).setPopup(new mapboxgl.Popup({offset:28, maxWidth:"280px"}).setHTML(popupHtml(g))).addTo(MAP);
+      MARKERS.push(mk); bounds.extend(pt);
+      if (isFocus) focusMarker = mk;
+      upd();
+    }
+  }
+  await Promise.all(Array.from({length:5}, worker));
+  if (run !== RUN) return;
+  if (tokenBad) { mapMsg('O Mapbox recusou o token. Confira se colou o token público (pk.) inteiro na linha <code>MAPBOX_TOKEN</code>.'); return; }
+  if (focusMarker) { MAP.flyTo({center: focusMarker.getLngLat(), zoom:16}); focusMarker.togglePopup(); }
+  else if (!bounds.isEmpty()) MAP.fitBounds(bounds, {padding:60, maxZoom:16, duration:600});
+  else mapMsg("Nenhum endereço desta lista foi localizado no mapa.");
+}
+function closeMap(){ RUN++; $("mapov").classList.remove("on"); }
+
+/* ===== Guias oficiais (abrem o site de cada convênio) ===== */
+const OFICIAIS = [
+  {conv:"unimed", nome:"Guia Médico Nacional Unimed", sub:"Médicos, hospitais e laboratórios Unimed no Brasil todo", url:"https://www.unimed.coop.br/site/guia-medico"},
+  {conv:"fesp", nome:"Guia Médico Unimed Fesp", sub:"Rede Fesp no estado de São Paulo", url:"https://www.unimed.coop.br/site/web/unimedfesp/guia-medico-fesp"},
+  {conv:"sus", nome:"Meu SUS Digital", sub:"Cartão SUS, vacinas, exames e consultas do SUS", url:"https://meususdigital.saude.gov.br"},
+  {conv:"uniodonto", nome:"Encontre um dentista Uniodonto", sub:"Dentistas Uniodonto no Brasil todo", url:"https://www.uniodonto.coop.br/encontre-um-dentista/"},
+  {conv:"uniodonto", nome:"Uniodonto Piracicaba", sub:"Site oficial, com a rede atualizada", url:"https://www.uniodontopiracicaba.com.br"}
+];
+function cidadeAtual(){ return state.city !== "Todas" ? state.city : state.cityQ; }
+function oficiaisHtml(todos){
+  const cid = todos ? "" : cidadeAtual();
+  const list = OFICIAIS.filter(o => todos || state.conv==="todos" || o.conv===state.conv);
+  const quem = state.spec ? lab(state.spec) : (state.conv==="uniodonto" ? "dentista" : state.conv==="sus" ? "UBS posto de saúde" : "médico");
+  const gq = encodeURIComponent(`${quem} ${state.conv!=="todos" ? CONVS[state.conv].nome : ""} ${cid || ""} SP`.replace(/\s+/g," ").trim());
+  const links = list.map(o => `<a class="ofl" target="_blank" rel="noopener" href="${o.url}" data-city="${esc(cid)}"><span><b>${esc(o.nome)}</b><small>${esc(o.sub)}</small></span><span>›</span></a>`).join("") +
+    (todos ? "" : `<a class="ofl" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${gq}"><span><b>Procurar no Google Maps</b><small>${esc(decodeURIComponent(gq))}</small></span><span>›</span></a>`);
+  if (todos) return links;
+  return `<div class="ofc"><h4>${cid ? `Não achou em ${esc(cid)}?` : "Não achou quem procurava?"}</h4>
+    <p>Procure direto no site oficial do convênio.${cid ? " Ao tocar, o nome da cidade já fica copiado para você colar na busca." : ""}</p>${links}</div>`;
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest(".ofl[data-city]");
+  if (a && a.dataset.city && navigator.clipboard) navigator.clipboard.writeText(a.dataset.city).then(()=>toast("Cidade copiada: cole no guia")).catch(()=>{});
+});
+$("oficiais").innerHTML = oficiaisHtml(true);
+
+/* ===== Guardado no aparelho ===== */
+function lsGet(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(_) { return d; } }
+function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(_) {} }
+const pid = p => p.conv + "|" + p.city + "|" + p.name;
+const BYID = Object.fromEntries(PEOPLE.map(p => [pid(p), p]));
+
+/* ===== Favoritos ===== */
+const FAVS = new Set(lsGet("am_favs", []));
+function isFav(p){ return FAVS.has(pid(p)); }
+function toggleFav(p){
+  const k = pid(p);
+  if (FAVS.has(k)) { FAVS.delete(k); toast("Tirado dos favoritos"); } else { FAVS.add(k); toast("Salvo nos favoritos"); }
+  lsSet("am_favs", [...FAVS]);
+  render(); renderMeus();
+}
+
+/* ===== Perto de mim ===== */
+function fmtKm(d){ return d < 1 ? Math.round(d*1000/10)*10 + " m" : d.toFixed(d < 10 ? 1 : 0).replace(".", ",") + " km"; }
+function distOf(p){
+  if (!state.near) return null;
+  let best = null;
+  p.locs.forEach(l => { if (!l.addr) return; const pt = GEO[p.city + "|" + l.addr]; if (pt) { const d = km(state.near, pt); if (best == null || d < best) best = d; } });
+  return best;
+}
+let NEAR_RUN = 0;
+async function locateAddrs(list){
+  if (!MAPBOX_TOKEN || MAPBOX_TOKEN.startsWith("COLE") || /claude|anthropic/.test(location.hostname)) return false;
+  const run = ++NEAR_RUN;
+  const todo = []; list.forEach(p => p.locs.forEach(l => { if (l.addr && !((p.city + "|" + l.addr) in GEO)) todo.push([l.addr, p.city]); }));
+  let i = 0;
+  async function w(){ while (i < todo.length && run === NEAR_RUN) { const [a,c] = todo[i++]; await geocode(a, c); } }
+  await Promise.all([w(), w(), w(), w()]);
+  if (run === NEAR_RUN && state.near) render();
+  return true;
+}
+function nearMe(){
+  if (state.near) { state.near = null; $("btnNear").setAttribute("aria-pressed","false"); render(); return; }
+  if (!navigator.geolocation) { toast("Este celular não informa a localização"); return; }
+  toast("Pegando sua localização…");
+  navigator.geolocation.getCurrentPosition(pos => {
+    state.near = [pos.coords.longitude, pos.coords.latitude];
+    $("btnNear").setAttribute("aria-pressed","true");
+    const cities = [...new Set(PEOPLE.filter(inConv).map(p => p.city))];
+    let best = cities[0], bd = Infinity;
+    cities.forEach(c => { const d = km(state.near, CENTERS[c]); if (d < bd) { bd = d; best = c; } });
+    state.nearCity = best; state.nearFar = bd > 30;
+    state.city = best; state.cityQ = best; $("cityQ").value = best;
+    buildChips(); buildSpecs(); render();
+    locateAddrs(filtered());
+  }, () => toast("Libere a localização para o navegador e tente de novo"), {enableHighAccuracy:true, timeout:12000, maximumAge:60000});
+}
+
+/* ===== Avisos no topo da busca ===== */
+function renderExtras(){
+  let h = "";
+  const prox = proximaConsulta();
+  if (prox) h += `<button class="lembra" data-goto="p-meus"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span><b>${esc(prox.quando)}</b>${esc(prox.c.nome)}</span></button>`;
+  if (state.near) {
+    const sem = !MAPBOX_TOKEN || MAPBOX_TOKEN.startsWith("COLE") || /claude|anthropic/.test(location.hostname);
+    h += `<div class="near"><span>${state.nearFar ? `Você está longe das cidades do app. A mais perto é <b>${esc(state.nearCity)}</b>.` : `Mostrando <b>${esc(state.nearCity)}</b>, a cidade onde você está.`}${sem ? " A ordem por distância liga quando o mapa estiver ativo." : " Os mais perto aparecem primeiro."}</span><button id="nearOff">Desligar</button></div>`;
+  }
+  if (showInstallBanner()) h += `<div class="instb"><img src="apple-touch-icon.png" alt=""><div><b>Instale o Acha Médico</b><br>Fica na tela inicial como um app.</div><button class="go" id="instGo">Instalar</button><button class="x" id="instX" aria-label="Fechar">×</button></div>`;
+  $("topExtras").innerHTML = h;
+  const off = $("nearOff"); if (off) off.onclick = nearMe;
+  const go = $("instGo"); if (go) go.onclick = installApp;
+  const x = $("instX"); if (x) x.onclick = () => { lsSet("am_inst_x", Date.now()); renderExtras(); };
+}
+
+/* ===== Minhas consultas ===== */
+let CONS = lsGet("am_consultas", []);
+const pad = n => String(n).padStart(2,"0");
+const DIAS = ["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+function consDate(c){ const [y,m,d] = c.data.split("-").map(Number); const [h,mi] = c.hora.split(":").map(Number); return new Date(y, m-1, d, h, mi); }
+function quandoTxt(c){
+  const dt = consDate(c), hoje = new Date(); hoje.setHours(0,0,0,0);
+  const dia = new Date(dt); dia.setHours(0,0,0,0);
+  const diff = Math.round((dia - hoje) / 864e5);
+  const hr = c.hora.replace(":", "h");
+  if (diff === 0) return "Hoje, " + hr;
+  if (diff === 1) return "Amanhã, " + hr;
+  return `${DIAS[dt.getDay()]}, ${pad(dt.getDate())}/${pad(dt.getMonth()+1)} às ${hr}`;
+}
+function proximaConsulta(){
+  const now = Date.now();
+  const c = CONS.filter(c => consDate(c) > now).sort((a,b) => consDate(a) - consDate(b))[0];
+  if (!c) return null;
+  const dias = (consDate(c) - now) / 864e5;
+  return dias <= 7 ? {c, quando: "Consulta " + quandoTxt(c).toLowerCase().replace(/^hoje/,"hoje").replace(/^amanhã/,"amanhã")} : null;
+}
+function icsFor(c){
+  const dt = consDate(c), end = new Date(dt.getTime() + 60*60000);
+  const f = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const e = t => String(t||"").replace(/[\\,;]/g, m => "\\" + m).replace(/\n/g, "\\n");
+  const desc = [c.tel ? "Telefone: " + c.tel : "", c.obs || "", "Anotado no app Acha Médico"].filter(Boolean).join("\n");
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Acha Medico//PT-BR","CALSCALE:GREGORIAN","BEGIN:VEVENT",
+    "UID:" + c.id + "@acha-medico", "DTSTAMP:" + f(new Date()), "DTSTART:" + f(dt), "DTEND:" + f(end),
+    "SUMMARY:" + e("Consulta - " + c.nome), c.addr ? "LOCATION:" + e(c.addr) : "", "DESCRIPTION:" + e(desc),
+    "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:" + e("Consulta amanhã - " + c.nome),"TRIGGER:-P1D","END:VALARM",
+    "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:" + e("Consulta em 2 horas - " + c.nome),"TRIGGER:-PT2H","END:VALARM",
+    "END:VEVENT","END:VCALENDAR"].filter(Boolean).join("\r\n");
+}
+function gcalUrl(c){
+  const dt = consDate(c), end = new Date(dt.getTime() + 60*60000);
+  const f = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  return "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent("Consulta - " + c.nome) +
+    "&dates=" + f(dt) + "/" + f(end) + "&ctz=America/Sao_Paulo" +
+    "&details=" + encodeURIComponent([c.tel ? "Telefone: " + c.tel : "", c.obs].filter(Boolean).join("\n")) +
+    (c.addr ? "&location=" + encodeURIComponent(c.addr) : "");
+}
+function consCard(c, past){
+  const tel = c.tel ? digits(c.tel) : "";
+  return `<div class="cons${past ? " past" : ""}">
+    <div class="when">${esc(quandoTxt(c))}</div>
+    <div class="who">${esc(c.nome)}</div>
+    ${c.addr ? `<div class="obs">${esc(c.addr)}</div>` : ""}
+    ${c.obs ? `<div class="obs">${esc(c.obs)}</div>` : ""}
+    <div class="btns">
+      ${past ? "" : `<a href="data:text/calendar;charset=utf-8,${encodeURIComponent(icsFor(c))}" download="consulta.ics">Lembrete no celular</a>
+      <a href="${gcalUrl(c)}" target="_blank" rel="noopener">Google Agenda</a>`}
+      ${tel ? `<a href="tel:+55${tel}">Ligar</a>` : ""}
+      <button class="del" data-del="${esc(c.id)}">Excluir</button>
+    </div></div>`;
+}
+function renderMeus(){
+  const now = Date.now();
+  const fut = CONS.filter(c => consDate(c) >= now - 3*3600e3).sort((a,b) => consDate(a) - consDate(b));
+  const pas = CONS.filter(c => consDate(c) < now - 3*3600e3).sort((a,b) => consDate(b) - consDate(a));
+  $("consList").innerHTML = (fut.length ? fut.map(c => consCard(c, false)).join("") : `<div class="vazio">Nenhuma consulta marcada.</div>`) +
+    (pas.length ? `<details class="past"><summary>Consultas que já passaram (${pas.length})</summary>${pas.map(c => consCard(c, true)).join("")}</details>` : "");
+  const favs = PEOPLE.filter(isFav);
+  $("favList").innerHTML = favs.length ? favs.map(card).join("") : `<div class="vazio">Toque na estrela ☆ de um médico ou dentista para ele aparecer aqui.</div>`;
+}
+$("allNames").innerHTML = [...new Set(PEOPLE.map(p => title(p) + p.name))].sort((a,b)=>a.localeCompare(b,"pt-BR")).map(n => `<option value="${esc(n)}">`).join("");
+function pessoaPorNome(n){ const t = norm(n).replace(/^(drª|dra\.?|dr\.?)\s*/,""); return PEOPLE.find(p => norm(p.name) === t || norm(title(p)+p.name) === norm(n)); }
+function anotarConsulta(p){
+  goTab("p-meus");
+  $("cNome").value = title(p) + p.name;
+  $("cData").focus();
+}
+$("fCons").addEventListener("submit", e => {
+  e.preventDefault();
+  const nome = $("cNome").value.trim(), data = $("cData").value, hora = $("cHora").value;
+  if (!nome || !data || !hora) return;
+  const p = pessoaPorNome(nome);
+  const loc = p ? (p.locs.find(l => l.addr) || p.locs[0]) : null;
+  CONS.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), nome, data, hora, obs: $("cObs").value.trim(),
+    tel: loc && loc.tels[0] ? fmt(loc.tels[0]) : "", addr: loc && loc.addr ? loc.addr + " - " + p.city + " - SP" : "" });
+  lsSet("am_consultas", CONS);
+  e.target.reset(); renderMeus(); renderExtras();
+  toast("Consulta salva. Toque em “Lembrete no celular”");
+});
+$("consList").addEventListener("click", e => {
+  const d = e.target.closest("[data-del]"); if (!d) return;
+  if (!confirm("Excluir esta consulta?")) return;
+  CONS = CONS.filter(c => c.id !== d.dataset.del); lsSet("am_consultas", CONS); renderMeus(); renderExtras();
+});
+
+/* ===== Minhas carteirinhas (guardadas com senha de 4 a 6 números) ===== */
+const CART_TIPOS = {sus:["Cartão SUS","#0B5CAD"], unimed:["Unimed","#0B6B3A"], uniodonto:["Uniodonto","#4A1640"], fesp:["Unimed Fesp","#1F3F7A"], outro:["Outro convênio","#5A4A55"]};
+let CART = null, CKEY = null, CSALT = null, CART_EDIT = null;
+const b64 = u => btoa(String.fromCharCode(...new Uint8Array(u)));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function deriveKey(pin, salt){
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pin), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:200000, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
+}
+async function cartSave(){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({name:"AES-GCM", iv}, CKEY, new TextEncoder().encode(JSON.stringify(CART)));
+  lsSet("am_cart", {salt:b64(CSALT), iv:b64(iv), ct:b64(ct)});
+}
+function cartLock(){ CART = null; CKEY = null; CART_EDIT = null; renderCart(); }
+function fmtNum(t, n){ const d = String(n||"").replace(/\s/g,""); return t === "sus" && /^\d{15}$/.test(d) ? d.replace(/(\d{3})(\d{4})(\d{4})(\d{4})/, "$1 $2 $3 $4") : (n||""); }
+function renderCart(){
+  const box = $("cartBox"); if (!box) return;
+  if (!window.crypto || !crypto.subtle) { box.innerHTML = `<div class="vazio">Abra o app pelo link do GitHub (https) para usar as carteirinhas.</div>`; return; }
+  const saved = lsGet("am_cart", null);
+  if (!CART) {
+    box.innerHTML = saved ? `<form class="pinbox" id="pinForm"><p>Digite sua senha do app para ver as carteirinhas.</p>
+        <input id="pinIn" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" aria-label="Senha" required>
+        <button class="save" type="submit">Abrir</button>
+        <button class="lnk" type="button" id="pinForgot">Esqueci a senha</button></form>`
+      : `<form class="pinbox" id="pinForm"><p>Crie uma senha de 4 a 6 números. Ela protege os números e as senhas das suas carteirinhas neste celular.</p>
+        <input id="pinIn" type="password" inputmode="numeric" pattern="[0-9]*" minlength="4" maxlength="6" autocomplete="new-password" aria-label="Nova senha" required>
+        <input id="pinIn2" type="password" inputmode="numeric" pattern="[0-9]*" minlength="4" maxlength="6" autocomplete="new-password" aria-label="Repita a senha" placeholder="repita" style="margin-top:8px" required>
+        <button class="save" type="submit">Criar senha</button>
+        <p style="margin-top:10px;font-size:.8rem">Anote essa senha. Se esquecer, as carteirinhas precisam ser cadastradas de novo.</p></form>`;
+    $("pinForm").onsubmit = async e => {
+      e.preventDefault();
+      const pin = $("pinIn").value.trim();
+      if (!/^\d{4,6}$/.test(pin)) { toast("Use de 4 a 6 números"); return; }
+      if (!saved) {
+        if (pin !== $("pinIn2").value.trim()) { toast("As senhas não são iguais"); return; }
+        CSALT = crypto.getRandomValues(new Uint8Array(16)); CKEY = await deriveKey(pin, CSALT); CART = []; await cartSave();
+        toast("Senha criada"); renderCart(); return;
+      }
+      try {
+        CSALT = unb64(saved.salt); const k = await deriveKey(pin, CSALT);
+        const pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:unb64(saved.iv)}, k, unb64(saved.ct));
+        CKEY = k; CART = JSON.parse(new TextDecoder().decode(pt)); renderCart();
+      } catch(_) { toast("Senha errada"); $("pinIn").value = ""; }
+    };
+    const fg = $("pinForgot");
+    if (fg) fg.onclick = () => { if (confirm("Sem a senha não dá para abrir. Apagar todas as carteirinhas e criar uma senha nova?")) { try { localStorage.removeItem("am_cart"); } catch(_){} renderCart(); } };
+    return;
+  }
+  const form = CART_EDIT ? (() => { const c = CART_EDIT;
+    return `<form class="form" id="cartForm" autocomplete="off" style="margin-bottom:12px">
+      <label>Tipo<select id="kTipo">${Object.entries(CART_TIPOS).map(([k,v])=>`<option value="${k}" ${c.tipo===k?"selected":""}>${v[0]}</option>`).join("")}</select></label>
+      <label>Nome do titular<input id="kNome" value="${esc(c.nome||"")}" placeholder="Como está no cartão"></label>
+      <label>Número da carteirinha<input id="kNum" value="${esc(c.num||"")}" inputmode="numeric" required></label>
+      <div class="row"><label>Validade<input id="kVal" value="${esc(c.val||"")}" placeholder="ex.: 12/2027"></label><label>Plano<input id="kPlano" value="${esc(c.plano||"")}" placeholder="opcional"></label></div>
+      <label>Login do app/site<input id="kLogin" value="${esc(c.login||"")}" placeholder="CPF ou e-mail (opcional)" autocomplete="off"></label>
+      <label>Senha de acesso<input id="kSenha" type="password" value="${esc(c.senha||"")}" placeholder="opcional" autocomplete="new-password"></label>
+      <button class="save" type="submit">${c.id ? "Salvar alterações" : "Salvar carteirinha"}</button>
+      <button class="lnk" type="button" id="kCancel" style="border:0;background:none;color:var(--mute);text-decoration:underline;cursor:pointer">Cancelar</button>
+    </form>`; })() : "";
+  box.innerHTML = `<div class="cartbar"><button id="cartAdd">+ Adicionar carteirinha</button><button id="cartLock">Trancar</button></div>` + form +
+    (CART.length ? CART.map(c => { const [nomeT, cor] = CART_TIPOS[c.tipo] || CART_TIPOS.outro;
+      return `<div class="cartao" style="background:${cor}">
+        <div class="tp">${esc(nomeT)}${c.plano ? " · " + esc(c.plano) : ""}</div>
+        <div class="nm">${esc(c.nome || "")}</div>
+        <div class="num">${esc(fmtNum(c.tipo, c.num))}</div>
+        ${c.val ? `<div class="ln"><span>Validade</span><code>${esc(c.val)}</code></div>` : ""}
+        ${c.login ? `<div class="ln"><span>Login</span><code>${esc(c.login)}</code><button data-copy="${esc(c.login)}">Copiar</button></div>` : ""}
+        ${c.senha ? `<div class="ln"><span>Senha</span><code data-pw="${esc(c.id)}">••••••</code><button data-show="${esc(c.id)}">Mostrar</button><button data-copy="${esc(c.senha)}">Copiar</button></div>` : ""}
+        <div class="acts"><button data-copy="${esc(String(c.num).replace(/\s/g,""))}">Copiar número</button><button data-edit="${esc(c.id)}">Editar</button><button data-rm="${esc(c.id)}">Excluir</button></div>
+      </div>`; }).join("") : (CART_EDIT ? "" : `<div class="vazio">Nenhuma carteirinha ainda. Toque em “Adicionar carteirinha”.</div>`));
+  $("cartAdd").onclick = () => { CART_EDIT = {tipo:"sus"}; renderCart(); $("kNome").focus(); };
+  $("cartLock").onclick = cartLock;
+  const cf = $("cartForm");
+  if (cf) {
+    $("kCancel").onclick = () => { CART_EDIT = null; renderCart(); };
+    cf.onsubmit = async e => {
+      e.preventDefault();
+      const c = {id: CART_EDIT.id || Date.now().toString(36), tipo:$("kTipo").value, nome:$("kNome").value.trim(), num:$("kNum").value.trim(),
+        val:$("kVal").value.trim(), plano:$("kPlano").value.trim(), login:$("kLogin").value.trim(), senha:$("kSenha").value};
+      const i = CART.findIndex(x => x.id === c.id); if (i >= 0) CART[i] = c; else CART.push(c);
+      CART_EDIT = null; await cartSave(); renderCart(); toast("Carteirinha salva");
+    };
+  }
+}
+$("cartBox").addEventListener("click", async e => {
+  const cp = e.target.closest("[data-copy]");
+  if (cp) { try { await navigator.clipboard.writeText(cp.dataset.copy); toast("Copiado"); } catch(_) { toast("Não foi possível copiar"); } return; }
+  const sh = e.target.closest("[data-show]");
+  if (sh) { const c = CART.find(x => x.id === sh.dataset.show); const el = document.querySelector(`[data-pw="${sh.dataset.show}"]`);
+    const on = sh.textContent === "Mostrar"; el.textContent = on ? c.senha : "••••••"; sh.textContent = on ? "Esconder" : "Mostrar"; return; }
+  const ed = e.target.closest("[data-edit]");
+  if (ed) { CART_EDIT = {...CART.find(x => x.id === ed.dataset.edit)}; renderCart(); return; }
+  const rm = e.target.closest("[data-rm]");
+  if (rm && confirm("Excluir esta carteirinha?")) { CART = CART.filter(x => x.id !== rm.dataset.rm); await cartSave(); renderCart(); }
+});
+document.addEventListener("visibilitychange", () => { if (document.hidden && CART) cartLock(); });
+
+/* ===== Instalar na tela inicial ===== */
+let DEFER = null;
+const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+function showInstallBanner(){ if (isStandalone()) return false; const x = lsGet("am_inst_x", 0); return Date.now() - x > 14*864e5; }
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); DEFER = e; renderExtras(); });
+window.addEventListener("appinstalled", () => { DEFER = null; toast("App instalado"); renderExtras(); });
+async function installApp(){
+  if (isStandalone()) { toast("O app já está instalado"); return; }
+  if (DEFER) { DEFER.prompt(); try { await DEFER.userChoice; } catch(_){} DEFER = null; renderExtras(); return; }
+  const preview = /claude|anthropic/.test(location.hostname);
+  $("instSteps").innerHTML = (preview ? `<p class="note">Nesta prévia de teste não dá para instalar. Faça isto abrindo o app pelo link do GitHub.</p>` : "") + (isIOS ?
+    `<ol><li>Abra o app no <b>Safari</b>.</li><li>Toque no botão <b>Compartilhar</b> (o quadrado com a seta para cima).</li><li>Role e toque em <b>Adicionar à Tela de Início</b>.</li><li>Toque em <b>Adicionar</b>.</li></ol>` :
+    `<ol><li>Abra o app no <b>Chrome</b>.</li><li>Toque nos <b>três pontinhos</b> no canto de cima.</li><li>Toque em <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol>`);
+  $("instSheet").classList.add("on");
+}
+$("instOk").addEventListener("click", () => $("instSheet").classList.remove("on"));
+$("instSheet").addEventListener("click", e => { if (e.target.id === "instSheet") $("instSheet").classList.remove("on"); });
+$("btnInstall2").addEventListener("click", installApp);
+if ("serviceWorker" in navigator && location.protocol === "https:" && !/claude|anthropic/.test(location.hostname)) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+
+function goTab(id){
+  document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-selected", x.dataset.p === id));
+  document.querySelectorAll(".panel").forEach(x => x.classList.toggle("on", x.id === id));
+  $("q").closest(".search").style.display = $("chips").style.display = $("convs").style.display = id === "p-busca" ? "" : "none";
+  if (id === "p-meus") { renderMeus(); renderCart(); } else if (CART) cartLock();
+  window.scrollTo(0,0);
+}
+
+/* ===== Eventos ===== */
+$("btnNear").addEventListener("click", nearMe);
+$("btnFavs").addEventListener("click", () => {
+  state.onlyFav = !state.onlyFav; $("btnFavs").setAttribute("aria-pressed", state.onlyFav); render();
+});
+document.addEventListener("click", e => {
+  const f = e.target.closest(".fav"); if (f) { toggleFav(PEOPLE[+f.dataset.f]); return; }
+  const c = e.target.closest("[data-c]"); if (c && c.classList.contains("share")) { anotarConsulta(PEOPLE[+c.dataset.c]); return; }
+  const g = e.target.closest("[data-goto]"); if (g) goTab(g.dataset.goto);
+});
+$("fab").addEventListener("click", () => openMap(filtered()));
+$("mapClose").addEventListener("click", closeMap);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("mapov").classList.contains("on")) closeMap(); });
+$("convs").addEventListener("click", e => {
+  const b = e.target.closest(".cvbtn"); if (!b) return;
+  state.conv = b.dataset.v; buildConvs(); buildChips(); buildSpecs(); render();
+});
+async function shareApp(){
+  const url = location.href.split("?")[0].split("#")[0];
+  const data = {title:"Acha Médico", text:"Acha Médico: médicos e dentistas dos convênios, com telefone e mapa.", url};
+  if (navigator.share) { try { await navigator.share(data); } catch(_){} return; }
+  try { await navigator.clipboard.writeText(data.text + " " + url); toast("Link do app copiado"); }
+  catch(_) { toast("Não foi possível copiar o link"); }
+}
+async function updateApp(){
+  toast("Atualizando…");
+  try { if ("caches" in window) { const ks = await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); } } catch(_){}
+  try { const regs = await navigator.serviceWorker?.getRegistrations?.(); if (regs) await Promise.all(regs.map(r=>r.update())); } catch(_){}
+  setTimeout(() => {
+    try { const u = new URL(location.href); u.searchParams.set("v", Date.now()); location.replace(u.toString()); }
+    catch(_) { location.reload(); }
+  }, 500);
+}
+["btnShare","btnShare2"].forEach(id => $(id).addEventListener("click", shareApp));
+["btnUpdate","btnUpdate2"].forEach(id => $(id).addEventListener("click", updateApp));
+$("chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  state.city = b.dataset.c;
+  state.cityQ = state.city === "Todas" ? "" : state.city;
+  $("cityQ").value = state.cityQ;
+  buildChips(); buildSpecs(); render();
+});
+$("cityQ").addEventListener("input", e => {
+  state.cityQ = e.target.value.trim();
+  const all = [...new Set(PEOPLE.filter(inConv).map(p=>p.city))];
+  const exact = all.find(c => norm(c) === norm(state.cityQ));
+  const starts = all.filter(c => norm(c).startsWith(norm(state.cityQ)));
+  state.city = exact || (state.cityQ.length >= 3 && starts.length === 1 ? starts[0] : "Todas");
+  buildChips(); buildSpecs(); render();
+});
+$("cityQ").addEventListener("change", e => { if (state.city !== "Todas") e.target.value = state.city; });
+$("spec").addEventListener("change", e => { state.spec = e.target.value; render(); });
+$("onlyE").addEventListener("change", e => { state.onlyE = e.target.checked; render(); });
+let tmr; $("q").addEventListener("input", e => { clearTimeout(tmr); tmr = setTimeout(()=>{ state.q = e.target.value; render(); }, 120); });
+$("clear").addEventListener("click", () => { $("q").value=""; state.q=""; render(); $("q").focus(); });
+async function cardClick(e){
+  const m = e.target.closest(".pinbtn");
+  if (m) { const p = PEOPLE[+m.dataset.m]; const l = filtered().filter(x => x.city === p.city); if (!l.includes(p)) l.push(p); openMap(l, p); return; }
+  const b = e.target.closest(".share[data-i]"); if (!b) return;
+  const text = shareText(PEOPLE[+b.dataset.i]);
+  if (navigator.share) { try { await navigator.share({text}); } catch(_){} return; }
+  try { await navigator.clipboard.writeText(text); toast("Contato copiado"); }
+  catch(_) { toast("Não foi possível copiar"); }
+}
+$("list").addEventListener("click", cardClick);
+$("favList").addEventListener("click", cardClick);
+document.querySelector("nav.tabs").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (b) goTab(b.dataset.p);
+});
+
+$("offices").innerHTML = OFFICES.map(o => `<div class="office"><strong>${esc(o[0])}</strong>
+  <a class="addr" target="_blank" rel="noopener" href="${mapUrl(o[1], o[0].replace("Sede administrativa - ",""))}">${pinSvg}<span><u>${esc(o[1])}</u></span></a>
+  <div class="phones">${phonesHtml(o[2].split(",").map(t=>t.trim()))}</div></div>`).join("");
+
+buildConvs(); buildChips(); buildSpecs(); render();
+</script>
+</body>
+</html>
